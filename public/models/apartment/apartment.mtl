@@ -1,0 +1,99 @@
+newmtl wall
+Kd 0.9333 0.9176 0.8863
+d 1.000
+Ns 30
+
+newmtl slab
+Kd 0.6667 0.6471 0.6078
+d 1.000
+Ns 30
+
+newmtl oak
+Kd 0.7333 0.6275 0.5059
+d 1.000
+Ns 30
+
+newmtl oak_light
+Kd 0.8118 0.7255 0.6039
+d 1.000
+Ns 30
+
+newmtl floor
+Kd 0.8353 0.7451 0.6275
+d 1.000
+Ns 30
+
+newmtl joint
+Kd 0.7373 0.6471 0.5451
+d 1.000
+Ns 30
+
+newmtl tile
+Kd 0.7725 0.7725 0.7373
+d 1.000
+Ns 30
+
+newmtl tilejoint
+Kd 0.6824 0.6863 0.6549
+d 1.000
+Ns 30
+
+newmtl white
+Kd 0.9608 0.9490 0.9176
+d 1.000
+Ns 30
+
+newmtl stone
+Kd 0.8784 0.8745 0.8353
+d 1.000
+Ns 30
+
+newmtl dark
+Kd 0.2549 0.2745 0.2902
+d 1.000
+Ns 30
+
+newmtl black
+Kd 0.1451 0.1725 0.1882
+d 1.000
+Ns 30
+
+newmtl linen
+Kd 0.8941 0.8706 0.8157
+d 1.000
+Ns 30
+
+newmtl sage
+Kd 0.6157 0.6627 0.5765
+d 1.000
+Ns 30
+
+newmtl terra
+Kd 0.7059 0.4941 0.4000
+d 1.000
+Ns 30
+
+newmtl glass
+Kd 0.6627 0.7686 0.7922
+d 0.240
+Ns 30
+
+newmtl showerglass
+Kd 0.7216 0.8196 0.8196
+d 0.180
+Ns 30
+
+newmtl mirror
+Kd 0.7216 0.7804 0.7765
+d 0.750
+Ns 30
+
+newmtl green
+Kd 0.3961 0.5176 0.3882
+d 1.000
+Ns 30
+
+newmtl rug
+Kd 0.8392 0.8000 0.7294
+d 1.000
+Ns 30

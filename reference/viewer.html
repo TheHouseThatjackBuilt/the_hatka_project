@@ -1,0 +1,1597 @@
+<!doctype html>
+<html lang="ru" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Квартира · 3D-просмотр</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled="true"]):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed="true"],
+  [aria-selected="true"],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type="file"]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type="color"] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="time"],
+    [type="week"]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html>body{padding:0}</style>
+</head>
+<body>
+<div id="apartment-view">
+  <div id="ap-toolbar">
+    <div id="ap-view-field">
+    <label class="form-label">Вид
+      <select class="form-select" id="ap-view">
+        <option value="cut">3D · разрез стен</option>
+        <option value="full">3D · стены 2,7 м</option>
+        <option value="top">План сверху</option>
+      </select>
+    </label>
+    </div>
+    <label class="form-check"><input class="form-check-input" id="ap-furniture" type="checkbox" checked><span class="form-check-label">Мебель</span></label>
+    <label class="form-check"><input class="form-check-input" id="ap-labels" type="checkbox" checked><span class="form-check-label">Названия</span></label>
+    <button class="btn" id="ap-pan" type="button" aria-pressed="false">Перемещать</button>
+    <button class="btn" id="ap-fit" type="button">Вписать модель</button>
+  </div>
+  <div id="ap-scene" role="img" aria-label="Вращаемая 3D-модель квартиры. Стены 2,7 метра; кухня-гостиная, кабинет, спальня, два санузла, гардеробная и балкон.">
+    <div id="ap-room-labels"></div>
+    <span id="ap-loading" role="status">Загрузка 3D…</span>
+  </div>
+  <div class="viz-row" id="ap-footer">
+    <button class="btn btn-ghost" id="ap-left" type="button" aria-label="Повернуть влево">↶</button>
+    <button class="btn btn-ghost" id="ap-right" type="button" aria-label="Повернуть вправо">↷</button>
+    <button class="btn btn-ghost" id="ap-minus" type="button" aria-label="Отдалить">−</button>
+    <button class="btn btn-ghost" id="ap-plus" type="button" aria-label="Приблизить">+</button>
+    <span class="text-small text-muted" id="ap-state" aria-live="polite">Потолки 2,70 м · разрез на 1,05 м</span>
+    <span class="text-small text-muted" id="ap-help">Вращение — левая кнопка · перемещение — правая или Shift · масштаб — колёсико</span>
+  </div>
+</div>
+<style>
+#apartment-view{width:100%}
+#ap-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+#ap-view-field{flex:0 1 240px;min-width:180px}
+#ap-scene{width:100%;height:660px;position:relative;touch-action:none;overflow:hidden;min-width:0}
+#ap-scene canvas{display:block;width:100%;height:100%;cursor:grab}
+#ap-room-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#ap-room-labels span{position:absolute;transform:translate(-50%,-50%);color:var(--foreground);background:var(--background);padding:2px 5px;white-space:nowrap}
+#ap-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--foreground)}
+@media(max-width:480px){#ap-scene{height:480px}#ap-help{display:none}}
+/* Only the downloaded browser document fills the window. The inline preview
+   keeps a bounded height so its host can measure it without a resize loop. */
+html[data-visualize-standalone],html[data-visualize-standalone]>body{width:100%;height:100%;margin:0;min-height:0;overflow:hidden}
+html[data-visualize-standalone] #apartment-view{height:100vh;height:100dvh;box-sizing:border-box;padding:12px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;overflow:hidden}
+html[data-visualize-standalone] #ap-scene{height:100%;min-height:0}
+</style>
+<script type="module">
+const root=document.getElementById('apartment-view');
+const area=root.querySelector('#ap-scene');
+const model={"metadata":{"title":"Квартира по фотографии планировки","units":"metres","ceilingHeight":2.7,"coordinateSystem":"X right, Y up, Z down the source plan","source":"User-supplied photographed plan","status":"Approximate reconstruction; readable dimensions prioritized; unlabelled values inferred"},"materials":{"wall":["Warm plaster","#eeeae2",1],"slab":["Concrete slab","#aaa59b",1],"oak":["Natural oak","#bba081",1],"oak_light":["Oak front","#cfb99a",1],"floor":["Oak flooring","#d5bea0",1],"joint":["Floor joints","#bca58b",1],"tile":["Warm grey tile","#c5c5bc",1],"tilejoint":["Tile grout","#aeafa7",1],"white":["Porcelain and painted joinery","#f5f2ea",1],"stone":["Pale stone worktop","#e0dfd5",1],"dark":["Graphite metal","#41464a",1],"black":["Appliance glass","#252c30",1],"linen":["Ivory upholstery","#e4ded0",1],"sage":["Sage upholstery","#9da993",1],"terra":["Clay textile","#b47e66",1],"glass":["Window glass","#a9c4ca",0.24],"showerglass":["Shower glass","#b8d1d1",0.18],"mirror":["Mirror","#b8c7c6",0.75],"green":["Leaves","#658463",1],"rug":["Woven rug","#d6ccba",1]},"parts":[{"name":"Main floor slab","shape":"box","pos":[4.996,-0.09,3.41],"size":[10.472,0.18,7.3],"mat":"slab","group":"floor","rot":0},{"name":"Entrance extension slab","shape":"box","pos":[1.5775,-0.09,7.66],"size":[3.635,0.18,1.2],"mat":"slab","group":"floor","rot":0},{"name":"Entrance corner slab","shape":"box","pos":[1.5775,-0.09,6.94],"size":[3.635,0.18,0.24],"mat":"slab","group":"floor","rot":0},{"name":"Balcony slab","shape":"box","pos":[10.732,-0.09,5.31],"size":[1.0,0.18,2.58],"mat":"slab","group":"floor","rot":0},{"name":"Timber floor main","shape":"box","pos":[4.991,0.009,3.41],"size":[9.982,0.018,6.82],"mat":"floor","group":"floor","rot":0},{"name":"Timber floor entrance","shape":"box","pos":[1.5775,0.009,7.42],"size":[3.155,0.018,1.2],"mat":"floor","group":"floor","rot":0},{"name":"Balcony surface","shape":"box","pos":[10.732,0.0125,5.31],"size":[1.0,0.025,2.58],"mat":"tile","group":"floor","rot":0},{"name":"Bathroom 1 floor","shape":"box","pos":[0.9175,0.0125,4.395],"size":[1.835,0.019,2.49],"mat":"tile","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[0.603,0.0235,4.395],"size":[0.006,0.003,2.49],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[1.203,0.0235,4.395],"size":[0.006,0.003,2.49],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[1.803,0.0235,4.395],"size":[0.006,0.003,2.49],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[0.9175,0.0235,3.753],"size":[1.835,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[0.9175,0.0235,4.353],"size":[1.835,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[0.9175,0.0235,4.953],"size":[1.835,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 1 grout","shape":"box","pos":[0.9175,0.0235,5.553],"size":[1.835,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 2 floor","shape":"box","pos":[5.794,0.0125,5.95],"size":[1.58,0.019,1.74],"mat":"tile","group":"floor","rot":0},{"name":"Bathroom 2 grout","shape":"box","pos":[5.607,0.0235,5.95],"size":[0.006,0.003,1.74],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 2 grout","shape":"box","pos":[6.207,0.0235,5.95],"size":[0.006,0.003,1.74],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 2 grout","shape":"box","pos":[5.794,0.0235,5.683],"size":[1.58,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Bathroom 2 grout","shape":"box","pos":[5.794,0.0235,6.283],"size":[1.58,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Entrance tile floor","shape":"box","pos":[2.555,0.0125,6.89],"size":[1.2,0.019,2.26],"mat":"tile","group":"floor","rot":0},{"name":"Entrance tile grout","shape":"box","pos":[2.558,0.0235,6.89],"size":[0.006,0.003,2.26],"mat":"tilejoint","group":"floor","rot":0},{"name":"Entrance tile grout","shape":"box","pos":[3.158,0.0235,6.89],"size":[0.006,0.003,2.26],"mat":"tilejoint","group":"floor","rot":0},{"name":"Entrance tile grout","shape":"box","pos":[2.555,0.0235,6.363],"size":[1.2,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Entrance tile grout","shape":"box","pos":[2.555,0.0235,6.963],"size":[1.2,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Entrance tile grout","shape":"box","pos":[2.555,0.0235,7.563],"size":[1.2,0.003,0.006],"mat":"tilejoint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[0.2875,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.145,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.145,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.145,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[0.5725,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.43,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.43,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.43,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[0.8575,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.715,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.715,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.715,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[0.715,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[1.1425,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.0,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.0,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.0,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[1.4275,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.285,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.285,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.285,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[1.7125,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.57,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.57,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.57,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.57,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[1.9975,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.855,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.855,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[1.855,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[2.2825,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.14,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.14,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.14,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[2.5675,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.425,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.425,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.425,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.425,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[2.8525,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.71,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.71,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.71,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[3.1375,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.995,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.995,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[2.995,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[3.4225,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.28,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.28,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.28,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.28,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[3.7075,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.565,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.565,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.565,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[3.9925,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.85,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.85,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[3.85,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[4.2775,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.135,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.135,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.135,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.135,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[4.5625,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.42,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.42,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.42,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[4.8475,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.705,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.705,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.705,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[5.1325,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.99,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.99,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.99,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[4.99,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[5.4175,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.275,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.275,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.275,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[5.7025,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.56,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.56,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.56,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[5.9875,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.845,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.845,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.845,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[5.845,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[6.2725,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.13,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.13,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.13,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[6.5575,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.415,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.415,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.415,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[6.8425,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.7,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.7,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.7,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.7,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[7.1275,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.985,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.985,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[6.985,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[7.4125,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.27,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.27,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.27,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[7.6975,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.555,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.555,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.555,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.555,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[7.9825,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.84,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.84,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[7.84,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[8.2675,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.125,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.125,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.125,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[8.5525,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.41,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.41,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.41,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.41,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[8.8375,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.695,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.695,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.695,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[9.1225,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.98,0.019,2.412],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.98,0.019,4.062],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[8.98,0.019,5.712],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[9.4075,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.265,0.019,1.652],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.265,0.019,3.302],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.265,0.019,4.952],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.265,0.019,6.602],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber longitudinal joint","shape":"box","pos":[9.6925,0.019,3.41],"size":[0.005,0.002,6.82],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.55,0.019,2.032],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.55,0.019,3.682],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"Timber board end","shape":"box","pos":[9.55,0.019,5.332],"size":[0.28,0.002,0.004],"mat":"joint","group":"floor","rot":0},{"name":"North exterior 0","shape":"box","pos":[0.17,1.35,-0.12],"size":[0.82,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window sill 1","shape":"box","pos":[1.52,0.425,-0.12],"size":[1.88,0.85,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window lintel 1","shape":"box","pos":[1.52,2.525,-0.12],"size":[1.88,0.35,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window 1 jamb","shape":"box","pos":[0.605,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 1 jamb","shape":"box","pos":[2.435,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 1 rail","shape":"box","pos":[1.52,0.875,-0.12],"size":[1.88,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 1 rail","shape":"box","pos":[1.52,2.325,-0.12],"size":[1.88,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 1 mullion","shape":"box","pos":[1.20667,1.6,-0.12],"size":[0.05,1.5,0.07],"mat":"white","group":"windows","rot":0},{"name":"North window 1 mullion","shape":"box","pos":[1.83333,1.6,-0.12],"size":[0.05,1.5,0.07],"mat":"white","group":"windows","rot":0},{"name":"North window 1 glazing","shape":"box","pos":[1.52,1.6,-0.12],"size":[1.82,1.44,0.016],"mat":"glass","group":"windows","rot":0},{"name":"North window 1 ledge","shape":"box","pos":[1.52,0.83,-0.14],"size":[1.96,0.04,0.3],"mat":"stone","group":"windows","rot":0},{"name":"North exterior 2","shape":"box","pos":[2.985,1.35,-0.12],"size":[1.05,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window sill 3","shape":"box","pos":[4.31,0.425,-0.12],"size":[1.6,0.85,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window lintel 3","shape":"box","pos":[4.31,2.525,-0.12],"size":[1.6,0.35,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window 3 jamb","shape":"box","pos":[3.535,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 3 jamb","shape":"box","pos":[5.085,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 3 rail","shape":"box","pos":[4.31,0.875,-0.12],"size":[1.6,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 3 rail","shape":"box","pos":[4.31,2.325,-0.12],"size":[1.6,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 3 mullion","shape":"box","pos":[4.31,1.6,-0.12],"size":[0.05,1.5,0.07],"mat":"white","group":"windows","rot":0},{"name":"North window 3 glazing","shape":"box","pos":[4.31,1.6,-0.12],"size":[1.54,1.44,0.016],"mat":"glass","group":"windows","rot":0},{"name":"North window 3 ledge","shape":"box","pos":[4.31,0.83,-0.14],"size":[1.68,0.04,0.3],"mat":"stone","group":"windows","rot":0},{"name":"North exterior 4","shape":"box","pos":[6.1,1.35,-0.12],"size":[1.98,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window sill 5","shape":"box","pos":[7.885,0.425,-0.12],"size":[1.59,0.85,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window lintel 5","shape":"box","pos":[7.885,2.525,-0.12],"size":[1.59,0.35,0.24],"mat":"wall","group":"walls","rot":0},{"name":"North window 5 jamb","shape":"box","pos":[7.115,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 5 jamb","shape":"box","pos":[8.655,1.6,-0.12],"size":[0.05,1.5,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 5 rail","shape":"box","pos":[7.885,0.875,-0.12],"size":[1.59,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 5 rail","shape":"box","pos":[7.885,2.325,-0.12],"size":[1.59,0.05,0.09],"mat":"white","group":"windows","rot":0},{"name":"North window 5 mullion","shape":"box","pos":[7.885,1.6,-0.12],"size":[0.05,1.5,0.07],"mat":"white","group":"windows","rot":0},{"name":"North window 5 glazing","shape":"box","pos":[7.885,1.6,-0.12],"size":[1.53,1.44,0.016],"mat":"glass","group":"windows","rot":0},{"name":"North window 5 ledge","shape":"box","pos":[7.885,0.83,-0.14],"size":[1.67,0.04,0.3],"mat":"stone","group":"windows","rot":0},{"name":"North exterior 6","shape":"box","pos":[9.456,1.35,-0.12],"size":[1.552,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"West exterior","shape":"box","pos":[-0.12,1.35,4.01],"size":[0.24,2.7,8.02],"mat":"wall","group":"walls","rot":0},{"name":"East study wall upper","shape":"box","pos":[10.107,1.35,0.26],"size":[0.25,2.7,0.52],"mat":"wall","group":"walls","rot":0},{"name":"East study wall lower","shape":"box","pos":[10.107,1.35,3.035],"size":[0.25,2.7,0.79],"mat":"wall","group":"walls","rot":0},{"name":"East study wall sill","shape":"box","pos":[10.107,0.425,1.58],"size":[0.25,0.85,2.12],"mat":"wall","group":"walls","rot":0},{"name":"East study wall lintel","shape":"box","pos":[10.107,2.525,1.58],"size":[0.25,0.35,2.12],"mat":"wall","group":"walls","rot":0},{"name":"East study wall jamb","shape":"box","pos":[10.107,1.6,0.545],"size":[0.09,1.5,0.05],"mat":"white","group":"windows","rot":0},{"name":"East study wall jamb","shape":"box","pos":[10.107,1.6,2.615],"size":[0.09,1.5,0.05],"mat":"white","group":"windows","rot":0},{"name":"East study wall rail","shape":"box","pos":[10.107,0.875,1.58],"size":[0.09,0.05,2.12],"mat":"white","group":"windows","rot":0},{"name":"East study wall rail","shape":"box","pos":[10.107,2.325,1.58],"size":[0.09,0.05,2.12],"mat":"white","group":"windows","rot":0},{"name":"East study wall mullion","shape":"box","pos":[10.107,1.6,1.22667],"size":[0.07,1.5,0.05],"mat":"white","group":"windows","rot":0},{"name":"East study wall mullion","shape":"box","pos":[10.107,1.6,1.93333],"size":[0.07,1.5,0.05],"mat":"white","group":"windows","rot":0},{"name":"East study wall glazing","shape":"box","pos":[10.107,1.6,1.58],"size":[0.016,1.44,2.06],"mat":"glass","group":"windows","rot":0},{"name":"East bedroom wall upper","shape":"box","pos":[10.107,1.35,4.165],"size":[0.25,2.7,1.47],"mat":"wall","group":"walls","rot":0},{"name":"East bedroom wall lower","shape":"box","pos":[10.107,1.35,6.335],"size":[0.25,2.7,0.97],"mat":"wall","group":"walls","rot":0},{"name":"East bedroom wall lintel","shape":"box","pos":[10.107,2.45,5.375],"size":[0.25,0.5,0.95],"mat":"wall","group":"walls","rot":0},{"name":"Balcony door glazing jamb","shape":"box","pos":[10.105,1.14,4.925],"size":[0.09,2.08,0.05],"mat":"white","group":"windows","rot":0},{"name":"Balcony door glazing jamb","shape":"box","pos":[10.105,1.14,5.825],"size":[0.09,2.08,0.05],"mat":"white","group":"windows","rot":0},{"name":"Balcony door glazing rail","shape":"box","pos":[10.105,0.125,5.375],"size":[0.09,0.05,0.95],"mat":"white","group":"windows","rot":0},{"name":"Balcony door glazing rail","shape":"box","pos":[10.105,2.155,5.375],"size":[0.09,0.05,0.95],"mat":"white","group":"windows","rot":0},{"name":"Balcony door glazing mullion","shape":"box","pos":[10.105,1.14,5.375],"size":[0.07,2.08,0.05],"mat":"white","group":"windows","rot":0},{"name":"Balcony door glazing glazing","shape":"box","pos":[10.105,1.14,5.375],"size":[0.016,2.02,0.89],"mat":"glass","group":"windows","rot":0},{"name":"Balcony door open","shape":"box","pos":[9.535,1.045,4.9],"size":[0.91,2.09,0.04],"mat":"oak_light","group":"doors","rot":-3.141593},{"name":"Balcony door open hinge","shape":"cylinder","pos":[9.99,1.045,4.9],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"South main exterior","shape":"box","pos":[6.6935,1.35,6.94],"size":[7.077,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"Entrance east exterior","shape":"box","pos":[3.275,1.35,7.54],"size":[0.24,2.7,1.44],"mat":"wall","group":"walls","rot":0},{"name":"South cloakroom exterior","shape":"box","pos":[0.8575,1.35,8.14],"size":[2.195,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"Entrance door wall left","shape":"box","pos":[1.98,1.35,8.14],"size":[0.05,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"Entrance door wall right","shape":"box","pos":[3.07,1.35,8.14],"size":[0.17,2.7,0.24],"mat":"wall","group":"walls","rot":0},{"name":"Entrance door wall lintel","shape":"box","pos":[2.495,2.4,8.14],"size":[0.98,0.6,0.24],"mat":"wall","group":"walls","rot":0},{"name":"Entry door open","shape":"box","pos":[2.94229,1.045,8.63314],"size":[0.98,2.09,0.04],"mat":"oak_light","group":"doors","rot":-1.658063},{"name":"Entry door open hinge","shape":"cylinder","pos":[2.985,1.045,8.145],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"Balcony railing east","shape":"box","pos":[11.2175,0.525,5.31],"size":[0.035,1.05,2.58],"mat":"dark","group":"balcony","rot":0},{"name":"Balcony railing return","shape":"box","pos":[10.732,0.525,4.0375],"size":[1.0,1.05,0.035],"mat":"glass","group":"balcony","rot":0},{"name":"Balcony railing return","shape":"box","pos":[10.732,0.525,6.5825],"size":[1.0,1.05,0.035],"mat":"glass","group":"balcony","rot":0},{"name":"Balcony glass guard","shape":"box","pos":[11.189,0.5,5.31],"size":[0.018,0.92,2.5],"mat":"glass","group":"balcony","rot":0},{"name":"Living room pier / x=3.122","shape":"box","pos":[3.242,1.35,0.56],"size":[0.24,2.7,1.12],"mat":"wall","group":"walls","rot":0},{"name":"Study partition with door upper","shape":"box","pos":[6.629,1.35,0.04],"size":[0.15,2.7,0.08],"mat":"wall","group":"walls","rot":0},{"name":"Study partition with door lower","shape":"box","pos":[6.629,1.35,2.09],"size":[0.15,2.7,2.18],"mat":"wall","group":"walls","rot":0},{"name":"Study partition with door lintel","shape":"box","pos":[6.629,2.4,0.54],"size":[0.15,0.6,0.92],"mat":"wall","group":"walls","rot":0},{"name":"Study door open","shape":"box","pos":[6.169,1.045,0.08],"size":[0.92,2.09,0.04],"mat":"oak_light","group":"doors","rot":-3.141593},{"name":"Study door open hinge","shape":"cylinder","pos":[6.629,1.045,0.08],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"Kitchen and bedroom transverse wall","shape":"box","pos":[6.552,1.35,3.305],"size":[6.86,2.7,0.25],"mat":"wall","group":"walls","rot":0},{"name":"Kitchen west return","shape":"box","pos":[3.242,1.35,3.545],"size":[0.24,2.7,2.31],"mat":"wall","group":"walls","rot":0},{"name":"Hall storage return","shape":"box","pos":[3.412,1.35,4.775],"size":[0.58,2.7,0.15],"mat":"wall","group":"walls","rot":0},{"name":"Hall storage east cheek","shape":"box","pos":[3.64,1.35,4.14],"size":[0.12,2.7,1.42],"mat":"wall","group":"walls","rot":0},{"name":"Bedroom entrance upper pier","shape":"box","pos":[6.629,1.35,3.755],"size":[0.15,2.7,0.65],"mat":"wall","group":"walls","rot":0},{"name":"Bedroom ensuite partition","shape":"box","pos":[6.644,1.35,5.9],"size":[0.12,2.7,1.84],"mat":"wall","group":"walls","rot":0},{"name":"Bedroom door lintel","shape":"box","pos":[6.644,2.4,4.53],"size":[0.12,0.6,0.9],"mat":"wall","group":"walls","rot":0},{"name":"Bedroom sliding leaf open","shape":"box","pos":[6.722,1.045,5.37],"size":[0.9,2.09,0.04],"mat":"oak_light","group":"doors","rot":1.570796},{"name":"Bathroom 1 north wall","shape":"box","pos":[0.9775,1.35,3.09],"size":[1.955,2.7,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Bathroom 1 east wall upper","shape":"box","pos":[1.895,1.35,3.5],"size":[0.12,2.7,0.7],"mat":"wall","group":"walls","rot":0},{"name":"Bathroom 1 east wall lower","shape":"box","pos":[1.895,1.35,5.145],"size":[0.12,2.7,0.99],"mat":"wall","group":"walls","rot":0},{"name":"Bathroom 1 east wall lintel","shape":"box","pos":[1.895,2.4,4.25],"size":[0.12,0.6,0.8],"mat":"wall","group":"walls","rot":0},{"name":"Bathroom 1 door open","shape":"box","pos":[2.295,1.045,4.65],"size":[0.8,2.09,0.04],"mat":"oak_light","group":"doors","rot":-0.0},{"name":"Bathroom 1 door open hinge","shape":"cylinder","pos":[1.895,1.045,4.65],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"Bathroom 1 south wall","shape":"box","pos":[0.9775,1.35,5.7],"size":[1.955,2.7,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Cloakroom east upper","shape":"box","pos":[1.895,1.35,6.31],"size":[0.12,2.7,1.1],"mat":"wall","group":"walls","rot":0},{"name":"Cloakroom east lower","shape":"box","pos":[1.895,1.35,7.84],"size":[0.12,2.7,0.36],"mat":"wall","group":"walls","rot":0},{"name":"Cloakroom door lintel","shape":"box","pos":[1.895,2.4,7.26],"size":[0.12,0.6,0.8],"mat":"wall","group":"walls","rot":0},{"name":"Cloakroom door open","shape":"box","pos":[1.495,1.045,7.66],"size":[0.8,2.09,0.04],"mat":"oak_light","group":"doors","rot":-3.141593},{"name":"Cloakroom door open hinge","shape":"cylinder","pos":[1.895,1.045,7.66],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"Ensuite west wall","shape":"box","pos":[4.944,1.35,5.95],"size":[0.12,2.7,1.74],"mat":"wall","group":"walls","rot":0},{"name":"Ensuite north wall left","shape":"box","pos":[4.944,1.35,5.02],"size":[0.12,2.7,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Ensuite north wall right","shape":"box","pos":[6.254,1.35,5.02],"size":[0.9,2.7,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Ensuite north wall lintel","shape":"box","pos":[5.404,2.4,5.02],"size":[0.8,0.6,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Ensuite door open","shape":"box","pos":[5.004,1.045,4.62],"size":[0.8,2.09,0.04],"mat":"oak_light","group":"doors","rot":1.570796},{"name":"Ensuite door open hinge","shape":"cylinder","pos":[5.004,1.045,5.02],"size":[0.034,2.07,0.034],"mat":"dark","group":"doors","rot":0},{"name":"Utility south nib","shape":"box","pos":[4.0195,1.35,6.24],"size":[1.729,2.7,0.12],"mat":"wall","group":"walls","rot":0},{"name":"Sofa plinth","shape":"box","pos":[1.575,0.135,0.625],"size":[2.97,0.19,1.1],"mat":"oak","group":"furniture","rot":0},{"name":"Sofa base","shape":"box","pos":[1.56,0.335,0.6],"size":[3.0,0.29,1.15],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa arm","shape":"box","pos":[0.14,0.48,0.59],"size":[0.16,0.56,1.1],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa arm","shape":"box","pos":[2.98,0.48,0.59],"size":[0.16,0.56,1.1],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa seat 1","shape":"box","pos":[0.88,0.55,0.685],"size":[1.29,0.16,0.81],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa back cushion 1","shape":"box","pos":[0.88,0.76,0.185],"size":[1.29,0.46,0.22],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa seat 2","shape":"box","pos":[2.205,0.55,0.685],"size":[1.29,0.16,0.81],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa back cushion 2","shape":"box","pos":[2.205,0.76,0.185],"size":[1.29,0.46,0.22],"mat":"linen","group":"furniture","rot":0},{"name":"Sofa sage pillow","shape":"sphere","pos":[0.77,0.72,0.51],"size":[0.6,0.16,0.44],"mat":"sage","group":"furniture","rot":0.36},{"name":"Sofa clay pillow","shape":"sphere","pos":[0.46,0.72,0.58],"size":[0.43,0.14,0.4],"mat":"terra","group":"furniture","rot":-0.18},{"name":"TV console 1935 x 400","shape":"box","pos":[0.9675,0.19,2.83],"size":[1.935,0.38,0.4],"mat":"oak_light","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / door 1","shape":"box","pos":[0.24188,0.19,3.039],"size":[0.45375,0.33,0.018],"mat":"white","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / pull 1","shape":"box","pos":[0.41625,0.2724,3.061],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / door 2","shape":"box","pos":[0.72562,0.19,3.039],"size":[0.45375,0.33,0.018],"mat":"white","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / pull 2","shape":"box","pos":[0.9,0.2724,3.061],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / door 3","shape":"box","pos":[1.20938,0.19,3.039],"size":[0.45375,0.33,0.018],"mat":"white","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / pull 3","shape":"box","pos":[1.38375,0.2724,3.061],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / door 4","shape":"box","pos":[1.69312,0.19,3.039],"size":[0.45375,0.33,0.018],"mat":"white","group":"furniture","rot":0},{"name":"TV console 1935 x 400 / pull 4","shape":"box","pos":[1.8675,0.2724,3.061],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Projector screen housing","shape":"box","pos":[0.965,2.5375,3.0285],"size":[1.87,0.075,0.045],"mat":"white","group":"furniture","rot":0},{"name":"Projector screen","shape":"box","pos":[0.965,1.93,3.007],"size":[1.84,1.08,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Dining tabletop D900","shape":"cylinder","pos":[4.46,0.7575,0.6],"size":[0.9,0.045,0.9],"mat":"oak_light","group":"furniture","rot":0},{"name":"Dining central leg","shape":"cylinder","pos":[4.46,0.3775,0.6],"size":[0.144,0.715,0.144],"mat":"oak","group":"furniture","rot":0},{"name":"Dining base","shape":"cylinder","pos":[4.46,0.0325,0.6],"size":[0.6,0.025,0.6],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair west seat","shape":"sphere","pos":[3.83,0.465,0.6],"size":[0.45,0.11,0.44],"mat":"sage","group":"furniture","rot":-1.570796},{"name":"Dining chair west back","shape":"box","pos":[4.02,0.66,0.6],"size":[0.44,0.4,0.065],"mat":"sage","group":"furniture","rot":-1.570796},{"name":"Dining chair west leg","shape":"cylinder","pos":[3.98,0.21,0.45],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair west leg","shape":"cylinder","pos":[3.68,0.21,0.45],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair west leg","shape":"cylinder","pos":[3.98,0.21,0.75],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair west leg","shape":"cylinder","pos":[3.68,0.21,0.75],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair east seat","shape":"sphere","pos":[5.09,0.465,0.6],"size":[0.45,0.11,0.44],"mat":"sage","group":"furniture","rot":1.570796},{"name":"Dining chair east back","shape":"box","pos":[4.9,0.66,0.6],"size":[0.44,0.4,0.065],"mat":"sage","group":"furniture","rot":1.570796},{"name":"Dining chair east leg","shape":"cylinder","pos":[4.94,0.21,0.75],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair east leg","shape":"cylinder","pos":[5.24,0.21,0.75],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair east leg","shape":"cylinder","pos":[4.94,0.21,0.45],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair east leg","shape":"cylinder","pos":[5.24,0.21,0.45],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair south seat","shape":"sphere","pos":[4.46,0.465,1.27],"size":[0.45,0.11,0.44],"mat":"sage","group":"furniture","rot":3.141593},{"name":"Dining chair south back","shape":"box","pos":[4.46,0.66,1.46],"size":[0.44,0.4,0.065],"mat":"sage","group":"furniture","rot":3.141593},{"name":"Dining chair south leg","shape":"cylinder","pos":[4.61,0.21,1.42],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair south leg","shape":"cylinder","pos":[4.61,0.21,1.12],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair south leg","shape":"cylinder","pos":[4.31,0.21,1.42],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Dining chair south leg","shape":"cylinder","pos":[4.31,0.21,1.12],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Kitchen base 1","shape":"box","pos":[3.66,0.43,2.82],"size":[0.6,0.86,0.72],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen base 1 / door 1","shape":"box","pos":[3.66,0.43,2.451],"size":[0.57,0.81,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen base 1 / pull 1","shape":"box","pos":[3.8925,0.5028,2.441],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen base 2","shape":"box","pos":[4.26,0.43,2.82],"size":[0.6,0.86,0.72],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen base 2 / door 1","shape":"box","pos":[4.26,0.43,2.451],"size":[0.57,0.81,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen base 2 / pull 1","shape":"box","pos":[4.4925,0.5028,2.441],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen base 3","shape":"box","pos":[4.86,0.43,2.82],"size":[0.6,0.86,0.72],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen base 3 / door 1","shape":"box","pos":[4.86,0.43,2.451],"size":[0.57,0.81,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen base 3 / pull 1","shape":"box","pos":[5.0925,0.5028,2.441],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen base 4","shape":"box","pos":[5.497,0.43,2.82],"size":[0.674,0.86,0.72],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen base 4 / door 1","shape":"box","pos":[5.497,0.43,2.451],"size":[0.644,0.81,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen base 4 / pull 1","shape":"box","pos":[5.7665,0.5028,2.441],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen worktop","shape":"box","pos":[4.5975,0.8775,2.82],"size":[2.505,0.035,0.75],"mat":"stone","group":"furniture","rot":0},{"name":"Kitchen sink outline","shape":"box","pos":[4.25,0.908,2.72],"size":[0.5,0.018,0.43],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen sink bowl","shape":"box","pos":[4.25,0.912,2.71],"size":[0.41,0.02,0.33],"mat":"tile","group":"furniture","rot":0},{"name":"Kitchen mixer","shape":"cylinder","pos":[4.23,1.025,2.97],"size":[0.03,0.25,0.03],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen mixer spout","shape":"box","pos":[4.23,1.141,2.9],"size":[0.028,0.022,0.16],"mat":"dark","group":"furniture","rot":0},{"name":"Induction hob","shape":"box","pos":[5.49,0.911,2.77],"size":[0.58,0.022,0.48],"mat":"black","group":"furniture","rot":0},{"name":"Hob cooking zone","shape":"cylinder","pos":[5.34,0.927,2.67],"size":[0.17,0.006,0.17],"mat":"dark","group":"furniture","rot":0},{"name":"Hob cooking zone","shape":"cylinder","pos":[5.64,0.927,2.67],"size":[0.13,0.006,0.13],"mat":"dark","group":"furniture","rot":0},{"name":"Hob cooking zone","shape":"cylinder","pos":[5.36,0.927,2.86],"size":[0.13,0.006,0.13],"mat":"dark","group":"furniture","rot":0},{"name":"Hob cooking zone","shape":"cylinder","pos":[5.62,0.927,2.85],"size":[0.17,0.006,0.17],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen corner return","shape":"box","pos":[6.194,0.43,2.82],"size":[0.72,0.86,0.72],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen corner return / door 1","shape":"box","pos":[5.825,0.43,2.82],"size":[0.018,0.81,0.69],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen return worktop","shape":"box","pos":[6.194,0.8775,2.515],"size":[0.75,0.035,1.35],"mat":"stone","group":"furniture","rot":0},{"name":"Kitchen return base 600","shape":"box","pos":[6.194,0.43,2.14],"size":[0.72,0.86,0.6],"mat":"oak_light","group":"furniture","rot":0},{"name":"Kitchen return base 600 / door 1","shape":"box","pos":[5.825,0.43,2.14],"size":[0.018,0.81,0.57],"mat":"white","group":"furniture","rot":0},{"name":"Refrigerator 720 x 700","shape":"box","pos":[6.194,1.1,1.49],"size":[0.72,2.2,0.7],"mat":"white","group":"furniture","rot":0},{"name":"Refrigerator 720 x 700 / door 1","shape":"box","pos":[5.825,1.1,1.49],"size":[0.018,2.15,0.67],"mat":"white","group":"furniture","rot":0},{"name":"Refrigerator handle","shape":"box","pos":[5.811,1.24,1.689],"size":[0.028,0.62,0.018],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 1","shape":"box","pos":[3.66,2.175,3.0275],"size":[0.6,0.85,0.305],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 1 / door 1","shape":"box","pos":[3.66,2.175,2.866],"size":[0.57,0.8,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 1 / pull 1","shape":"box","pos":[3.8925,2.248,2.856],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 2","shape":"box","pos":[4.275,2.175,3.0275],"size":[0.6,0.85,0.305],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 2 / door 1","shape":"box","pos":[4.275,2.175,2.866],"size":[0.57,0.8,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 2 / pull 1","shape":"box","pos":[4.5075,2.248,2.856],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 3","shape":"box","pos":[4.89,2.175,3.0275],"size":[0.6,0.85,0.305],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 3 / door 1","shape":"box","pos":[4.89,2.175,2.866],"size":[0.57,0.8,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 3 / pull 1","shape":"box","pos":[5.1225,2.248,2.856],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 4","shape":"box","pos":[5.505,2.175,3.0275],"size":[0.6,0.85,0.305],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 4 / door 1","shape":"box","pos":[5.505,2.175,2.866],"size":[0.57,0.8,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Kitchen wall cabinet 4 / pull 1","shape":"box","pos":[5.7375,2.248,2.856],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700","shape":"box","pos":[8.343,1.275,2.83],"size":[3.278,2.55,0.7],"mat":"oak_light","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 1","shape":"box","pos":[6.97717,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 1","shape":"box","pos":[7.18283,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 2","shape":"box","pos":[7.5235,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 2","shape":"box","pos":[7.72917,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 3","shape":"box","pos":[8.06983,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 3","shape":"box","pos":[8.2755,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 4","shape":"box","pos":[8.61617,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 4","shape":"box","pos":[8.82183,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 5","shape":"box","pos":[9.1625,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 5","shape":"box","pos":[9.36817,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / door 6","shape":"box","pos":[9.70883,1.275,2.471],"size":[0.51633,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Study storage 3278 x 700 / pull 6","shape":"box","pos":[9.9145,1.314,2.461],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Study desk 700 x 1356","shape":"box","pos":[7.064,0.7575,1.818],"size":[0.7,0.045,1.356],"mat":"oak_light","group":"furniture","rot":0},{"name":"Study desk drawer unit","shape":"box","pos":[6.874,0.37,1.385],"size":[0.3,0.7,0.45],"mat":"white","group":"furniture","rot":0},{"name":"Study desk end","shape":"box","pos":[7.054,0.3775,2.456],"size":[0.66,0.715,0.04],"mat":"oak","group":"furniture","rot":0},{"name":"Study desk chair seat","shape":"sphere","pos":[7.7,0.465,1.82],"size":[0.45,0.11,0.44],"mat":"sage","group":"furniture","rot":1.570796},{"name":"Study desk chair back","shape":"box","pos":[7.51,0.66,1.82],"size":[0.44,0.4,0.065],"mat":"sage","group":"furniture","rot":1.570796},{"name":"Study desk chair leg","shape":"cylinder","pos":[7.55,0.21,1.97],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Study desk chair leg","shape":"cylinder","pos":[7.85,0.21,1.97],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Study desk chair leg","shape":"cylinder","pos":[7.55,0.21,1.67],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Study desk chair leg","shape":"cylinder","pos":[7.85,0.21,1.67],"size":[0.034,0.42,0.034],"mat":"oak","group":"furniture","rot":0},{"name":"Study monitor foot","shape":"box","pos":[7.015,0.8,1.71],"size":[0.15,0.02,0.22],"mat":"dark","group":"furniture","rot":0},{"name":"Study monitor","shape":"box","pos":[6.9775,1.0,1.71],"size":[0.035,0.3,0.46],"mat":"black","group":"furniture","rot":0},{"name":"Study sofa-bed base","shape":"box","pos":[9.0675,0.23,0.535],"size":[1.685,0.26,0.95],"mat":"oak","group":"furniture","rot":0},{"name":"Study sofa-bed mattress","shape":"box","pos":[9.0675,0.46,0.54],"size":[1.625,0.2,0.9],"mat":"sage","group":"furniture","rot":0},{"name":"Study sofa-bed back","shape":"box","pos":[9.0675,0.46,0.115],"size":[1.665,0.72,0.14],"mat":"sage","group":"furniture","rot":0},{"name":"Study sofa-bed left arm","shape":"box","pos":[8.255,0.39,0.54],"size":[0.1,0.58,0.95],"mat":"sage","group":"furniture","rot":0},{"name":"Study sofa-bed right arm","shape":"box","pos":[9.905,0.39,0.54],"size":[0.1,0.58,0.95],"mat":"sage","group":"furniture","rot":0},{"name":"Study pillow","shape":"sphere","pos":[8.63,0.645,0.43],"size":[0.49,0.17,0.39],"mat":"linen","group":"furniture","rot":0.13},{"name":"Study pillow","shape":"sphere","pos":[9.3,0.645,0.43],"size":[0.49,0.17,0.39],"mat":"linen","group":"furniture","rot":0.13},{"name":"Study side table D350","shape":"cylinder","pos":[9.73,0.485,1.3],"size":[0.35,0.03,0.35],"mat":"oak_light","group":"furniture","rot":0},{"name":"Study side table leg","shape":"cylinder","pos":[9.73,0.235,1.3],"size":[0.05,0.47,0.05],"mat":"dark","group":"furniture","rot":0},{"name":"Study plant wall backing","shape":"box","pos":[6.7315,1.63,1.29],"size":[0.035,1.2,0.3],"mat":"oak","group":"furniture","rot":0},{"name":"Study plant wall foliage","shape":"sphere","pos":[6.77,1.195,1.28],"size":[0.1,0.25,0.28],"mat":"green","group":"furniture","rot":0},{"name":"Study plant wall foliage","shape":"sphere","pos":[6.77,1.415,1.28],"size":[0.1,0.25,0.28],"mat":"green","group":"furniture","rot":0},{"name":"Study plant wall foliage","shape":"sphere","pos":[6.77,1.635,1.28],"size":[0.1,0.25,0.28],"mat":"green","group":"furniture","rot":0},{"name":"Study plant wall foliage","shape":"sphere","pos":[6.77,1.855,1.28],"size":[0.1,0.25,0.28],"mat":"green","group":"furniture","rot":0},{"name":"Study plant wall foliage","shape":"sphere","pos":[6.77,2.075,1.28],"size":[0.1,0.25,0.28],"mat":"green","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650","shape":"box","pos":[5.133,1.275,3.755],"size":[2.866,2.55,0.65],"mat":"oak_light","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / door 1","shape":"box","pos":[3.9866,1.275,4.089],"size":[0.5432,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / pull 1","shape":"box","pos":[4.2057,1.314,4.111],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / door 2","shape":"box","pos":[4.5598,1.275,4.089],"size":[0.5432,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / pull 2","shape":"box","pos":[4.7789,1.314,4.111],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / door 3","shape":"box","pos":[5.133,1.275,4.089],"size":[0.5432,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / pull 3","shape":"box","pos":[5.3521,1.314,4.111],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / door 4","shape":"box","pos":[5.7062,1.275,4.089],"size":[0.5432,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / pull 4","shape":"box","pos":[5.9253,1.314,4.111],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / door 5","shape":"box","pos":[6.2794,1.275,4.089],"size":[0.5432,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Hall wardrobe 2866 x 650 / pull 5","shape":"box","pos":[6.4985,1.314,4.111],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Hall shallow cupboard","shape":"box","pos":[3.47,1.275,4.075],"size":[0.22,2.55,1.25],"mat":"white","group":"furniture","rot":0},{"name":"Hall shallow cupboard / door 1","shape":"box","pos":[3.351,1.275,3.7625],"size":[0.018,2.5,0.595],"mat":"white","group":"furniture","rot":0},{"name":"Hall shallow cupboard / door 2","shape":"box","pos":[3.351,1.275,4.3875],"size":[0.018,2.5,0.595],"mat":"white","group":"furniture","rot":0},{"name":"Utility base cupboard 882","shape":"box","pos":[3.801,0.445,5.805],"size":[0.882,0.89,0.55],"mat":"oak_light","group":"furniture","rot":0},{"name":"Utility base cupboard 882 / door 1","shape":"box","pos":[3.5805,0.445,5.521],"size":[0.411,0.84,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Utility base cupboard 882 / pull 1","shape":"box","pos":[3.7335,0.5172,5.511],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Utility base cupboard 882 / door 2","shape":"box","pos":[4.0215,0.445,5.521],"size":[0.411,0.84,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Utility base cupboard 882 / pull 2","shape":"box","pos":[4.1745,0.5172,5.511],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Laundry utility housing 650","shape":"box","pos":[4.563,1.25,5.855],"size":[0.642,2.5,0.65],"mat":"white","group":"furniture","rot":0},{"name":"Laundry utility housing 650 / door 1","shape":"box","pos":[4.563,1.25,5.521],"size":[0.612,2.45,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Laundry utility housing 650 / pull 1","shape":"box","pos":[4.8165,1.29,5.511],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Washing machine","shape":"box","pos":[4.557,0.48,5.77],"size":[0.58,0.8,0.5],"mat":"white","group":"furniture","rot":0},{"name":"Washing machine door","shape":"sphere","pos":[4.557,0.47,5.508],"size":[0.36,0.36,0.028],"mat":"dark","group":"furniture","rot":0},{"name":"Washing machine glass","shape":"sphere","pos":[4.557,0.47,5.485],"size":[0.275,0.275,0.018],"mat":"mirror","group":"furniture","rot":0},{"name":"Tumble dryer","shape":"box","pos":[4.557,1.36,5.77],"size":[0.58,0.8,0.5],"mat":"white","group":"furniture","rot":0},{"name":"Tumble dryer door","shape":"sphere","pos":[4.557,1.35,5.508],"size":[0.36,0.36,0.028],"mat":"dark","group":"furniture","rot":0},{"name":"Tumble dryer glass","shape":"sphere","pos":[4.557,1.35,5.485],"size":[0.275,0.275,0.018],"mat":"mirror","group":"furniture","rot":0},{"name":"Utility worktop","shape":"box","pos":[3.8,0.9075,5.805],"size":[0.9,0.035,0.59],"mat":"stone","group":"furniture","rot":0},{"name":"Utility basin rim","shape":"sphere","pos":[4.54,0.8775,6.43],"size":[0.34,0.095,0.25],"mat":"white","group":"furniture","rot":0},{"name":"Utility basin bowl","shape":"sphere","pos":[4.54,0.9145,6.414],"size":[0.2346,0.013,0.16],"mat":"tile","group":"furniture","rot":0},{"name":"Utility basin tap","shape":"cylinder","pos":[4.54,0.925,6.54],"size":[0.03,0.19,0.03],"mat":"dark","group":"furniture","rot":0},{"name":"Utility basin spout","shape":"box","pos":[4.54,1.0075,6.51125],"size":[0.028,0.025,0.0725],"mat":"dark","group":"furniture","rot":0},{"name":"Hall console","shape":"box","pos":[2.98,0.42,6.165],"size":[0.35,0.84,0.79],"mat":"oak_light","group":"furniture","rot":0},{"name":"Hall console / door 1","shape":"box","pos":[2.796,0.42,6.165],"size":[0.018,0.79,0.76],"mat":"white","group":"furniture","rot":0},{"name":"Entrance bench base","shape":"box","pos":[2.98,0.205,7.05],"size":[0.35,0.37,0.7],"mat":"oak","group":"furniture","rot":0},{"name":"Entrance bench cushion","shape":"box","pos":[2.975,0.43,7.05],"size":[0.38,0.08,0.7],"mat":"linen","group":"furniture","rot":0},{"name":"Entrance full-length mirror","shape":"box","pos":[3.138,1.25,7.34],"size":[0.02,1.8,0.6],"mat":"mirror","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835","shape":"box","pos":[0.9175,0.55,3.43],"size":[1.805,0.52,0.5],"mat":"oak_light","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / door 1","shape":"box","pos":[0.31583,0.55,3.689],"size":[0.57167,0.47,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / pull 1","shape":"box","pos":[0.54917,0.6296,3.711],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / door 2","shape":"box","pos":[0.9175,0.55,3.689],"size":[0.57167,0.47,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / pull 2","shape":"box","pos":[1.15083,0.6296,3.711],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / door 3","shape":"box","pos":[1.51917,0.55,3.689],"size":[0.57167,0.47,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 double vanity 1835 / pull 3","shape":"box","pos":[1.7525,0.6296,3.711],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 stone top","shape":"box","pos":[0.9175,0.8275,3.43],"size":[1.825,0.035,0.52],"mat":"stone","group":"furniture","rot":0},{"name":"Bathroom 1 basin left rim","shape":"sphere","pos":[0.43,0.8975,3.43],"size":[0.5,0.095,0.4],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 basin left bowl","shape":"sphere","pos":[0.43,0.9345,3.414],"size":[0.345,0.013,0.256],"mat":"tile","group":"furniture","rot":0},{"name":"Bathroom 1 basin left tap","shape":"cylinder","pos":[0.43,0.945,3.606],"size":[0.03,0.19,0.03],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 basin left spout","shape":"box","pos":[0.43,1.0275,3.56],"size":[0.028,0.025,0.116],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 basin right rim","shape":"sphere","pos":[1.35,0.8975,3.43],"size":[0.5,0.095,0.4],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 basin right bowl","shape":"sphere","pos":[1.35,0.9345,3.414],"size":[0.345,0.013,0.256],"mat":"tile","group":"furniture","rot":0},{"name":"Bathroom 1 basin right tap","shape":"cylinder","pos":[1.35,0.945,3.606],"size":[0.03,0.19,0.03],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 basin right spout","shape":"box","pos":[1.35,1.0275,3.56],"size":[0.028,0.025,0.116],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 mirror","shape":"box","pos":[0.9175,1.555,3.164],"size":[1.675,0.91,0.024],"mat":"mirror","group":"furniture","rot":0},{"name":"Bathroom 1 WC cistern wall","shape":"box","pos":[0.46,0.55,5.54],"size":[0.6,1.1,0.16],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 WC bowl","shape":"sphere","pos":[0.46,0.31,5.22],"size":[0.37,0.3,0.58],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 WC seat","shape":"sphere","pos":[0.46,0.4625,5.18],"size":[0.38,0.045,0.47],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 WC opening","shape":"sphere","pos":[0.46,0.4755,5.165],"size":[0.245,0.015,0.33],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 WC flush","shape":"box","pos":[0.46,0.9525,5.456],"size":[0.17,0.085,0.016],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 tray","shape":"box","pos":[1.385,0.05,5.19],"size":[0.9,0.1,0.9],"mat":"white","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 recess","shape":"box","pos":[1.385,0.107,5.19],"size":[0.81,0.014,0.81],"mat":"tile","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 drain","shape":"cylinder","pos":[1.547,0.121,5.352],"size":[0.05,0.008,0.05],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 left screen","shape":"box","pos":[0.956,1.075,5.19],"size":[0.012,1.95,0.85],"mat":"showerglass","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 front screen","shape":"box","pos":[1.385,1.075,4.764],"size":[0.86,1.95,0.012],"mat":"showerglass","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 edge","shape":"box","pos":[0.956,1.075,4.761],"size":[0.022,1.95,0.022],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 riser","shape":"cylinder","pos":[1.52,1.57,5.6],"size":[0.026,1.1,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 shower 900 shower head","shape":"box","pos":[1.54,2.1125,5.51],"size":[0.22,0.025,0.2],"mat":"dark","group":"furniture","rot":0},{"name":"Bathroom 1 installation shelf","shape":"box","pos":[0.465,1.1425,5.54],"size":[0.87,0.045,0.14],"mat":"oak","group":"furniture","rot":0},{"name":"Cat litter tray under vanity","shape":"box","pos":[0.44,0.1,3.435],"size":[0.5,0.16,0.43],"mat":"white","group":"furniture","rot":0},{"name":"Cat litter tray under vanity","shape":"box","pos":[1.22,0.1,3.435],"size":[0.5,0.16,0.43],"mat":"white","group":"furniture","rot":0},{"name":"Ensuite WC cistern wall","shape":"box","pos":[5.39,0.55,6.65],"size":[0.6,1.1,0.16],"mat":"white","group":"furniture","rot":0},{"name":"Ensuite WC bowl","shape":"sphere","pos":[5.39,0.31,6.33],"size":[0.37,0.3,0.58],"mat":"white","group":"furniture","rot":0},{"name":"Ensuite WC seat","shape":"sphere","pos":[5.39,0.4625,6.29],"size":[0.38,0.045,0.47],"mat":"white","group":"furniture","rot":0},{"name":"Ensuite WC opening","shape":"sphere","pos":[5.39,0.4755,6.275],"size":[0.245,0.015,0.33],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite WC flush","shape":"box","pos":[5.39,0.9525,6.566],"size":[0.17,0.085,0.016],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite shower 900 tray","shape":"box","pos":[6.134,0.05,6.37],"size":[0.9,0.1,0.9],"mat":"white","group":"furniture","rot":0},{"name":"Ensuite shower 900 recess","shape":"box","pos":[6.134,0.107,6.37],"size":[0.81,0.014,0.81],"mat":"tile","group":"furniture","rot":0},{"name":"Ensuite shower 900 drain","shape":"cylinder","pos":[6.296,0.121,6.532],"size":[0.05,0.008,0.05],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite shower 900 left screen","shape":"box","pos":[5.705,1.075,6.37],"size":[0.012,1.95,0.85],"mat":"showerglass","group":"furniture","rot":0},{"name":"Ensuite shower 900 front screen","shape":"box","pos":[6.134,1.075,5.944],"size":[0.86,1.95,0.012],"mat":"showerglass","group":"furniture","rot":0},{"name":"Ensuite shower 900 edge","shape":"box","pos":[5.705,1.075,5.941],"size":[0.022,1.95,0.022],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite shower 900 riser","shape":"cylinder","pos":[6.269,1.57,6.78],"size":[0.026,1.1,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite shower 900 shower head","shape":"box","pos":[6.289,2.1125,6.69],"size":[0.22,0.025,0.2],"mat":"dark","group":"furniture","rot":0},{"name":"Ensuite installation shelf","shape":"box","pos":[5.335,1.1425,6.725],"size":[0.64,0.045,0.15],"mat":"oak","group":"furniture","rot":0},{"name":"Cloakroom north storage","shape":"box","pos":[0.915,1.275,5.98],"size":[1.79,2.55,0.4],"mat":"oak_light","group":"furniture","rot":0},{"name":"Cloakroom north storage / door 1","shape":"box","pos":[0.31833,1.275,6.189],"size":[0.56667,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom north storage / pull 1","shape":"box","pos":[0.54917,1.314,6.211],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom north storage / door 2","shape":"box","pos":[0.915,1.275,6.189],"size":[0.56667,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom north storage / pull 2","shape":"box","pos":[1.14583,1.314,6.211],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom north storage / door 3","shape":"box","pos":[1.51167,1.275,6.189],"size":[0.56667,2.5,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom north storage / pull 3","shape":"box","pos":[1.7425,1.314,6.211],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom west storage","shape":"box","pos":[0.22,1.275,6.82],"size":[0.4,2.55,1.28],"mat":"oak_light","group":"furniture","rot":0},{"name":"Cloakroom west storage / door 1","shape":"box","pos":[0.429,1.275,6.5],"size":[0.018,2.5,0.61],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom west storage / door 2","shape":"box","pos":[0.429,1.275,7.14],"size":[0.018,2.5,0.61],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom south storage","shape":"box","pos":[0.915,1.42,7.83],"size":[1.79,2.46,0.34],"mat":"oak_light","group":"furniture","rot":0},{"name":"Cloakroom south storage / door 1","shape":"box","pos":[0.31833,1.42,7.651],"size":[0.56667,2.41,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom south storage / pull 1","shape":"box","pos":[0.54917,1.4608,7.641],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom south storage / door 2","shape":"box","pos":[0.915,1.42,7.651],"size":[0.56667,2.41,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom south storage / pull 2","shape":"box","pos":[1.14583,1.4608,7.641],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom south storage / door 3","shape":"box","pos":[1.51167,1.42,7.651],"size":[0.56667,2.41,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Cloakroom south storage / pull 3","shape":"box","pos":[1.7425,1.4608,7.641],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom open rail","shape":"box","pos":[0.89,1.7535,6.3035],"size":[1.66,0.027,0.027],"mat":"dark","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[0.18,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"sage","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[0.35,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"linen","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[0.52,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"sage","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[0.69,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"linen","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[0.86,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"sage","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[1.03,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"linen","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[1.2,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"sage","group":"furniture","rot":0},{"name":"Cloakroom hanging garment","shape":"box","pos":[1.37,1.3,6.445],"size":[0.08,0.86,0.39],"mat":"linen","group":"furniture","rot":0},{"name":"Robot vacuum","shape":"cylinder","pos":[1.5,0.0625,7.74],"size":[0.32,0.085,0.32],"mat":"dark","group":"furniture","rot":0},{"name":"Bedroom rug","shape":"box","pos":[8.395,0.03,5.595],"size":[2.29,0.018,2.25],"mat":"rug","group":"furniture","rot":0},{"name":"Bed frame","shape":"box","pos":[8.29,0.25,5.72],"size":[1.86,0.28,2.16],"mat":"oak","group":"furniture","rot":0},{"name":"Mattress 1800 x 2100","shape":"box","pos":[8.29,0.51,5.72],"size":[1.8,0.24,2.1],"mat":"linen","group":"furniture","rot":0},{"name":"Bed headboard south","shape":"box","pos":[8.29,0.54,6.7475],"size":[1.9,1.04,0.075],"mat":"linen","group":"furniture","rot":0},{"name":"Bed duvet","shape":"box","pos":[8.29,0.6625,5.51],"size":[1.75,0.055,1.62],"mat":"sage","group":"furniture","rot":0},{"name":"Bed folded cover","shape":"box","pos":[8.29,0.7075,5.03],"size":[1.75,0.035,0.4],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom pillow","shape":"sphere","pos":[7.87,0.735,6.38],"size":[0.68,0.17,0.42],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom pillow","shape":"sphere","pos":[8.68,0.735,6.38],"size":[0.68,0.17,0.42],"mat":"linen","group":"furniture","rot":0},{"name":"Bedside table 450 x 400","shape":"box","pos":[7.015,0.225,6.56],"size":[0.45,0.45,0.4],"mat":"oak_light","group":"furniture","rot":0},{"name":"Bedside table 450 x 400 / door 1","shape":"box","pos":[7.015,0.225,6.351],"size":[0.42,0.4,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedside table 450 x 400 / pull 1","shape":"box","pos":[7.1725,0.306,6.341],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light base","shape":"cylinder","pos":[7.01,0.4625,6.55],"size":[0.14,0.025,0.14],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light stem","shape":"cylinder","pos":[7.01,0.6,6.55],"size":[0.024,0.25,0.024],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light shade","shape":"cylinder","pos":[7.01,0.73,6.55],"size":[0.23,0.14,0.23],"mat":"linen","group":"furniture","rot":0},{"name":"Bedside table 450 x 400","shape":"box","pos":[9.525,0.225,6.56],"size":[0.45,0.45,0.4],"mat":"oak_light","group":"furniture","rot":0},{"name":"Bedside table 450 x 400 / door 1","shape":"box","pos":[9.525,0.225,6.351],"size":[0.42,0.4,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedside table 450 x 400 / pull 1","shape":"box","pos":[9.6825,0.306,6.341],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light base","shape":"cylinder","pos":[9.52,0.4625,6.55],"size":[0.14,0.025,0.14],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light stem","shape":"cylinder","pos":[9.52,0.6,6.55],"size":[0.024,0.25,0.024],"mat":"dark","group":"furniture","rot":0},{"name":"Bedside light shade","shape":"cylinder","pos":[9.52,0.73,6.55],"size":[0.23,0.14,0.23],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960","shape":"box","pos":[8.684,0.58,3.648],"size":[1.96,0.56,0.396],"mat":"white","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / door 1","shape":"box","pos":[7.949,0.58,3.855],"size":[0.46,0.51,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / pull 1","shape":"box","pos":[8.1265,0.6588,3.877],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / door 2","shape":"box","pos":[8.439,0.58,3.855],"size":[0.46,0.51,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / pull 2","shape":"box","pos":[8.6165,0.6588,3.877],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / door 3","shape":"box","pos":[8.929,0.58,3.855],"size":[0.46,0.51,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / pull 3","shape":"box","pos":[9.1065,0.6588,3.877],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / door 4","shape":"box","pos":[9.419,0.58,3.855],"size":[0.46,0.51,0.018],"mat":"white","group":"furniture","rot":0},{"name":"Bedroom north cabinet 1960 / pull 4","shape":"box","pos":[9.5965,0.6588,3.877],"size":[0.015,0.18,0.026],"mat":"dark","group":"furniture","rot":0},{"name":"Bedroom north shelf","shape":"box","pos":[8.34,0.8775,3.65],"size":[3.24,0.035,0.4],"mat":"oak_light","group":"furniture","rot":0},{"name":"Bedroom curtain pleat","shape":"box","pos":[9.905,1.35,4.2],"size":[0.05,2.54,0.16],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom curtain pleat","shape":"box","pos":[9.905,1.35,4.62],"size":[0.05,2.54,0.16],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom curtain pleat","shape":"box","pos":[9.905,1.35,6.21],"size":[0.05,2.54,0.16],"mat":"linen","group":"furniture","rot":0},{"name":"Bedroom curtain pleat","shape":"box","pos":[9.905,1.35,6.63],"size":[0.05,2.54,0.16],"mat":"linen","group":"furniture","rot":0},{"name":"Plant rack side","shape":"box","pos":[9.756,0.875,3.64],"size":[0.028,1.75,0.32],"mat":"dark","group":"furniture","rot":0},{"name":"Plant rack shelf","shape":"box","pos":[9.862,0.161,3.66],"size":[0.24,0.022,0.36],"mat":"oak_light","group":"furniture","rot":0},{"name":"Plant rack pot pot","shape":"cylinder","pos":[9.86,0.3,3.65],"size":[0.16,0.25,0.16],"mat":"terra","group":"furniture","rot":0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.908,0.49575,3.65],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":0.0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,0.52875,3.69565],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":1.256637},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,0.49575,3.67821],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":2.513274},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,0.52875,3.62179],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":3.769911},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,0.49575,3.60435],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":5.026548},{"name":"Plant rack shelf","shape":"box","pos":[9.862,0.671,3.66],"size":[0.24,0.022,0.36],"mat":"oak_light","group":"furniture","rot":0},{"name":"Plant rack pot pot","shape":"cylinder","pos":[9.86,0.81,3.65],"size":[0.16,0.25,0.16],"mat":"terra","group":"furniture","rot":0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.908,1.00575,3.65],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":0.0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,1.03875,3.69565],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":1.256637},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,1.00575,3.67821],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":2.513274},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,1.03875,3.62179],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":3.769911},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,1.00575,3.60435],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":5.026548},{"name":"Plant rack shelf","shape":"box","pos":[9.862,1.191,3.66],"size":[0.24,0.022,0.36],"mat":"oak_light","group":"furniture","rot":0},{"name":"Plant rack pot pot","shape":"cylinder","pos":[9.86,1.33,3.65],"size":[0.16,0.25,0.16],"mat":"terra","group":"furniture","rot":0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.908,1.52575,3.65],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":0.0},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,1.55875,3.69565],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":1.256637},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,1.52575,3.67821],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":2.513274},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.82117,1.55875,3.62179],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":3.769911},{"name":"Plant rack pot leaf","shape":"sphere","pos":[9.87483,1.52575,3.60435],"size":[0.096,0.1815,0.056],"mat":"green","group":"furniture","rot":5.026548},{"name":"Ceiling main","shape":"box","pos":[4.991,2.74,3.41],"size":[9.982,0.08,6.82],"mat":"white","group":"ceiling","rot":0},{"name":"Ceiling entrance","shape":"box","pos":[1.5775,2.74,7.42],"size":[3.155,0.08,1.2],"mat":"white","group":"ceiling","rot":0}],"labels":[["Кухня-гостиная",3.7,1.85],["Кабинет / гостевая",8.56,1.89],["Спальня",8.35,4.21],["Санузел",0.93,4.22],["Санузел",5.65,5.56],["Гардеробная",1.08,7.13],["Прихожая",2.45,6.43],["Холл",4.31,4.76],["Балкон",10.71,5.24]]};
+try {
+  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js');
+  const scene=new THREE.Scene();
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.0;
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.localClippingEnabled=true;
+  area.prepend(renderer.domElement);
+  const camera=new THREE.OrthographicCamera(-8,8,6,-6,.1,100);
+  const ambient=new THREE.HemisphereLight(0xffffff,0xa7a099,1.7);scene.add(ambient);
+  const sunlight=new THREE.DirectionalLight(0xffffff,2.5);sunlight.position.set(-4,14,-5);sunlight.castShadow=true;
+  sunlight.shadow.mapSize.set(2048,2048);
+  Object.assign(sunlight.shadow.camera,{left:-11,right:11,top:11,bottom:-11,near:.5,far:45});
+  sunlight.shadow.bias=-.00025;sunlight.shadow.normalBias=.025;
+  sunlight.target.position.set(5,0,4);scene.add(sunlight,sunlight.target);
+  const fill=new THREE.DirectionalLight(0xffffff,.5);fill.position.set(12,8,12);scene.add(fill);
+  const materials={};
+  for(const [k,[name,color,opacity]] of Object.entries(model.materials)) {
+    materials[k]=new THREE.MeshStandardMaterial({name,color,roughness:['glass','mirror','black'].includes(k)?.23:.85,metalness:k==='dark'?.22:0,transparent:opacity<1,opacity,depthWrite:opacity===1,side:opacity<1?THREE.DoubleSide:THREE.FrontSide});
+  }
+  const geometries={box:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(.5,.5,1,24),sphere:new THREE.SphereGeometry(.5,20,12)};
+  const groups={},meshes=[];
+  const clipping=new THREE.Plane(new THREE.Vector3(0,-1,0),1.05);
+  for(const p of model.parts){
+    if(!groups[p.group]){groups[p.group]=new THREE.Group();scene.add(groups[p.group]);}
+    const m=new THREE.Mesh(geometries[p.shape],materials[p.mat].clone());
+    m.material.clipShadows=true;
+    m.name=p.name;m.position.set(...p.pos);m.rotation.y=p.rot;m.scale.set(...p.size);
+    m.castShadow=p.group!=='floor'&&p.mat!=='glass'&&p.mat!=='showerglass';m.receiveShadow=true;
+    m.userData=p;groups[p.group].add(m);meshes.push(m);
+  }
+  groups.ceiling.visible=false;
+  const cutCaps=new THREE.Group();scene.add(cutCaps);
+  const capMat=new THREE.MeshStandardMaterial({color:0x9a958b,roughness:1});
+  for(const p of model.parts.filter(p=>p.group==='walls'||(p.group==='furniture'&&p.shape==='box'))){
+    if(p.pos[1]-p.size[1]/2<1.05&&p.pos[1]+p.size[1]/2>1.05){
+      const cap=new THREE.Mesh(geometries.box,p.group==='walls'?capMat:materials[p.mat]);
+      cap.position.set(p.pos[0],1.048,p.pos[2]);cap.scale.set(p.size[0],.008,p.size[2]);cap.rotation.y=p.rot;cutCaps.add(cap);
+    }
+  }
+  const labelLayer=root.querySelector('#ap-room-labels');
+  const labels=model.labels.map(([text,x,z])=>{
+    const el=document.createElement('span');el.className='text-small';el.textContent=text;labelLayer.append(el);
+    return {el,pos:new THREE.Vector3(x,.06,z),name:text};
+  });
+  const target=new THREE.Vector3(5.12,.35,3.92);
+  const panOffset=new THREE.Vector3();
+  const cameraRight=new THREE.Vector3(),cameraUp=new THREE.Vector3();
+  let angle=-.20,elevation=1.04,zoom=1,mode='cut';
+  let framePending=false;
+  function render(){
+    framePending=false;
+    const w=area.clientWidth,h=area.clientHeight;
+    if(!w||!h)return;
+    const aspect=w/h;
+    const span=Math.max(mode==='full'?11.1:10.4,(mode==='full'?13.5:13.2)/aspect)/zoom;
+    camera.left=-span*aspect/2;camera.right=span*aspect/2;camera.top=span/2;camera.bottom=-span/2;
+    target.set(5.12,mode==='full'?1.0:.35,3.92).add(panOffset);
+    camera.position.set(target.x+18*Math.cos(elevation)*Math.sin(angle),target.y+18*Math.sin(elevation),target.z+18*Math.cos(elevation)*Math.cos(angle));
+    camera.up.set(0,1,0);camera.lookAt(target);camera.updateProjectionMatrix();
+    renderer.render(scene,camera);
+    const narrow=w<500;
+    for(const label of labels){
+      const p=label.pos.clone().project(camera);
+      label.el.style.left=((p.x+1)*w/2)+'px';label.el.style.top=((1-p.y)*h/2)+'px';
+      label.el.hidden=!root.querySelector('#ap-labels').checked||(mode==='full')||(narrow&&mode!=='top'&&['Санузел','Холл','Балкон','Прихожая','Гардеробная'].includes(label.name));
+    }
+  }
+  function requestRender(){if(!framePending){framePending=true;requestAnimationFrame(render);}}
+  function resize(){renderer.setSize(area.clientWidth,area.clientHeight,false);requestRender();}
+  new ResizeObserver(resize).observe(area);
+  function panPixels(dx,dy){
+    camera.updateMatrixWorld();
+    const units=(camera.top-camera.bottom)/Math.max(1,area.clientHeight);
+    cameraRight.setFromMatrixColumn(camera.matrixWorld,0);
+    cameraUp.setFromMatrixColumn(camera.matrixWorld,1);
+    panOffset.addScaledVector(cameraRight,-dx*units).addScaledVector(cameraUp,dy*units);
+  }
+  function zoomAt(factor,clientX,clientY){
+    const before=zoom;
+    zoom=Math.max(.35,Math.min(6,zoom*factor));
+    if(clientX!==undefined){
+      const r=renderer.domElement.getBoundingClientRect();
+      const dx=clientX-r.left-r.width/2,dy=clientY-r.top-r.height/2;
+      panPixels(-dx*(1-before/zoom),-dy*(1-before/zoom));
+    }
+    requestRender();
+  }
+  function fitModel(){
+    panOffset.set(0,0,0);zoom=1;render();
+    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    const v=new THREE.Vector3();
+    for(const mesh of meshes){
+      if(!mesh.visible||!mesh.parent.visible)continue;
+      const p=mesh.userData,cut=mode!=='full'&&['walls','windows','doors','furniture'].includes(p.group);
+      const bottom=p.pos[1]-p.size[1]/2,top=cut?Math.min(1.05,p.pos[1]+p.size[1]/2):p.pos[1]+p.size[1]/2;
+      if(top<bottom)continue;
+      const c=Math.cos(p.rot),s=Math.sin(p.rot);
+      for(const x of [-p.size[0]/2,p.size[0]/2])for(const y of [bottom,top])for(const z of [-p.size[2]/2,p.size[2]/2]){
+        v.set(p.pos[0]+c*x+s*z,y,p.pos[2]-s*x+c*z).project(camera);
+        minX=Math.min(minX,v.x);maxX=Math.max(maxX,v.x);minY=Math.min(minY,v.y);maxY=Math.max(maxY,v.y);
+      }
+    }
+    cameraRight.setFromMatrixColumn(camera.matrixWorld,0);cameraUp.setFromMatrixColumn(camera.matrixWorld,1);
+    panOffset.addScaledVector(cameraRight,(minX+maxX)*(camera.right-camera.left)/4).addScaledVector(cameraUp,(minY+maxY)*(camera.top-camera.bottom)/4);
+    zoom=Math.max(.35,Math.min(6,.88/Math.max((maxX-minX)/2,(maxY-minY)/2)));
+    requestRender();
+  }
+  function updateMode(){
+    mode=root.querySelector('#ap-view').value;
+    const cut=mode!=='full';
+    for(const m of meshes){
+      const p=m.userData;
+      m.material.clippingPlanes=cut&&['walls','windows','doors','furniture'].includes(p.group)?[clipping]:[];
+      // Wall-hung objects are kept in the full-height model; hide them in the cutaway.
+      m.visible=!(cut&&p.group==='furniture'&&p.pos[1]-p.size[1]/2>1.04);
+    }
+    cutCaps.visible=cut;
+    if(mode==='top'){angle=0;elevation=Math.PI/2-.0001;} else {elevation=mode==='full'?.91:1.04;angle=-.20;}
+    root.querySelector('#ap-state').textContent=mode==='full'?'Стены 2,70 м · потолок скрыт':mode==='top'?'План сверху · масштаб в метрах':'Потолки 2,70 м · разрез на 1,05 м';
+    fitModel();
+  }
+  root.querySelector('#ap-view').addEventListener('change',updateMode);
+  root.querySelector('#ap-furniture').addEventListener('change',e=>{groups.furniture.visible=e.target.checked;for(const cap of cutCaps.children)if(cap.material!==capMat)cap.visible=e.target.checked;requestRender();});
+  root.querySelector('#ap-labels').addEventListener('change',requestRender);
+  root.querySelector('#ap-left').addEventListener('click',()=>{angle-=Math.PI/8;requestRender();});
+  root.querySelector('#ap-right').addEventListener('click',()=>{angle+=Math.PI/8;requestRender();});
+  root.querySelector('#ap-plus').addEventListener('click',()=>zoomAt(1.15));
+  root.querySelector('#ap-minus').addEventListener('click',()=>zoomAt(1/1.15));
+  root.querySelector('#ap-fit').addEventListener('click',fitModel);
+  let panMode=false;
+  root.querySelector('#ap-pan').addEventListener('click',e=>{panMode=!panMode;e.currentTarget.setAttribute('aria-pressed',String(panMode));});
+  let drag=null;const pointers=new Map();let pinchDistance=0,pinchCenter=null;
+  const gesture=()=>{const [a,b]=[...pointers.values()];return {distance:Math.hypot(a.x-b.x,a.y-b.y),x:(a.x+b.x)/2,y:(a.y+b.y)/2};};
+  renderer.domElement.addEventListener('pointerdown',e=>{
+    if(e.button>2)return;
+    e.preventDefault();
+    renderer.domElement.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    drag={x:e.clientX,y:e.clientY,pan:panMode||e.button===2||e.button===1||e.shiftKey};renderer.domElement.style.cursor='grabbing';
+    if(pointers.size===2){const g=gesture();pinchDistance=g.distance;pinchCenter=g;}
+  });
+  renderer.domElement.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2){
+      const g=gesture();
+      if(pinchCenter)panPixels(g.x-pinchCenter.x,g.y-pinchCenter.y);
+      if(pinchDistance>0)zoomAt(g.distance/pinchDistance,g.x,g.y);
+      pinchDistance=g.distance;pinchCenter=g;
+    }else if(drag){
+      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+      if(drag.pan||e.shiftKey)panPixels(dx,dy);
+      else{angle-=dx*.007;if(mode!=='top')elevation=Math.max(.30,Math.min(1.49,elevation+dy*.005));}
+    }
+    drag={x:e.clientX,y:e.clientY,pan:drag?.pan??panMode};requestRender();
+  });
+  function release(e){pointers.delete(e.pointerId);const remaining=[...pointers.values()][0];drag=remaining?{...remaining,pan:panMode}:null;pinchDistance=0;pinchCenter=null;renderer.domElement.style.cursor=remaining?'grabbing':'grab';}
+  renderer.domElement.addEventListener('pointerup',release);renderer.domElement.addEventListener('pointercancel',release);
+  renderer.domElement.addEventListener('lostpointercapture',release);
+  renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+  renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoomAt(Math.exp(-e.deltaY*.001),e.clientX,e.clientY);},{passive:false});
+  const observer=new MutationObserver(requestRender);observer.observe(document.documentElement,{attributes:true,attributeFilter:['class','style','data-theme']});
+  root.querySelector('#ap-loading').remove();updateMode();resize();
+}catch(err){root.querySelector('#ap-loading').textContent='Не удалось запустить 3D-просмотр. Модель доступна в файле GLB.';console.error(err);}
+</script>
+
+<script src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
+<script src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
+<script>
+(() => {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (target) =>
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest("[data-tooltip]")
+      : null;
+  const containsTarget = (trigger, target) =>
+    target?.nodeType != null && trigger.contains(target);
+  const getContent = (trigger) =>
+    trigger.getAttribute("data-tooltip")?.trim() ?? "";
+  const getPlacement = (trigger) => {
+    const placement = trigger.getAttribute("data-tooltip-placement");
+    return tooltipPlacements.has(placement) ? placement : "top";
+  };
+  const getTooltip = () => {
+    if (tooltip == null) {
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) => {
+    const ids = new Set(
+      (trigger.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute("aria-describedby");
+    } else {
+      trigger.setAttribute("aria-describedby", [...ids].join(" "));
+    }
+  };
+  const clearOpenTimeout = () => {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) => {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) => {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              "--tooltip-available-width",
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              "--tooltip-available-height",
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: "fixed",
+    })
+      .then(({ x, y }) => {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = "visible";
+      })
+      .catch(() => {
+        if (activeTrigger === trigger && request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) => {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = "hidden";
+    floating.style.transform = "translate(0, 0)";
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) => {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() < skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() => {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) => {
+    lastPointerWasTouch =
+      event.type === "pointerdown" && event.pointerType === "touch";
+  };
+  const handleTouchClick = (event) => {
+    const isTouch = event.pointerType === "touch" || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch && activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() => {
+      if (activeTrigger === trigger && !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) => {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(":focus-visible")) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) => {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () => {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    document.removeEventListener("pointerover", handlePointerOpen);
+    document.removeEventListener("pointerdown", handlePointer);
+    document.removeEventListener("pointercancel", handlePointer);
+    document.removeEventListener("click", handleTouchClick);
+    document.removeEventListener("pointerout", handleLeave);
+    document.removeEventListener("focusin", handleFocusIn);
+    document.removeEventListener("focusout", handleLeave);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("contextmenu", handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener("pointerover", handlePointerOpen);
+  document.addEventListener("pointerdown", handlePointer);
+  document.addEventListener("pointercancel", handlePointer);
+  document.addEventListener("click", handleTouchClick);
+  document.addEventListener("pointerout", handleLeave);
+  document.addEventListener("focusin", handleFocusIn);
+  document.addEventListener("focusout", handleLeave);
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  window.addEventListener("pagehide", destroy, { once: true });
+})();
+</script>
+<script id="codex-visualization-tabs">
+(() => {
+  const selector = '.nav[role="tablist"] [role="tab"]';
+  const disabled = ':disabled,[aria-disabled="true"]';
+  const selectTab = (selected) => {
+    const panelId = selected.getAttribute("aria-controls");
+    for (const tab of selected.closest('[role="tablist"]').querySelectorAll('[role="tab"]')) {
+      const active = tab === selected;
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
+      const id = tab.getAttribute("aria-controls");
+      const panel = id && document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden && selected.id) {
+          panel.setAttribute("aria-labelledby", selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) => {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === "click") {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]'),
+    ).filter((candidate) => !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll('.nav[role="tablist"]')) {
+    const selected =
+      list.querySelector('[role="tab"][aria-selected="true"]') ??
+      list.querySelector('[role="tab"].active') ??
+      list.querySelector('[role="tab"]');
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener("click", interact);
+  document.addEventListener("keydown", interact);
+  window.addEventListener("pagehide", () => {
+    document.removeEventListener("click", interact);
+    document.removeEventListener("keydown", interact);
+  }, { once: true });
+})();
+</script>
+<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
+<script>
+(() => {
+  const initialize = () => {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById("codex-visualization-lucide")
+    ?.addEventListener("load", initialize, { once: true });
+})();
+</script>
+
+</body>
+</html>

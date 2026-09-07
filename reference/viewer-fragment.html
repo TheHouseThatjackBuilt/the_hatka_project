@@ -1,0 +1,218 @@
+<div id="apartment-view">
+  <div id="ap-toolbar">
+    <div id="ap-view-field">
+    <label class="form-label">Вид
+      <select class="form-select" id="ap-view">
+        <option value="cut">3D · разрез стен</option>
+        <option value="full">3D · стены 2,7 м</option>
+        <option value="top">План сверху</option>
+      </select>
+    </label>
+    </div>
+    <label class="form-check"><input class="form-check-input" id="ap-furniture" type="checkbox" checked><span class="form-check-label">Мебель</span></label>
+    <label class="form-check"><input class="form-check-input" id="ap-labels" type="checkbox" checked><span class="form-check-label">Названия</span></label>
+    <button class="btn" id="ap-pan" type="button" aria-pressed="false">Перемещать</button>
+    <button class="btn" id="ap-fit" type="button">Вписать модель</button>
+  </div>
+  <div id="ap-scene" role="img" aria-label="Вращаемая 3D-модель квартиры. Стены 2,7 метра; кухня-гостиная, кабинет, спальня, два санузла, гардеробная и балкон.">
+    <div id="ap-room-labels"></div>
+    <span id="ap-loading" role="status">Загрузка 3D…</span>
+  </div>
+  <div class="viz-row" id="ap-footer">
+    <button class="btn btn-ghost" id="ap-left" type="button" aria-label="Повернуть влево">↶</button>
+    <button class="btn btn-ghost" id="ap-right" type="button" aria-label="Повернуть вправо">↷</button>
+    <button class="btn btn-ghost" id="ap-minus" type="button" aria-label="Отдалить">−</button>
+    <button class="btn btn-ghost" id="ap-plus" type="button" aria-label="Приблизить">+</button>
+    <span class="text-small text-muted" id="ap-state" aria-live="polite">Потолки 2,70 м · разрез на 1,05 м</span>
+    <span class="text-small text-muted" id="ap-help">Вращение — левая кнопка · перемещение — правая или Shift · масштаб — колёсико</span>
+  </div>
+</div>
+<style>
+#apartment-view{width:100%}
+#ap-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+#ap-view-field{flex:0 1 240px;min-width:180px}
+#ap-scene{width:100%;height:660px;position:relative;touch-action:none;overflow:hidden;min-width:0}
+#ap-scene canvas{display:block;width:100%;height:100%;cursor:grab}
+#ap-room-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#ap-room-labels span{position:absolute;transform:translate(-50%,-50%);color:var(--foreground);background:var(--background);padding:2px 5px;white-space:nowrap}
+#ap-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--foreground)}
+@media(max-width:480px){#ap-scene{height:480px}#ap-help{display:none}}
+/* Only the downloaded browser document fills the window. The inline preview
+   keeps a bounded height so its host can measure it without a resize loop. */
+html[data-visualize-standalone],html[data-visualize-standalone]>body{width:100%;height:100%;margin:0;min-height:0;overflow:hidden}
+html[data-visualize-standalone] #apartment-view{height:100vh;height:100dvh;box-sizing:border-box;padding:12px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;overflow:hidden}
+html[data-visualize-standalone] #ap-scene{height:100%;min-height:0}
+</style>
+<script type="module">
+const root=document.getElementById('apartment-view');
+const area=root.querySelector('#ap-scene');
+const model=__APARTMENT_MODEL__;
+try {
+  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js');
+  const scene=new THREE.Scene();
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.0;
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.localClippingEnabled=true;
+  area.prepend(renderer.domElement);
+  const camera=new THREE.OrthographicCamera(-8,8,6,-6,.1,100);
+  const ambient=new THREE.HemisphereLight(0xffffff,0xa7a099,1.7);scene.add(ambient);
+  const sunlight=new THREE.DirectionalLight(0xffffff,2.5);sunlight.position.set(-4,14,-5);sunlight.castShadow=true;
+  sunlight.shadow.mapSize.set(2048,2048);
+  Object.assign(sunlight.shadow.camera,{left:-11,right:11,top:11,bottom:-11,near:.5,far:45});
+  sunlight.shadow.bias=-.00025;sunlight.shadow.normalBias=.025;
+  sunlight.target.position.set(5,0,4);scene.add(sunlight,sunlight.target);
+  const fill=new THREE.DirectionalLight(0xffffff,.5);fill.position.set(12,8,12);scene.add(fill);
+  const materials={};
+  for(const [k,[name,color,opacity]] of Object.entries(model.materials)) {
+    materials[k]=new THREE.MeshStandardMaterial({name,color,roughness:['glass','mirror','black'].includes(k)?.23:.85,metalness:k==='dark'?.22:0,transparent:opacity<1,opacity,depthWrite:opacity===1,side:opacity<1?THREE.DoubleSide:THREE.FrontSide});
+  }
+  const geometries={box:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(.5,.5,1,24),sphere:new THREE.SphereGeometry(.5,20,12)};
+  const groups={},meshes=[];
+  const clipping=new THREE.Plane(new THREE.Vector3(0,-1,0),1.05);
+  for(const p of model.parts){
+    if(!groups[p.group]){groups[p.group]=new THREE.Group();scene.add(groups[p.group]);}
+    const m=new THREE.Mesh(geometries[p.shape],materials[p.mat].clone());
+    m.material.clipShadows=true;
+    m.name=p.name;m.position.set(...p.pos);m.rotation.y=p.rot;m.scale.set(...p.size);
+    m.castShadow=p.group!=='floor'&&p.mat!=='glass'&&p.mat!=='showerglass';m.receiveShadow=true;
+    m.userData=p;groups[p.group].add(m);meshes.push(m);
+  }
+  groups.ceiling.visible=false;
+  const cutCaps=new THREE.Group();scene.add(cutCaps);
+  const capMat=new THREE.MeshStandardMaterial({color:0x9a958b,roughness:1});
+  for(const p of model.parts.filter(p=>p.group==='walls'||(p.group==='furniture'&&p.shape==='box'))){
+    if(p.pos[1]-p.size[1]/2<1.05&&p.pos[1]+p.size[1]/2>1.05){
+      const cap=new THREE.Mesh(geometries.box,p.group==='walls'?capMat:materials[p.mat]);
+      cap.position.set(p.pos[0],1.048,p.pos[2]);cap.scale.set(p.size[0],.008,p.size[2]);cap.rotation.y=p.rot;cutCaps.add(cap);
+    }
+  }
+  const labelLayer=root.querySelector('#ap-room-labels');
+  const labels=model.labels.map(([text,x,z])=>{
+    const el=document.createElement('span');el.className='text-small';el.textContent=text;labelLayer.append(el);
+    return {el,pos:new THREE.Vector3(x,.06,z),name:text};
+  });
+  const target=new THREE.Vector3(5.12,.35,3.92);
+  const panOffset=new THREE.Vector3();
+  const cameraRight=new THREE.Vector3(),cameraUp=new THREE.Vector3();
+  let angle=-.20,elevation=1.04,zoom=1,mode='cut';
+  let framePending=false;
+  function render(){
+    framePending=false;
+    const w=area.clientWidth,h=area.clientHeight;
+    if(!w||!h)return;
+    const aspect=w/h;
+    const span=Math.max(mode==='full'?11.1:10.4,(mode==='full'?13.5:13.2)/aspect)/zoom;
+    camera.left=-span*aspect/2;camera.right=span*aspect/2;camera.top=span/2;camera.bottom=-span/2;
+    target.set(5.12,mode==='full'?1.0:.35,3.92).add(panOffset);
+    camera.position.set(target.x+18*Math.cos(elevation)*Math.sin(angle),target.y+18*Math.sin(elevation),target.z+18*Math.cos(elevation)*Math.cos(angle));
+    camera.up.set(0,1,0);camera.lookAt(target);camera.updateProjectionMatrix();
+    renderer.render(scene,camera);
+    const narrow=w<500;
+    for(const label of labels){
+      const p=label.pos.clone().project(camera);
+      label.el.style.left=((p.x+1)*w/2)+'px';label.el.style.top=((1-p.y)*h/2)+'px';
+      label.el.hidden=!root.querySelector('#ap-labels').checked||(mode==='full')||(narrow&&mode!=='top'&&['Санузел','Холл','Балкон','Прихожая','Гардеробная'].includes(label.name));
+    }
+  }
+  function requestRender(){if(!framePending){framePending=true;requestAnimationFrame(render);}}
+  function resize(){renderer.setSize(area.clientWidth,area.clientHeight,false);requestRender();}
+  new ResizeObserver(resize).observe(area);
+  function panPixels(dx,dy){
+    camera.updateMatrixWorld();
+    const units=(camera.top-camera.bottom)/Math.max(1,area.clientHeight);
+    cameraRight.setFromMatrixColumn(camera.matrixWorld,0);
+    cameraUp.setFromMatrixColumn(camera.matrixWorld,1);
+    panOffset.addScaledVector(cameraRight,-dx*units).addScaledVector(cameraUp,dy*units);
+  }
+  function zoomAt(factor,clientX,clientY){
+    const before=zoom;
+    zoom=Math.max(.35,Math.min(6,zoom*factor));
+    if(clientX!==undefined){
+      const r=renderer.domElement.getBoundingClientRect();
+      const dx=clientX-r.left-r.width/2,dy=clientY-r.top-r.height/2;
+      panPixels(-dx*(1-before/zoom),-dy*(1-before/zoom));
+    }
+    requestRender();
+  }
+  function fitModel(){
+    panOffset.set(0,0,0);zoom=1;render();
+    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    const v=new THREE.Vector3();
+    for(const mesh of meshes){
+      if(!mesh.visible||!mesh.parent.visible)continue;
+      const p=mesh.userData,cut=mode!=='full'&&['walls','windows','doors','furniture'].includes(p.group);
+      const bottom=p.pos[1]-p.size[1]/2,top=cut?Math.min(1.05,p.pos[1]+p.size[1]/2):p.pos[1]+p.size[1]/2;
+      if(top<bottom)continue;
+      const c=Math.cos(p.rot),s=Math.sin(p.rot);
+      for(const x of [-p.size[0]/2,p.size[0]/2])for(const y of [bottom,top])for(const z of [-p.size[2]/2,p.size[2]/2]){
+        v.set(p.pos[0]+c*x+s*z,y,p.pos[2]-s*x+c*z).project(camera);
+        minX=Math.min(minX,v.x);maxX=Math.max(maxX,v.x);minY=Math.min(minY,v.y);maxY=Math.max(maxY,v.y);
+      }
+    }
+    cameraRight.setFromMatrixColumn(camera.matrixWorld,0);cameraUp.setFromMatrixColumn(camera.matrixWorld,1);
+    panOffset.addScaledVector(cameraRight,(minX+maxX)*(camera.right-camera.left)/4).addScaledVector(cameraUp,(minY+maxY)*(camera.top-camera.bottom)/4);
+    zoom=Math.max(.35,Math.min(6,.88/Math.max((maxX-minX)/2,(maxY-minY)/2)));
+    requestRender();
+  }
+  function updateMode(){
+    mode=root.querySelector('#ap-view').value;
+    const cut=mode!=='full';
+    for(const m of meshes){
+      const p=m.userData;
+      m.material.clippingPlanes=cut&&['walls','windows','doors','furniture'].includes(p.group)?[clipping]:[];
+      // Wall-hung objects are kept in the full-height model; hide them in the cutaway.
+      m.visible=!(cut&&p.group==='furniture'&&p.pos[1]-p.size[1]/2>1.04);
+    }
+    cutCaps.visible=cut;
+    if(mode==='top'){angle=0;elevation=Math.PI/2-.0001;} else {elevation=mode==='full'?.91:1.04;angle=-.20;}
+    root.querySelector('#ap-state').textContent=mode==='full'?'Стены 2,70 м · потолок скрыт':mode==='top'?'План сверху · масштаб в метрах':'Потолки 2,70 м · разрез на 1,05 м';
+    fitModel();
+  }
+  root.querySelector('#ap-view').addEventListener('change',updateMode);
+  root.querySelector('#ap-furniture').addEventListener('change',e=>{groups.furniture.visible=e.target.checked;for(const cap of cutCaps.children)if(cap.material!==capMat)cap.visible=e.target.checked;requestRender();});
+  root.querySelector('#ap-labels').addEventListener('change',requestRender);
+  root.querySelector('#ap-left').addEventListener('click',()=>{angle-=Math.PI/8;requestRender();});
+  root.querySelector('#ap-right').addEventListener('click',()=>{angle+=Math.PI/8;requestRender();});
+  root.querySelector('#ap-plus').addEventListener('click',()=>zoomAt(1.15));
+  root.querySelector('#ap-minus').addEventListener('click',()=>zoomAt(1/1.15));
+  root.querySelector('#ap-fit').addEventListener('click',fitModel);
+  let panMode=false;
+  root.querySelector('#ap-pan').addEventListener('click',e=>{panMode=!panMode;e.currentTarget.setAttribute('aria-pressed',String(panMode));});
+  let drag=null;const pointers=new Map();let pinchDistance=0,pinchCenter=null;
+  const gesture=()=>{const [a,b]=[...pointers.values()];return {distance:Math.hypot(a.x-b.x,a.y-b.y),x:(a.x+b.x)/2,y:(a.y+b.y)/2};};
+  renderer.domElement.addEventListener('pointerdown',e=>{
+    if(e.button>2)return;
+    e.preventDefault();
+    renderer.domElement.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    drag={x:e.clientX,y:e.clientY,pan:panMode||e.button===2||e.button===1||e.shiftKey};renderer.domElement.style.cursor='grabbing';
+    if(pointers.size===2){const g=gesture();pinchDistance=g.distance;pinchCenter=g;}
+  });
+  renderer.domElement.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2){
+      const g=gesture();
+      if(pinchCenter)panPixels(g.x-pinchCenter.x,g.y-pinchCenter.y);
+      if(pinchDistance>0)zoomAt(g.distance/pinchDistance,g.x,g.y);
+      pinchDistance=g.distance;pinchCenter=g;
+    }else if(drag){
+      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+      if(drag.pan||e.shiftKey)panPixels(dx,dy);
+      else{angle-=dx*.007;if(mode!=='top')elevation=Math.max(.30,Math.min(1.49,elevation+dy*.005));}
+    }
+    drag={x:e.clientX,y:e.clientY,pan:drag?.pan??panMode};requestRender();
+  });
+  function release(e){pointers.delete(e.pointerId);const remaining=[...pointers.values()][0];drag=remaining?{...remaining,pan:panMode}:null;pinchDistance=0;pinchCenter=null;renderer.domElement.style.cursor=remaining?'grabbing':'grab';}
+  renderer.domElement.addEventListener('pointerup',release);renderer.domElement.addEventListener('pointercancel',release);
+  renderer.domElement.addEventListener('lostpointercapture',release);
+  renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+  renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoomAt(Math.exp(-e.deltaY*.001),e.clientX,e.clientY);},{passive:false});
+  const observer=new MutationObserver(requestRender);observer.observe(document.documentElement,{attributes:true,attributeFilter:['class','style','data-theme']});
+  root.querySelector('#ap-loading').remove();updateMode();resize();
+}catch(err){root.querySelector('#ap-loading').textContent='Не удалось запустить 3D-просмотр. Модель доступна в файле GLB.';console.error(err);}
+</script>

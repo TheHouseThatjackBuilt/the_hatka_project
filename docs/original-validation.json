@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "objects": 566,
+  "wall_height_m": 2.7,
+  "control_dimensions": "PASS",
+  "glb_structure": "PASS",
+  "mesh_indices_and_outward_normals": "PASS",
+  "default_scene_excludes_ceiling": true
+}
