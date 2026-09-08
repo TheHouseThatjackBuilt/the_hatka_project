@@ -9,10 +9,12 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run model:check && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --import tsx --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "model:build": "node --import tsx scripts/build-model.ts",
+    "model:check": "node --import tsx scripts/build-model.ts --check",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
