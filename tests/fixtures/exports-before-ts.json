@@ -1,0 +1,7 @@
+{
+  "description": "Captured from the Python exports before the TypeScript migration. Text uses LF; GLB JSON is key-sorted with numbers rounded to 12 decimal places.",
+  "glbDocument": "666b3e367fdef227da5caa32f5149db81b179945ff1ca07a26b66d5efea9146a",
+  "glbBinary": "8798784f8deea04a3e24532ede5ae44fee6b959402783edeaf0693d58c231ea9",
+  "obj": "e003e05af23b83320349a508d2736cc40fde951b9e9301c7c83b9a53d58cd328",
+  "mtl": "b84fb643a2dd61f8fea56905d30f11433b49cc8e45f687fb9450a6f6726a5367"
+}

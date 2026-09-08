@@ -170,7 +170,7 @@
         5.31
       ],
       "size": [
-        1,
+        1.0,
         0.18,
         2.58
       ],
@@ -221,7 +221,7 @@
         5.31
       ],
       "size": [
-        1,
+        1.0,
         0.025,
         2.58
       ],
@@ -794,7 +794,7 @@
       "name": "Timber board end",
       "shape": "box",
       "pos": [
-        1,
+        1.0,
         0.019,
         2.032
       ],
@@ -811,7 +811,7 @@
       "name": "Timber board end",
       "shape": "box",
       "pos": [
-        1,
+        1.0,
         0.019,
         3.682
       ],
@@ -828,7 +828,7 @@
       "name": "Timber board end",
       "shape": "box",
       "pos": [
-        1,
+        1.0,
         0.019,
         5.332
       ],
@@ -4148,7 +4148,7 @@
         4.0375
       ],
       "size": [
-        1,
+        1.0,
         1.05,
         0.035
       ],
@@ -4165,7 +4165,7 @@
         6.5825
       ],
       "size": [
-        1,
+        1.0,
         1.05,
         0.035
       ],
@@ -4511,7 +4511,7 @@
       ],
       "mat": "oak_light",
       "group": "doors",
-      "rot": 0
+      "rot": -0.0
     },
     {
       "name": "Bathroom 1 door open hinge",
@@ -4777,7 +4777,7 @@
         0.6
       ],
       "size": [
-        3,
+        3.0,
         0.29,
         1.15
       ],
@@ -8247,7 +8247,7 @@
       "size": [
         0.74,
         0.07,
-        2
+        2.0
       ],
       "mat": "linen",
       "group": "furniture",
@@ -12705,7 +12705,7 @@
       ],
       "mat": "green",
       "group": "furniture",
-      "rot": 0
+      "rot": 0.0
     },
     {
       "name": "Plant rack pot leaf",
@@ -12824,7 +12824,7 @@
       ],
       "mat": "green",
       "group": "furniture",
-      "rot": 0
+      "rot": 0.0
     },
     {
       "name": "Plant rack pot leaf",
@@ -12943,7 +12943,7 @@
       ],
       "mat": "green",
       "group": "furniture",
-      "rot": 0
+      "rot": 0.0
     },
     {
       "name": "Plant rack pot leaf",

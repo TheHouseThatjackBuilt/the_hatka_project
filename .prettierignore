@@ -3,6 +3,7 @@ dist/
 reference/
 public/models/
 docs/original-validation.json
+tests/fixtures/apartment-before-ts.json
 .import/
 .tmp/
 package-lock.json
