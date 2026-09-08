@@ -50,6 +50,17 @@ def cyl(name,x,z,r,h,mat='oak',base=0,group='furniture'):
 def ell(name,x,z,w,d,h,mat='linen',base=0,rot=0,group='furniture'):
     add(name,'sphere',(x,base+h/2,z),(w,h,d),mat,group,rot)
 
+def rotate_parts(first_part,x,z,rot):
+    """Rotate a newly assembled fixture as a unit around its plan anchor."""
+    if not rot:
+        return
+    ca,sa = math.cos(rot),math.sin(rot)
+    for part in PARTS[first_part:]:
+        dx,dz = part['pos'][0]-x,part['pos'][2]-z
+        part['pos'][0] = round(x+ca*dx+sa*dz,5)
+        part['pos'][2] = round(z-sa*dx+ca*dz,5)
+        part['rot'] = round(part['rot']+rot,6)
+
 def wall(name,x,z,w,d,base=0,h=H):
     box(name,x,z,w,d,h,'wall',base,'walls')
 
@@ -115,15 +126,25 @@ def chair(name,x,z,angle=0):
             lz=z-dx*math.sin(angle)+dz*math.cos(angle)
             cyl(name+' leg',lx,lz,.017,.42,'oak',0)
 
-def shower(name,x,z,size=.9,open_side='north'):
-    box(name+' tray',x,z,size,size,.10,'white')
-    box(name+' recess',x+.045,z+.045,size-.09,size-.09,.014,'tile',.10)
-    cyl(name+' drain',x+size*.68,z+size*.68,.025,.008,'dark',.117)
-    box(name+' left screen',x+.015,z+.025,.012,size-.05,1.95,'showerglass',.1)
-    box(name+' front screen',x+.02,z+.018,size-.04,.012,1.95,'showerglass',.1)
-    box(name+' edge',x+.01,z+.01,.022,.022,1.95,'dark',.1)
-    cyl(name+' riser',x+size*.65,z+size-.04,.013,1.1,'dark',1.02)
-    box(name+' shower head',x+size*.55,z+size-.23,.22,.20,.025,'dark',2.1)
+def walk_in_shower(name,x,z,w,d):
+    """Wall-to-wall shower; entry slides along the west partition at its north end."""
+    box(name+' tray',x,z,w,d,.04,'stone',.02)
+    box(name+' tiled floor',x+.025,z+.02,w-.05,d-.04,.012,'tile',.06)
+    box(name+' linear drain',x+w-.085,z+.12,.035,d-.24,.006,'dark',.073)
+    box(name+' east wall tile',x+w-.018,z,.018,d,2.20,'tile',.02)
+    for tile_z in [z+.58,z+1.16]:
+        box(name+' wall grout',x+w-.021,tile_z,.003,.004,2.20,'tilejoint',.02)
+    box(name+' fixed glass',x+.022,z+.70,.012,d-.72,2.05,'showerglass',.075)
+    box(name+' sliding glass door',x+.05,z+.02,.012,.72,2.05,'showerglass',.075)
+    for rail_base in [.065,2.125]:
+        box(name+' sliding rail',x+.015,z+.015,.055,d-.03,.022,'dark',rail_base)
+    for post_z in [z+.02,z+d-.04]:
+        box(name+' end post',x+.022,post_z,.022,.02,2.05,'dark',.075)
+    box(name+' door handle',x+.018,z+.12,.024,.018,.28,'dark',.84)
+    cyl(name+' riser',x+w-.075,z+d*.60,.014,1.12,'dark',1.01)
+    box(name+' mixer',x+w-.12,z+d*.60-.10,.055,.20,.05,'dark',.98)
+    box(name+' rain arm',x+w-.34,z+d*.60-.014,.28,.028,.026,'dark',2.11)
+    cyl(name+' rain head',x+w-.34,z+d*.60,.13,.025,'dark',2.085)
 
 def toilet(name,x,z):
     box(name+' cistern wall',x-.30,z+.24,.60,.16,1.10,'white')
@@ -132,11 +153,86 @@ def toilet(name,x,z):
     ell(name+' opening',x,z-.055,.245,.33,.015,'dark',.468)
     box(name+' flush',x-.085,z+.228,.17,.016,.085,'dark',.91)
 
-def basin(name,x,z,w=.5,d=.42,base=.84):
+def bathtub(name,x,z,w=1.70,d=.70,h=.60):
+    """Open bath with a recessed floor, four sides and an overhanging rim."""
+    box(name+' base',x,z,w,d,.12,'white',.04)
+    box(name+' back',x,z,w,.075,h-.16,'white',.16)
+    box(name+' apron',x,z+d-.075,w,.075,h-.16,'white',.16)
+    for suffix,side_x in [('left end',x),('right end',x+w-.10)]:
+        box(name+' '+suffix,side_x,z+.075,.10,d-.15,h-.16,'white',.16)
+    box(name+' recessed floor',x+.10,z+.075,w-.20,d-.15,.025,'white',.16)
+    for suffix,rim_z in [('back rim',z),('front rim',z+d-.105)]:
+        box(name+' '+suffix,x,rim_z,w,.105,.025,'white',h-.01)
+    for suffix,rim_x in [('left rim',x),('right rim',x+w-.15)]:
+        box(name+' '+suffix,rim_x,z+.105,.15,d-.21,.025,'white',h-.01)
+    cyl(name+' drain',x+w-.28,z+d/2,.026,.006,'dark',.186)
+    box(name+' overflow',x+w-.108,z+d/2-.055,.012,.11,.035,'dark',h-.14)
+    cyl(name+' mixer',x+w-.28,z+.04,.022,.16,'dark',h+.015)
+    box(name+' spout',x+w-.298,z+.025,.036,.22,.025,'dark',h+.15)
+    cyl(name+' spout outlet',x+w-.28,z+.23,.021,.035,'dark',h+.12)
+
+
+def basin(name,x,z,w=.5,d=.42,base=.84,rot=0):
+    first_part = len(PARTS)
     ell(name+' rim',x,z,w,d,.095,'white',base)
     ell(name+' bowl',x,z-.016,w*.69,d*.64,.013,'tile',base+.078)
     cyl(name+' tap',x,z+d*.44,.015,.19,'dark',base)
     box(name+' spout',x-.014,z+d*.18,.028,d*.29,.025,'dark',base+.165)
+    rotate_parts(first_part,x,z,rot)
+
+def pc_setup(name,x,z,rot=0):
+    """Monitor-centred workstation, facing north before rotation."""
+    first_part = len(PARTS)
+    box(name+' monitor base',x-.11,z-.10,.22,.20,.015,'dark',.782)
+    box(name+' monitor stand',x-.018,z-.015,.036,.035,.14,'dark',.797)
+    box(name+' monitor bezel',x-.32,z-.025,.64,.05,.38,'black',.88)
+    box(name+' monitor screen',x-.295,z-.032,.59,.010,.33,'dark',.905)
+    # A quiet desktop on each screen, visible from the seated side.
+    box(name+' screen window',x-.265,z-.039,.36,.006,.25,'sage',.94)
+    for row in range(3):
+        box(name+' screen line '+str(row+1),x-.235,z-.043,.22-row*.035,.004,.012,'linen',1.13-row*.045)
+    box(name+' keyboard',x-.225,z-.40,.45,.15,.02,'dark',.79)
+    for row in range(3):
+        for col in range(9):
+            box(name+' key %s-%s'%(row+1,col+1),x-.214+col*.047,z-.388+row*.038,.037,.027,.006,'tile',.81)
+    box(name+' mouse mat',x+.27,z-.45,.20,.25,.006,'linen',.79)
+    ell(name+' mouse',x+.36,z-.34,.065,.115,.035,'dark',.796)
+    box(name+' tower',x+.36,z-.28,.22,.40,.55,'dark',.04)
+    box(name+' tower front',x+.375,z-.29,.19,.012,.51,'black',.06)
+    for fan_base in [.13,.32]:
+        ell(name+' tower fan',x+.47,z-.296,.115,.008,.115,'sage',fan_base)
+    cyl(name+' tower power light',x+.54,z-.20,.006,.003,'sage',.591)
+    rotate_parts(first_part,x,z,rot)
+
+def office_chair(name,x,z,rot=0):
+    """Padded swivel chair facing south, with a five-spoke wheeled base."""
+    first_part = len(PARTS)
+    ell(name+' seat',x,z,.50,.49,.10,'sage',.43)
+    box(name+' back frame',x-.225,z-.235,.45,.055,.52,'dark',.52)
+    box(name+' back cushion',x-.21,z-.185,.42,.055,.46,'sage',.56)
+    for arm_x in [x-.28,x+.245]:
+        box(name+' arm support',arm_x,z-.05,.025,.04,.19,'dark',.46)
+        box(name+' armrest',arm_x-.007,z-.18,.045,.36,.04,'dark',.65)
+    cyl(name+' pedestal',x,z,.035,.34,'dark',.10)
+    for i in range(5):
+        angle=i*math.tau/5
+        dx,dz=math.cos(angle),math.sin(angle)
+        add(name+' base spoke','box',(x+dx*.13,.115,z+dz*.13),(.29,.025,.028),'dark',rot=-angle)
+        ell(name+' caster',x+dx*.26,z+dz*.26,.075,.06,.065,'black',.03,rot=-angle)
+    rotate_parts(first_part,x,z,rot)
+
+def niche_bookcase(name,x,z,w,d):
+    """Open shelves facing west, framing one end of the window seat."""
+    box(name+' back',x+w-.018,z,.018,d,2.61,'oak_light',.025)
+    for side_z in [z,z+d-.025]:
+        box(name+' side',x,side_z,w,.025,2.61,'oak_light',.025)
+    for level,base in enumerate([.08,.48,.92,1.36,1.80,2.24,2.61]):
+        box(name+' shelf '+str(level+1),x,z,w,d,.025,'oak_light',base)
+        if level==6:
+            continue
+        for book in range(4):
+            box(name+' book %s-%s'%(level+1,book+1),x+.035,z+.06+book*.062,.23,.045,.20+.025*((level+book)%3),
+                ['linen','sage','terra'][(level+book)%3],base+.025)
 
 def plant(name,x,z,r=.15,base=0,height=.65):
     cyl(name+' pot',x,z,r,.25,'terra',base)
@@ -239,10 +335,12 @@ chair('Dining chair south',4.46,1.27,math.pi)
 for i,(x,w) in enumerate([(3.36,.6),(3.96,.6),(4.56,.6),(5.16,.674)]):
     cabinet('Kitchen base '+str(i+1),x,2.46,w,.72,.86,'oak_light','north')
 box('Kitchen worktop',3.345,2.445,2.505,.75,.035,'stone',.86)
-box('Kitchen sink outline',4.00,2.505,.50,.43,.018,'dark',.899)
-box('Kitchen sink bowl',4.045,2.545,.41,.33,.02,'tile',.902)
-cyl('Kitchen mixer',4.23,2.97,.015,.25,'dark',.90)
-box('Kitchen mixer spout',4.216,2.82,.028,.16,.022,'dark',1.13)
+# Leave 100 mm of worktop between the sink rim and the west return wall.
+sink_x=3.462
+box('Kitchen sink outline',sink_x,2.505,.50,.43,.018,'dark',.899)
+box('Kitchen sink bowl',sink_x+.045,2.545,.41,.33,.02,'tile',.902)
+cyl('Kitchen mixer',sink_x+.23,2.97,.015,.25,'dark',.90)
+box('Kitchen mixer spout',sink_x+.216,2.82,.028,.16,.022,'dark',1.13)
 box('Induction hob',5.20,2.53,.58,.48,.022,'black',.9)
 for x,z,r in [(5.34,2.67,.085),(5.64,2.67,.065),(5.36,2.86,.065),(5.62,2.85,.085)]:cyl('Hob cooking zone',x,z,r,.006,'dark',.924)
 cabinet('Kitchen corner return',5.834,2.46,.72,.72,.86,'oak_light','west')
@@ -252,22 +350,40 @@ cabinet('Refrigerator 720 x 700',5.834,1.14,.72,.70,2.20,'white','west')
 box('Refrigerator handle',5.797,1.68,.028,.018,.62,'dark',.93)
 for i in range(4):cabinet('Kitchen wall cabinet '+str(i+1),3.36+i*.615,2.875,.60,.305,.85,'white','north',1.75)
 
-# Upper right room: 3278 mm width, sofa bed, long desk, wall of storage.
-cabinet('Study storage 3278 x 700',6.704,2.48,3.278,.70,2.55,'oak_light','north')
-box('Study desk 700 x 1356',6.714,1.14,.70,1.356,.045,'oak_light',.735)
-box('Study desk drawer unit',6.724,1.16,.30,.45,.70,'white',.02)
-box('Study desk end',6.724,2.436,.66,.04,.715,'oak',.02)
-chair('Study desk chair',7.70,1.82,math.pi/2)
-box('Study monitor foot',6.94,1.60,.15,.22,.02,'dark',.79)
-box('Study monitor',6.96,1.48,.035,.46,.30,'black',.85)
-box('Study sofa-bed base',8.225,.06,1.685,.95,.26,'oak',.10)
-box('Study sofa-bed mattress',8.255,.09,1.625,.90,.20,'sage',.36)
-box('Study sofa-bed back',8.235,.045,1.665,.14,.72,'sage',.10)
-box('Study sofa-bed left arm',8.205,.065,.10,.95,.58,'sage',.10)
-box('Study sofa-bed right arm',9.855,.065,.10,.95,.58,'sage',.10)
-for x in [8.63,9.30]:ell('Study pillow',x,.43,.49,.39,.17,'linen',.56,rot=.13)
-cyl('Study side table D350',9.73,1.30,.175,.03,'oak_light',.47)
-cyl('Study side table leg',9.73,1.30,.025,.47,'dark')
+# Study: a continuous 700 mm deep L-desk with two independent PC stations.
+# The west leg starts beyond the door; the south leg ends at the window niche.
+box('Study L desk west worktop',6.724,1.08,.70,1.38,.045,'oak_light',.735)
+box('Study L desk south worktop',6.724,2.46,2.38,.70,.045,'oak_light',.735)
+cabinet('Study desk drawer unit',6.75,1.10,.64,.35,.68,'oak_light','east',.03)
+for leg_x,leg_z in [(6.75,2.99),(7.34,3.08),(9.025,2.49),(9.025,3.08)]:
+    box('Study desk steel leg',leg_x,leg_z,.045,.045,.715,'dark',.02)
+box('Study desk west cable tray',6.78,1.46,.12,1.50,.06,'dark',.63)
+box('Study desk south cable tray',7.42,3.02,1.58,.12,.06,'dark',.63)
+pc_setup('Study PC 1',6.94,1.75,rot=-math.pi/2)
+pc_setup('Study PC 2',8.45,2.98)
+office_chair('Study office chair 1',7.80,1.58,rot=-math.pi/2)
+
+# Window-height daybed: a 2000 x 740 mm cushion and storage underneath.
+box('Study window seat plinth',9.18,.56,.72,2.04,.08,'oak',.02)
+cabinet('Study window seat storage',9.142,.535,.81,2.09,.63,'oak_light','west',.10)
+box('Study window seat platform',9.102,.51,.86,2.14,.035,'oak_light',.73)
+box('Study window seat cushion',9.152,.57,.74,2.00,.07,'linen',.765)
+ell('Study window seat pillow north',9.50,.84,.60,.42,.16,'sage',.835,rot=.10)
+ell('Study window seat pillow clay',9.54,1.10,.50,.30,.12,'terra',.835,rot=-.12)
+box('Study window seat folded throw',9.17,2.15,.70,.32,.025,'sage',.838)
+niche_bookcase('Study niche north bookcase',9.122,.025,.84,.455)
+niche_bookcase('Study niche south bookcase',9.122,2.70,.84,.46)
+
+# The shallower overhead bridge clears the window head at 2350 mm.
+box('Study niche bridge bottom',9.542,.48,.42,2.22,.035,'oak_light',2.38)
+box('Study niche bridge top',9.542,.48,.42,2.22,.035,'oak_light',2.60)
+box('Study niche bridge back',9.944,.48,.018,2.22,.22,'oak_light',2.415)
+for divider_z in [.48,1.20,1.92,2.675]:
+    box('Study niche bridge divider',9.542,divider_z,.42,.025,.185,'oak_light',2.415)
+for cubby_z in [.58,1.30,2.02]:
+    for book in range(5):
+        box('Study niche bridge book',9.57,cubby_z+book*.065,.22,.048,.15+.01*(book%3),
+            ['sage','linen','terra'][book%3],2.415)
 box('Study plant wall backing',6.714,1.14,.035,.30,1.20,'oak',1.03)
 for k in range(5):ell('Study plant wall foliage',6.77,1.28,.10,.28,.25,'green',1.07+k*.22)
 
@@ -288,20 +404,21 @@ box('Entrance bench base',2.805,6.70,.35,.70,.37,'oak',.02)
 box('Entrance bench cushion',2.785,6.70,.38,.70,.08,'linen',.39)
 box('Entrance full-length mirror',3.128,7.04,.02,.60,1.80,'mirror',.35)
 
-# Main bathroom 1835 mm width with double basin and 900 mm shower.
-cabinet('Bathroom 1 double vanity 1835',.015,3.18,1.805,.50,.52,'oak_light','south',.29)
-box('Bathroom 1 stone top',.005,3.17,1.825,.52,.035,'stone',.81)
-basin('Bathroom 1 basin left',.43,3.43,.50,.40,.85)
-basin('Bathroom 1 basin right',1.35,3.43,.50,.40,.85)
-box('Bathroom 1 mirror',.08,3.152,1.675,.024,.91,'mirror',1.10)
-toilet('Bathroom 1 WC',.46,5.22)
-shower('Bathroom 1 shower 900',.935,4.74)
-box('Bathroom 1 installation shelf',.03,5.47,.87,.14,.045,'oak',1.12)
-for x in [.44,1.22]:box('Cat litter tray under vanity',x-.25,3.22,.5,.43,.16,'white',.02)
+# Main bathroom: bath at the north wall, two west-facing taps, WC in the former shower corner.
+# The bath ends at z=3.85, where the east-wall doorway begins.
+bathtub('Bathroom 1 bathtub 1700 x 700',.0675,3.15)
+cabinet('Bathroom 1 west double vanity',.015,4.025,.50,1.57,.52,'oak_light','east',.29)
+box('Bathroom 1 stone top',.005,4.015,.52,1.59,.035,'stone',.81)
+for suffix,z in [('north',4.42),('south',5.20)]:
+    basin('Bathroom 1 basin '+suffix,.265,z,.55,.40,.85,rot=-math.pi/2)
+    box('Cat litter tray under vanity',.05,z-.25,.43,.50,.16,'white',.02)
+box('Bathroom 1 west mirror',.012,4.095,.024,1.44,.91,'mirror',1.10)
+toilet('Bathroom 1 WC',1.385,5.22)
+box('Bathroom 1 installation shelf',.985,5.47,.82,.14,.045,'oak',1.12)
 
-# Private bathroom, 800 mm door, 900 mm shower.
+# Private bathroom: 900 x 1740 mm shower along the entire east wall.
 toilet('Ensuite WC',5.39,6.33)
-shower('Ensuite shower 900',5.684,5.92)
+walk_in_shower('Ensuite shower 900 x 1740',5.684,5.08,.90,1.74)
 box('Ensuite installation shelf',5.015,6.65,.64,.15,.045,'oak',1.12)
 
 # Cloakroom: perimeter storage, a hanging rail and the robot vacuum niche.
@@ -339,7 +456,7 @@ box('Ceiling main',0,0,9.982,6.82,.08,'white',H,'ceiling')
 box('Ceiling entrance',0,6.82,3.155,1.20,.08,'white',H,'ceiling')
 
 LABELS=[
-    ('Кухня-гостиная',3.70,1.85),('Кабинет / гостевая',8.56,1.89),
+    ('Кухня-гостиная',3.70,1.85),('Кабинет',8.12,.66),
     ('Спальня',8.35,4.21),('Санузел',.93,4.22),
     ('Санузел',5.65,5.56),('Гардеробная',1.08,7.13),
     ('Прихожая',2.45,6.43),('Холл',4.31,4.76),('Балкон',10.71,5.24)]

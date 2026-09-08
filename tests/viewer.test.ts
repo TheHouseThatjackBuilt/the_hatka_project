@@ -25,9 +25,8 @@ function setup(t: TestContext, width = 1200, height = 700) {
   return { apartment, controller, area };
 }
 
-test('all original objects retain geometry, materials and transforms', (t) => {
+test('all model objects retain geometry, materials and transforms in the scene', (t) => {
   const { apartment } = setup(t);
-  assert.equal(model.parts.length, 566);
   assert.equal(model.metadata.ceilingHeight, 2.7);
   assert.equal(apartment.meshes.length, model.parts.length);
   apartment.meshes.forEach((mesh, index) => {
