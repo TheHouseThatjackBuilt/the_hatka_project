@@ -1,5 +1,5 @@
 import { OrthographicCamera, Vector3 } from 'three';
-import { CUT_HEIGHT, isClipped } from './scene.ts';
+import { CUT_HEIGHT, isClipped } from './scene-resources.ts';
 import type { ApartmentMesh, ViewMode, Viewport } from './types.ts';
 
 const MIN_ZOOM = 0.35;

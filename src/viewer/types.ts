@@ -12,6 +12,7 @@ export interface ViewerOptions {
 }
 
 export interface ViewerHandle {
+  ready: Promise<void>;
   setOptions(options: ViewerOptions): void;
   rotate(angle: number): void;
   zoom(factor: number): void;

@@ -26,7 +26,7 @@ export function useApartmentViewer(options: ViewerOptions) {
       try {
         const [response, { createViewer }] = await Promise.all([
           fetch(`${import.meta.env.BASE_URL}models/apartment/model.json`, { signal: abort.signal }),
-          import('../viewer/index.ts'),
+          import('../viewer/index.tsx'),
         ]);
         if (!response.ok) throw new Error(`Model request failed: ${response.status}`);
         const data: unknown = await response.json();
@@ -36,8 +36,15 @@ export function useApartmentViewer(options: ViewerOptions) {
           labels,
           parseApartmentModel(data),
           latestOptions.current,
+          (error) => {
+            if (abort.signal.aborted) return;
+            console.error('Apartment viewer:', error);
+            setStatus('error');
+          },
         );
         viewerRef.current = activeViewer;
+        await activeViewer.ready;
+        if (abort.signal.aborted) return;
         setStatus('ready');
       } catch (error) {
         if (abort.signal.aborted) return;
