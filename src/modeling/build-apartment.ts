@@ -16,7 +16,7 @@ import { buildBedroom } from './rooms/bedroom.ts';
 /** Pure model construction, shared by the Node CLI and future browser editing. */
 export function buildApartment(): ApartmentModel {
   const model = createModelBuilder();
-  // Keep source ordering during migration so each detail can be compared to the baseline.
+  // Shell and furniture use the same dimension register; exporters retain this order.
   buildFloors(model);
   buildWalls(model);
   buildLivingRoom(model);
@@ -30,13 +30,13 @@ export function buildApartment(): ApartmentModel {
   buildCeiling(model);
   return {
     metadata: {
-      title: 'Квартира по фотографии планировки',
+      title: 'Квартира по итоговой планировке, лист 09',
       units: 'metres',
       ceilingHeight: CEILING_HEIGHT,
       coordinateSystem: 'X right, Y up, Z down the source plan',
-      source: 'User-supplied photographed plan',
+      source: 'Итоговая планировка.pdf, sheet 09; dimension audit 2026-09-10',
       status:
-        'Approximate reconstruction; readable dimensions prioritized; unlabelled values inferred',
+        'Plan dimensions reconciled from printed values and calibrated PDF vectors; heights and decorative details remain schematic',
     },
     materials: createMaterials(),
     parts: model.parts,
@@ -44,12 +44,12 @@ export function buildApartment(): ApartmentModel {
       ['Кухня-гостиная', 3.7, 1.85],
       ['Кабинет', 8.12, 0.66],
       ['Спальня', 8.35, 4.21],
-      ['Санузел', 0.93, 4.22],
+      ['Санузел', 0.93, 4.55],
       ['Санузел', 5.65, 5.56],
       ['Гардеробная', 1.08, 7.13],
       ['Прихожая', 2.45, 6.43],
       ['Холл', 4.31, 4.76],
-      ['Балкон', 10.71, 5.24],
+      ['Балкон', 10.79, 5.12],
     ],
   };
 }

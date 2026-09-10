@@ -27,7 +27,10 @@ test('CLI supports another working directory, spaces in paths, and read-only sta
   const output = join(directory, args[1]!);
   const build = run(directory, ...args);
   assert.equal(build.status, 0, build.stderr);
-  assert.equal(JSON.parse(build.stdout).parts, 761);
+  const expected = JSON.parse(
+    readFileSync(new URL('./fixtures/apartment-plan-2026-09-10.json', import.meta.url), 'utf8'),
+  );
+  assert.equal(JSON.parse(build.stdout).parts, expected.parts.length);
   const names = readdirSync(output).sort();
   assert.deepEqual(names, ['apartment.glb', 'apartment.mtl', 'apartment.obj', 'model.json']);
   const bytes = names.map((name) => readFileSync(join(output, name)));

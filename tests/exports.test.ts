@@ -9,6 +9,7 @@ import { serializeObj } from '../src/modeling/export/obj.ts';
 
 test('GLB imports as two independent scenes with correct transforms and ceiling membership', async (t) => {
   const model = buildApartment();
+  const expectedCeilingCount = model.parts.filter((part) => part.group === 'ceiling').length;
   const gltf = await new GLTFLoader().parseAsync(serializeGlb(model).buffer, '');
   const geometries = new Set<BufferGeometry>(),
     materials = new Set<Material>();
@@ -57,8 +58,8 @@ test('GLB imports as two independent scenes with correct transforms and ceiling 
         );
       }
     });
-    assert.equal(meshCount, model.parts.length - (sceneIndex === 0 ? 2 : 0));
-    assert.equal(ceilingCount, sceneIndex === 0 ? 0 : 2);
+    assert.equal(meshCount, model.parts.length - (sceneIndex === 0 ? expectedCeilingCount : 0));
+    assert.equal(ceilingCount, sceneIndex === 0 ? 0 : expectedCeilingCount);
   });
 });
 

@@ -15,13 +15,25 @@ export function cabinet(
   base = 0,
 ) {
   const { box } = model;
-  box(name, x, z, w, d, h, mat, base);
   const horizontal = front === 'south' || front === 'north';
+  // w/d describe the complete plan footprint, including fronts and pulls.
+  // Previously every front silently added 18-58 mm to the requested size.
+  const frontDepth = horizontal ? 0.044 : 0.018;
+  box(
+    name,
+    x + (front === 'west' ? frontDepth : 0),
+    z + (front === 'north' ? frontDepth : 0),
+    w - (horizontal ? 0 : frontDepth),
+    d - (horizontal ? frontDepth : 0),
+    h,
+    mat,
+    base,
+  );
   const count = Math.max(1, roundTo((horizontal ? w : d) / 0.55));
   for (let i = 0; i < count; i++) {
     if (horizontal) {
       const fx = x + (i * w) / count + 0.015,
-        fz = front === 'south' ? z + d : z - 0.018;
+        fz = front === 'south' ? z + d - frontDepth : z + 0.026;
       box(
         `${name} / door ${i + 1}`,
         fx,
@@ -35,7 +47,7 @@ export function cabinet(
       box(
         `${name} / pull ${i + 1}`,
         fx + w / count - 0.09,
-        front === 'north' ? fz - 0.014 : fz + 0.018,
+        front === 'north' ? z : z + d - 0.026,
         0.015,
         0.026,
         0.18,
@@ -43,7 +55,7 @@ export function cabinet(
         base + h * 0.48,
       );
     } else {
-      const fx = front === 'east' ? x + w : x - 0.018,
+      const fx = front === 'east' ? x + w - frontDepth : x,
         fz = z + (i * d) / count + 0.015;
       box(
         `${name} / door ${i + 1}`,
