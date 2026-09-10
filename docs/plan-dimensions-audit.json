@@ -1,0 +1,1212 @@
+{
+  "status": "Applied to the generator on 2026-09-10. Printed labels take precedence; source vectors remain unchanged in this audit.",
+  "auditedOn": "2026-09-10",
+  "source": {
+    "filename": "Итоговая планировка.pdf",
+    "sha256": "c46ba2fa800a72648c0f9c53c87f2b716d7e8d37b8aec1b8a21cf6c1b74b94a8",
+    "page": 1,
+    "sheet": "09",
+    "pageSizePt": [1190.55, 841.89]
+  },
+  "coordinates": {
+    "page": "PDF points from top-left; X right, Y down",
+    "plan": "Millimetres from north-west interior wall intersection; X right, Z down",
+    "originPagePt": [119.79174207, 104.008127405]
+  },
+  "calibration": {
+    "pagePointsPerMetre": 56.693,
+    "printedTitleBlockScale": "1:60",
+    "effectiveScaleApprox": "1:50",
+    "anchors": ["pdf-line-9290", "pdf-line-9295", "pdf-line-9432", "pdf-line-9529"],
+    "note": "56.693 pt/m fits these horizontal and vertical labelled lines. Do not use the title block scale. Vector-derived dimensions are design drawing measurements, not site measurements."
+  },
+  "dimensions": [
+    {
+      "id": "pdf-line-9270",
+      "room": "bedroom",
+      "label": "Левая прикроватная тумба: ширина",
+      "printedMm": 450,
+      "axis": "X",
+      "pageStartPt": [511.90093955, 450.84824785],
+      "pageEndPt": [537.41278955, 450.84824785],
+      "vectorMm": 450.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9275",
+      "room": "bedroom",
+      "label": "Левая прикроватная тумба: глубина",
+      "printedMm": 400,
+      "axis": "Z",
+      "pageStartPt": [530.40553475, 455.46872735],
+      "pageEndPt": [530.40553475, 478.14592735],
+      "vectorMm": 400.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9280",
+      "room": "bedroom",
+      "label": "Правая прикроватная тумба: ширина",
+      "printedMm": 450,
+      "axis": "X",
+      "pageStartPt": [644.61358325, 451.06935055],
+      "pageEndPt": [670.12543325, 451.06935055],
+      "vectorMm": 450.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9285",
+      "room": "bedroom",
+      "label": "Правая прикроватная тумба: глубина",
+      "printedMm": 400,
+      "axis": "Z",
+      "pageStartPt": [664.3966056, 455.69549935],
+      "pageEndPt": [664.3966056, 478.37269935],
+      "vectorMm": 400.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9290",
+      "room": "bedroom",
+      "label": "Кровать: ширина",
+      "printedMm": 1800,
+      "axis": "X",
+      "pageStartPt": [540.95610205, 377.6547502],
+      "pageEndPt": [643.00350205, 377.6547502],
+      "vectorMm": 1800.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9295",
+      "room": "bedroom",
+      "label": "Кровать: длина",
+      "printedMm": 2100,
+      "axis": "Z",
+      "pageStartPt": [595.0553973, 358.6285794],
+      "pageEndPt": [595.0553973, 477.6838794],
+      "vectorMm": 2100.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9300",
+      "room": "hall",
+      "label": "Банкетка: длина",
+      "printedMm": 700,
+      "axis": "Z",
+      "pageStartPt": [270.80346884, 488.9884636],
+      "pageEndPt": [270.80346884, 528.6735636],
+      "vectorMm": 700.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9305",
+      "room": "hall",
+      "label": "Консоль: длина",
+      "printedMm": 790,
+      "axis": "Z",
+      "pageStartPt": [270.36183038, 437.7493302],
+      "pageEndPt": [270.36183038, 482.5368002],
+      "vectorMm": 790.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9310",
+      "room": "hall",
+      "label": "Консоль: глубина",
+      "printedMm": 300,
+      "axis": "X",
+      "pageStartPt": [280.09686887, 433.40948105],
+      "pageEndPt": [297.1053358, 433.40948105],
+      "vectorMm": 300.01,
+      "vectorMinusPrintedMm": 0.01
+    },
+    {
+      "id": "pdf-line-9315",
+      "room": "hall",
+      "label": "Банкетка: глубина",
+      "printedMm": 350,
+      "axis": "X",
+      "pageStartPt": [277.68203054, 496.8120976],
+      "pageEndPt": [297.524864, 496.8120976],
+      "vectorMm": 350.005,
+      "vectorMinusPrintedMm": 0.005
+    },
+    {
+      "id": "pdf-line-9320",
+      "room": "hall",
+      "label": "Зона стиральной и сушильной машин: ширина",
+      "printedMm": 650,
+      "axis": "X",
+      "pageStartPt": [361.5822847, 450.76887765],
+      "pageEndPt": [398.4327347, 450.76887765],
+      "vectorMm": 650.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9325",
+      "room": "hall",
+      "label": "Хозблок: ширина",
+      "printedMm": 882,
+      "axis": "X",
+      "pageStartPt": [311.6074052, 450.7943895],
+      "pageEndPt": [361.5822847, 450.7943895],
+      "vectorMm": 881.5,
+      "vectorMinusPrintedMm": -0.5
+    },
+    {
+      "id": "pdf-line-9330",
+      "room": "hall",
+      "label": "Хозблок: глубина",
+      "printedMm": 550,
+      "axis": "Z",
+      "pageStartPt": [353.91455645, 423.0601739],
+      "pageEndPt": [353.91455645, 454.2413239],
+      "vectorMm": 550.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9335",
+      "room": "hall",
+      "label": "Шкаф: ширина",
+      "printedMm": 2866,
+      "axis": "X",
+      "pageStartPt": [333.5872813, 340.79012695],
+      "pageEndPt": [496.06091535, 340.79012695],
+      "vectorMm": 2865.85,
+      "vectorMinusPrintedMm": -0.15
+    },
+    {
+      "id": "pdf-line-9340",
+      "room": "hall",
+      "label": "От фасада шкафа до северной грани малого санузла",
+      "printedMm": 875,
+      "axis": "Z",
+      "pageStartPt": [459.93046645, 334.6531097],
+      "pageEndPt": [459.93046645, 384.23397285],
+      "vectorMm": 874.55,
+      "vectorMinusPrintedMm": -0.45
+    },
+    {
+      "id": "pdf-line-9344",
+      "room": "hall",
+      "label": "Шкаф: глубина",
+      "printedMm": 650,
+      "axis": "Z",
+      "pageStartPt": [459.93046645, 297.8026597],
+      "pageEndPt": [459.93046645, 334.6531097],
+      "vectorMm": 650.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9348",
+      "room": "ensuite",
+      "label": "Дверной проём: ширина",
+      "printedMm": 800,
+      "axis": "X",
+      "pageStartPt": [404.23526325, 387.51082825],
+      "pageEndPt": [449.58966325, 387.51082825],
+      "vectorMm": 800.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9353",
+      "room": "ensuite",
+      "label": "Левая зона до ванны: ширина",
+      "printedMm": 801,
+      "axis": "X",
+      "pageStartPt": [404.1700663, 417.69985075],
+      "pageEndPt": [449.58966325, 417.69985075],
+      "vectorMm": 801.15,
+      "vectorMinusPrintedMm": 0.15
+    },
+    {
+      "id": "pdf-line-9357",
+      "room": "ensuite",
+      "label": "Правая зона с ванной: ширина",
+      "printedMm": 820,
+      "axis": "X",
+      "pageStartPt": [449.58966325, 417.69985075],
+      "pageEndPt": [496.06091535, 417.69985075],
+      "vectorMm": 819.7,
+      "vectorMinusPrintedMm": -0.3
+    },
+    {
+      "id": "pdf-line-9361",
+      "room": "ensuite",
+      "label": "Ванна: длина по размерной линии",
+      "printedMm": 1499,
+      "axis": "Z",
+      "pageStartPt": [486.9134998, 389.90327285],
+      "pageEndPt": [486.9134998, 474.89174915],
+      "vectorMm": 1499.1,
+      "vectorMinusPrintedMm": 0.1
+    },
+    {
+      "id": "pdf-line-9366",
+      "room": "bedroom",
+      "label": "Дверной проём: ширина",
+      "printedMm": 900,
+      "axis": "Z",
+      "pageStartPt": [512.0681839, 334.77499965],
+      "pageEndPt": [512.0681839, 385.79869965],
+      "vectorMm": 900.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9376",
+      "room": "hall",
+      "label": "Проход между стеной гардеробной и консолью",
+      "printedMm": 892,
+      "axis": "X",
+      "pageStartPt": [229.51225615, 433.56822145],
+      "pageEndPt": [280.09686887, 433.56822145],
+      "vectorMm": 892.255,
+      "vectorMinusPrintedMm": 0.255
+    },
+    {
+      "id": "pdf-line-9381",
+      "room": "cloakroom",
+      "label": "Внутренняя ширина",
+      "printedMm": 1835,
+      "axis": "X",
+      "pageStartPt": [119.79174207, 475.22056855],
+      "pageEndPt": [223.84295615, 475.22056855],
+      "vectorMm": 1835.345,
+      "vectorMinusPrintedMm": 0.345
+    },
+    {
+      "id": "pdf-line-9386",
+      "room": "cloakroom",
+      "label": "Левое хранение: длина",
+      "printedMm": 890,
+      "axis": "Z",
+      "pageStartPt": [149.07282617, 482.5538081],
+      "pageEndPt": [149.07282617, 532.98506625],
+      "vectorMm": 889.55,
+      "vectorMinusPrintedMm": -0.45
+    },
+    {
+      "id": "pdf-line-9390",
+      "room": "cloakroom",
+      "label": "Поперечная зона хранения одежды: глубина",
+      "printedMm": 600,
+      "axis": "Z",
+      "pageStartPt": [149.07282617, 448.5380081],
+      "pageEndPt": [149.07282617, 482.5538081],
+      "vectorMm": 600.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9394",
+      "room": "cloakroom",
+      "label": "Левое хранение: глубина",
+      "printedMm": 400,
+      "axis": "X",
+      "pageStartPt": [119.79174207, 525.04237695],
+      "pageEndPt": [142.46894207, 525.04237695],
+      "vectorMm": 400.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9399",
+      "room": "living",
+      "label": "ТВ-тумба: ширина",
+      "printedMm": 1935,
+      "axis": "X",
+      "pageStartPt": [119.79174207, 253.04098502],
+      "pageEndPt": [229.51225615, 253.04098502],
+      "vectorMm": 1935.345,
+      "vectorMinusPrintedMm": 0.345
+    },
+    {
+      "id": "pdf-line-9404",
+      "room": "living",
+      "label": "ТВ-тумба: глубина",
+      "printedMm": 400,
+      "axis": "Z",
+      "pageStartPt": [205.02626599, 261.06077679],
+      "pageEndPt": [205.02626599, 283.7371264],
+      "vectorMm": 399.985,
+      "vectorMinusPrintedMm": -0.015
+    },
+    {
+      "id": "pdf-line-9408",
+      "room": "living",
+      "label": "От дивана до ТВ-тумбы",
+      "printedMm": 1621,
+      "axis": "Z",
+      "pageStartPt": [205.02626599, 169.1775813],
+      "pageEndPt": [205.02626599, 261.06077679],
+      "vectorMm": 1620.715,
+      "vectorMinusPrintedMm": -0.285
+    },
+    {
+      "id": "pdf-line-9411",
+      "room": "living",
+      "label": "Диван: глубина",
+      "printedMm": 1150,
+      "axis": "Z",
+      "pageStartPt": [205.02626599, 104.0081274],
+      "pageEndPt": [205.02626599, 169.1775813],
+      "vectorMm": 1149.515,
+      "vectorMinusPrintedMm": -0.485
+    },
+    {
+      "id": "pdf-line-9415",
+      "room": "living",
+      "label": "От левого края дивана до простенка",
+      "printedMm": 3122,
+      "axis": "X",
+      "pageStartPt": [120.52053058, 181.12307987],
+      "pageEndPt": [297.5362026, 181.12307987],
+      "vectorMm": 3122.355,
+      "vectorMinusPrintedMm": 0.355
+    },
+    {
+      "id": "pdf-line-9420",
+      "room": "living",
+      "label": "Разрыв между верхним и нижним простенками",
+      "printedMm": 1324,
+      "axis": "Z",
+      "pageStartPt": [307.17684725, 164.96132289],
+      "pageEndPt": [307.17684725, 239.99450839],
+      "vectorMm": 1323.5,
+      "vectorMinusPrintedMm": -0.5
+    },
+    {
+      "id": "pdf-line-9425",
+      "room": "kitchen",
+      "label": "Первый модуль: подписанная ширина",
+      "printedMm": 600,
+      "axis": "X",
+      "pageStartPt": [311.7094526, 230.13701301],
+      "pageEndPt": [345.36525205, 230.13701301],
+      "vectorMm": 593.65,
+      "vectorMinusPrintedMm": -6.35
+    },
+    {
+      "id": "pdf-line-9429",
+      "room": "kitchen",
+      "label": "Второй модуль: подписанная ширина",
+      "printedMm": 600,
+      "axis": "X",
+      "pageStartPt": [345.36525205, 230.13701301],
+      "pageEndPt": [379.4405797, 230.13701301],
+      "vectorMm": 601.05,
+      "vectorMinusPrintedMm": 1.05
+    },
+    {
+      "id": "pdf-line-9432",
+      "room": "kitchen",
+      "label": "Третий модуль: подписанная ширина",
+      "printedMm": 600,
+      "axis": "X",
+      "pageStartPt": [379.4405797, 230.13701301],
+      "pageEndPt": [413.4563797, 230.13701301],
+      "vectorMm": 600.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9435",
+      "room": "kitchen",
+      "label": "Четвёртый модуль: подписанная ширина",
+      "printedMm": 674,
+      "axis": "X",
+      "pageStartPt": [413.4563797, 230.13701301],
+      "pageEndPt": [451.6617924, 230.13701301],
+      "vectorMm": 673.9,
+      "vectorMinusPrintedMm": -0.1
+    },
+    {
+      "id": "pdf-line-9438",
+      "room": "kitchen",
+      "label": "Правый возврат: ширина по X",
+      "printedMm": 720,
+      "axis": "X",
+      "pageStartPt": [451.6617924, 230.13701301],
+      "pageEndPt": [492.48925635, 230.13701301],
+      "vectorMm": 720.15,
+      "vectorMinusPrintedMm": 0.15
+    },
+    {
+      "id": "pdf-line-9442",
+      "room": "kitchen",
+      "label": "Нижняя часть возврата: длина по Z",
+      "printedMm": 720,
+      "axis": "Z",
+      "pageStartPt": [487.50594165, 242.8104497],
+      "pageEndPt": [487.50594165, 283.6010632],
+      "vectorMm": 719.5,
+      "vectorMinusPrintedMm": -0.5
+    },
+    {
+      "id": "pdf-line-9446",
+      "room": "kitchen",
+      "label": "Средний модуль возврата: длина по Z",
+      "printedMm": 600,
+      "axis": "Z",
+      "pageStartPt": [487.50594165, 208.7946497],
+      "pageEndPt": [487.50594165, 242.8104497],
+      "vectorMm": 600.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9449",
+      "room": "kitchen",
+      "label": "Холодильник: длина по Z",
+      "printedMm": 700,
+      "axis": "Z",
+      "pageStartPt": [487.50594165, 169.08970715],
+      "pageEndPt": [487.50594165, 208.7946497],
+      "vectorMm": 700.35,
+      "vectorMinusPrintedMm": 0.35
+    },
+    {
+      "id": "pdf-line-9453",
+      "room": "bedroom",
+      "label": "От левой границы до рабочего стола",
+      "printedMm": 1000,
+      "axis": "X",
+      "pageStartPt": [504.61588905, 333.1620838],
+      "pageEndPt": [561.30888905, 333.1620838],
+      "vectorMm": 1000.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9458",
+      "room": "study",
+      "label": "Нижняя зона мебели: глубина",
+      "printedMm": 700,
+      "axis": "Z",
+      "pageStartPt": [531.7973479, 243.94629395],
+      "pageEndPt": [531.7973479, 283.6294097],
+      "vectorMm": 699.965,
+      "vectorMinusPrintedMm": -0.035
+    },
+    {
+      "id": "pdf-line-9462",
+      "room": "study",
+      "label": "Рабочий стол: длина",
+      "printedMm": 1356,
+      "axis": "Z",
+      "pageStartPt": [531.7973479, 167.06123161],
+      "pageEndPt": [531.7973479, 243.94629395],
+      "vectorMm": 1356.165,
+      "vectorMinusPrintedMm": 0.165
+    },
+    {
+      "id": "pdf-line-9466",
+      "room": "study",
+      "label": "Фитостена: длина по Z",
+      "printedMm": 1305,
+      "axis": "Z",
+      "pageStartPt": [513.10850045, 169.33320358],
+      "pageEndPt": [513.10850045, 243.31756859],
+      "vectorMm": 1305.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9471",
+      "room": "study",
+      "label": "Фитостена: ширина по X",
+      "printedMm": 300,
+      "axis": "X",
+      "pageStartPt": [500.8373006, 185.89351235],
+      "pageEndPt": [517.8452006, 185.89351235],
+      "vectorMm": 300.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9476",
+      "room": "study",
+      "label": "Рабочий стол: глубина",
+      "printedMm": 700,
+      "axis": "X",
+      "pageStartPt": [500.70974135, 162.47731909],
+      "pageEndPt": [540.39484135, 162.47731909],
+      "vectorMm": 700.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9481",
+      "room": "study",
+      "label": "Внутренняя ширина комнаты",
+      "printedMm": 3278,
+      "axis": "X",
+      "pageStartPt": [500.70974135, 252.59906308],
+      "pageEndPt": [686.57207255, 252.59906308],
+      "vectorMm": 3278.4,
+      "vectorMinusPrintedMm": 0.4
+    },
+    {
+      "id": "pdf-line-9486",
+      "room": "living",
+      "label": "Круглый приставной стол: подписанный диаметр",
+      "printedMm": 500,
+      "axis": "X",
+      "pageStartPt": [134.60307178, 186.89556112],
+      "pageEndPt": [162.52692547, 186.89556112],
+      "vectorMm": 492.545,
+      "vectorMinusPrintedMm": -7.455
+    },
+    {
+      "id": "pdf-line-9491",
+      "room": "study",
+      "label": "Навесные шкафы: глубина",
+      "printedMm": 400,
+      "axis": "Z",
+      "pageStartPt": [644.6901188, 260.9522097],
+      "pageEndPt": [644.6901188, 283.63224435],
+      "vectorMm": 400.05,
+      "vectorMinusPrintedMm": 0.05
+    },
+    {
+      "id": "pdf-line-9496",
+      "room": "study",
+      "label": "От северной стены до нижней зоны мебели",
+      "printedMm": 2468,
+      "axis": "Z",
+      "pageStartPt": [644.6901188, 104.0081274],
+      "pageEndPt": [644.6901188, 243.94629395],
+      "vectorMm": 2468.35,
+      "vectorMinusPrintedMm": 0.35
+    },
+    {
+      "id": "pdf-line-9501",
+      "room": "study",
+      "label": "От рабочего стола до подоконной тумбы",
+      "printedMm": 1978,
+      "axis": "X",
+      "pageStartPt": [540.39484135, 162.56887829],
+      "pageEndPt": [652.55627255, 162.56887829],
+      "vectorMm": 1978.4,
+      "vectorMinusPrintedMm": 0.4
+    },
+    {
+      "id": "pdf-line-9506",
+      "room": "main-bathroom",
+      "label": "Внутренняя ширина",
+      "printedMm": 1835,
+      "axis": "X",
+      "pageStartPt": [119.79174207, 325.09750455],
+      "pageEndPt": [223.84295615, 325.09750455],
+      "vectorMm": 1835.345,
+      "vectorMinusPrintedMm": 0.345
+    },
+    {
+      "id": "pdf-line-9511",
+      "room": "bedroom",
+      "label": "От рабочего стола до кровати",
+      "printedMm": 569,
+      "axis": "Z",
+      "pageStartPt": [595.20563375, 326.36742775],
+      "pageEndPt": [595.20563375, 358.6285794],
+      "vectorMm": 569.05,
+      "vectorMinusPrintedMm": 0.05
+    },
+    {
+      "id": "pdf-line-9515",
+      "room": "bedroom",
+      "label": "Рабочий стол: глубина",
+      "printedMm": 500,
+      "axis": "Z",
+      "pageStartPt": [595.20563375, 298.02092775],
+      "pageEndPt": [595.20563375, 326.36742775],
+      "vectorMm": 500.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9519",
+      "room": "bedroom",
+      "label": "Рабочий стол: ширина",
+      "printedMm": 1356,
+      "axis": "X",
+      "pageStartPt": [561.30888905, 333.09121755],
+      "pageEndPt": [638.193101, 333.09121755],
+      "vectorMm": 1356.15,
+      "vectorMinusPrintedMm": 0.15
+    },
+    {
+      "id": "pdf-line-9524",
+      "room": "study",
+      "label": "Дверной проём: ширина",
+      "printedMm": 900,
+      "axis": "Z",
+      "pageStartPt": [497.31949995, 109.26838741],
+      "pageEndPt": [497.31949995, 160.29208741],
+      "vectorMm": 900.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9529",
+      "room": "main-bathroom",
+      "label": "Дверной проём: ширина",
+      "printedMm": 800,
+      "axis": "Z",
+      "pageStartPt": [227.22157549, 337.20146005],
+      "pageEndPt": [227.22157549, 382.55586005],
+      "vectorMm": 800.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9534",
+      "room": "main-bathroom",
+      "label": "Тумба с раковинами: длина",
+      "printedMm": 1250,
+      "axis": "Z",
+      "pageStartPt": [159.83145679, 343.53973745],
+      "pageEndPt": [159.83145679, 414.40598745],
+      "vectorMm": 1250.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9541",
+      "room": "main-bathroom",
+      "label": "Ванна: глубина",
+      "printedMm": 800,
+      "axis": "Z",
+      "pageStartPt": [159.83145679, 289.4064264],
+      "pageEndPt": [159.83145679, 334.7608264],
+      "vectorMm": 800.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9545",
+      "room": "main-bathroom",
+      "label": "Тумба с раковинами: глубина",
+      "printedMm": 500,
+      "axis": "X",
+      "pageStartPt": [119.79174207, 393.54863275],
+      "pageEndPt": [148.13824207, 393.54863275],
+      "vectorMm": 500.0,
+      "vectorMinusPrintedMm": -0.0
+    },
+    {
+      "id": "pdf-line-9549",
+      "room": "main-bathroom",
+      "label": "От тумбы до левого габарита унитаза",
+      "printedMm": 760,
+      "axis": "X",
+      "pageStartPt": [148.13824207, 393.54863275],
+      "pageEndPt": [191.24448115, 393.54863275],
+      "vectorMm": 760.345,
+      "vectorMinusPrintedMm": 0.345
+    },
+    {
+      "id": "pdf-line-9553",
+      "room": "main-bathroom",
+      "label": "От оси унитаза до правой стены",
+      "printedMm": 400,
+      "axis": "X",
+      "pageStartPt": [201.16575615, 393.4437507],
+      "pageEndPt": [223.84295615, 393.4437507],
+      "vectorMm": 400.0,
+      "vectorMinusPrintedMm": 0.0
+    },
+    {
+      "id": "pdf-line-9749",
+      "room": "kitchen",
+      "label": "Круглый обеденный стол: подписанный диаметр",
+      "printedMm": 900,
+      "axis": "X",
+      "pageStartPt": [346.46509625, 130.19178946],
+      "pageEndPt": [398.37887635, 130.19178946],
+      "vectorMm": 915.7,
+      "vectorMinusPrintedMm": 15.7
+    },
+    {
+      "id": "pdf-line-9754",
+      "room": "kitchen",
+      "label": "Нижний ряд кухни: глубина по поздней размерной линии",
+      "printedMm": 750,
+      "axis": "Z",
+      "pageStartPt": [405.13101265, 241.08754943],
+      "pageEndPt": [405.13668195, 283.6067325],
+      "vectorMm": 749.99,
+      "vectorMinusPrintedMm": -0.01
+    }
+  ],
+  "additionalPrintedDimensions": [
+    {
+      "room": "main-bathroom",
+      "label": "Зазор между ванной и тумбой",
+      "printedMm": 155,
+      "note": "Visually checked on page; no unique independent line assigned."
+    },
+    {
+      "room": "hall",
+      "label": "Проём хозблока",
+      "printedMm": 923,
+      "note": "Read visually; used instead of the conflicting 900 mm vector opening."
+    }
+  ],
+  "selectedWallAndBalconyVectors": [
+    {
+      "id": "pdf-rects-0",
+      "pageBoundsPt": [105.61849207, 345.7592684, 119.79174207, 475.5862384],
+      "planBoundsMm": [-250.0, 4264.215, 0.0, 6554.215],
+      "pageVerticesPt": [
+        [119.79174207, 475.5862384],
+        [105.61849207, 475.5862384],
+        [105.61849207, 345.7592684],
+        [119.79174207, 345.7592684]
+      ]
+    },
+    {
+      "id": "pdf-rects-4",
+      "pageBoundsPt": [119.79174207, 89.83487741, 152.14530331, 104.0081274],
+      "planBoundsMm": [0.0, -250.0, 570.68, -0.0],
+      "pageVerticesPt": [
+        [119.79174207, 104.0081274],
+        [152.14530331, 104.0081274],
+        [152.14530331, 89.83487741],
+        [119.79174207, 89.83487741]
+      ]
+    },
+    {
+      "id": "pdf-rects-5",
+      "pageBoundsPt": [262.69665331, 89.83487741, 323.27198995, 104.0081274],
+      "planBoundsMm": [2520.68, -250.0, 3589.16, -0.0],
+      "pageVerticesPt": [
+        [262.69665331, 89.83487741],
+        [323.27198995, 89.83487741],
+        [323.27198995, 104.0081274],
+        [262.69665331, 104.0081274]
+      ]
+    },
+    {
+      "id": "pdf-rects-6",
+      "pageBoundsPt": [412.56346495, 89.83487741, 441.3266585, 104.0081274],
+      "planBoundsMm": [5164.16, -250.0, 5671.51, -0.0],
+      "pageVerticesPt": [
+        [441.3266585, 89.83487741],
+        [412.56346495, 89.83487741],
+        [412.56346495, 104.0081274],
+        [441.3266585, 104.0081274]
+      ]
+    },
+    {
+      "id": "pdf-rects-28",
+      "pageBoundsPt": [509.3582585, 89.83487741, 521.405521, 104.0081274],
+      "planBoundsMm": [6871.51, -250.0, 7084.01, -0.0],
+      "pageVerticesPt": [
+        [509.3582585, 104.0081274],
+        [521.405521, 104.0081274],
+        [521.405521, 89.83487741],
+        [509.3582585, 89.83487741]
+      ]
+    },
+    {
+      "id": "pdf-rects-29",
+      "pageBoundsPt": [610.696996, 89.83487741, 622.7442585, 104.0081274],
+      "planBoundsMm": [8659.01, -250.0, 8871.51, -0.0],
+      "pageVerticesPt": [
+        [622.7442585, 89.83487741],
+        [610.696996, 89.83487741],
+        [610.696996, 104.0081274],
+        [622.7442585, 104.0081274]
+      ]
+    },
+    {
+      "id": "pdf-rects-40",
+      "pageBoundsPt": [622.7442585, 89.83487741, 686.57207255, 104.0081274],
+      "planBoundsMm": [8871.51, -250.0, 9997.36, -0.0],
+      "pageVerticesPt": [
+        [686.57207255, 89.83487741],
+        [622.7442585, 89.83487741],
+        [622.7442585, 104.0081274],
+        [686.57207255, 104.0081274]
+      ]
+    },
+    {
+      "id": "pdf-rects-41",
+      "pageBoundsPt": [686.57207255, 104.0081274, 700.74532255, 132.04961907],
+      "planBoundsMm": [9997.36, -0.0, 10247.36, 494.62],
+      "pageVerticesPt": [
+        [686.57207255, 104.0081274],
+        [700.74532255, 104.0081274],
+        [700.74532255, 132.04961907],
+        [686.57207255, 132.04961907]
+      ]
+    },
+    {
+      "id": "pdf-rects-42",
+      "pageBoundsPt": [686.57207255, 465.67346735, 700.74532255, 478.14592735],
+      "planBoundsMm": [9997.36, 6379.365, 10247.36, 6599.365],
+      "pageVerticesPt": [
+        [686.57207255, 478.14592735],
+        [700.74532255, 478.14592735],
+        [700.74532255, 465.67346735],
+        [686.57207255, 465.67346735]
+      ]
+    },
+    {
+      "id": "pdf-rects-43",
+      "pageBoundsPt": [686.57207255, 242.60096906, 700.74532255, 376.38199235],
+      "planBoundsMm": [9997.36, 2444.62, 10247.36, 4804.365],
+      "pageVerticesPt": [
+        [700.74532255, 242.60096906],
+        [686.57207255, 242.60096906],
+        [686.57207255, 376.38199235],
+        [700.74532255, 376.38199235]
+      ]
+    },
+    {
+      "id": "pdf-rects-58",
+      "pageBoundsPt": [622.56567555, 478.14592735, 700.74532255, 489.25775535],
+      "planBoundsMm": [8868.36, 6599.365, 10247.36, 6795.365],
+      "pageVerticesPt": [
+        [700.74532255, 478.14592735],
+        [622.56567555, 478.14592735],
+        [622.56567555, 489.25775535],
+        [700.74532255, 489.25775535]
+      ]
+    },
+    {
+      "id": "pdf-rects-59",
+      "pageBoundsPt": [509.17967555, 478.14592735, 622.56567555, 489.25775535],
+      "planBoundsMm": [6868.36, 6599.365, 8868.36, 6795.365],
+      "pageVerticesPt": [
+        [622.56567555, 478.14592735],
+        [509.17967555, 478.14592735],
+        [509.17967555, 489.25775535],
+        [622.56567555, 489.25775535]
+      ]
+    },
+    {
+      "id": "pdf-rects-61",
+      "pageBoundsPt": [119.79174207, 532.98506625, 227.07445716, 539.78822625],
+      "planBoundsMm": [0.0, 7566.665, 1892.345, 7686.665],
+      "pageVerticesPt": [
+        [119.79174207, 539.78822625],
+        [227.07445716, 539.78822625],
+        [227.07445716, 532.98506625],
+        [119.79174207, 532.98506625]
+      ]
+    },
+    {
+      "id": "pdf-rects-63",
+      "pageBoundsPt": [297.5362026, 104.0081274, 311.7094526, 164.96132289],
+      "planBoundsMm": [3135.21, -0.0, 3385.21, 1075.145],
+      "pageVerticesPt": [
+        [311.7094526, 164.96132289],
+        [297.5362026, 164.96132289],
+        [297.5362026, 104.0081274],
+        [311.7094526, 104.0081274]
+      ]
+    },
+    {
+      "id": "pdf-rects-66",
+      "pageBoundsPt": [700.74532255, 460.45204205, 760.80021745, 463.28669205],
+      "planBoundsMm": [10247.36, 6287.265, 11306.66, 6337.265],
+      "pageVerticesPt": [
+        [760.80021745, 460.45204205],
+        [700.74532255, 460.45204205],
+        [700.74532255, 463.28669205],
+        [760.80021745, 463.28669205]
+      ]
+    },
+    {
+      "id": "pdf-rects-67",
+      "pageBoundsPt": [760.80021745, 326.9031766, 763.63486745, 460.45204205],
+      "planBoundsMm": [11306.66, 3931.615, 11356.66, 6287.265],
+      "pageVerticesPt": [
+        [760.80021745, 326.9031766],
+        [763.63486745, 326.9031766],
+        [763.63486745, 460.45204205],
+        [760.80021745, 460.45204205]
+      ]
+    },
+    {
+      "id": "pdf-rects-68",
+      "pageBoundsPt": [700.74532255, 324.0685266, 760.80021745, 326.9031766],
+      "planBoundsMm": [10247.36, 3881.615, 11306.66, 3931.615],
+      "pageVerticesPt": [
+        [760.80021745, 324.0685266],
+        [700.74532255, 324.0685266],
+        [700.74532255, 326.9031766],
+        [760.80021745, 326.9031766]
+      ]
+    },
+    {
+      "id": "pdf-rects-69",
+      "pageBoundsPt": [119.79174207, 425.74458745, 223.84295615, 431.41388745],
+      "planBoundsMm": [0.0, 5675.065, 1835.345, 5775.065],
+      "pageVerticesPt": [
+        [119.79174207, 431.41388745],
+        [223.84295615, 431.41388745],
+        [223.84295615, 425.74458745],
+        [119.79174207, 425.74458745]
+      ]
+    },
+    {
+      "id": "pdf-rects-70",
+      "pageBoundsPt": [119.79174207, 283.7371264, 223.84295615, 289.4064264],
+      "planBoundsMm": [0.0, 3170.215, 1835.345, 3270.215],
+      "pageVerticesPt": [
+        [223.84295615, 283.7371264],
+        [119.79174207, 283.7371264],
+        [119.79174207, 289.4064264],
+        [223.84295615, 289.4064264]
+      ]
+    },
+    {
+      "id": "pdf-rects-71",
+      "pageBoundsPt": [223.84295615, 289.4064264, 229.51225615, 337.20146005],
+      "planBoundsMm": [1835.345, 3270.215, 1935.345, 4113.265],
+      "pageVerticesPt": [
+        [223.84295615, 289.4064264],
+        [229.51225615, 289.4064264],
+        [229.51225615, 337.20146005],
+        [223.84295615, 337.20146005]
+      ]
+    },
+    {
+      "id": "pdf-rects-72",
+      "pageBoundsPt": [223.84295615, 382.55586005, 229.51225615, 487.5144456],
+      "planBoundsMm": [1835.345, 4913.265, 1935.345, 6764.615],
+      "pageVerticesPt": [
+        [223.84295615, 487.5144456],
+        [229.51225615, 487.5144456],
+        [229.51225615, 382.55586005],
+        [223.84295615, 382.55586005]
+      ]
+    },
+    {
+      "id": "pdf-rects-78",
+      "pageBoundsPt": [119.79174207, 442.8687081, 223.84295615, 448.5380081],
+      "planBoundsMm": [0.0, 5977.115, 1835.345, 6077.115],
+      "pageVerticesPt": [
+        [119.79174207, 448.5380081],
+        [223.84295615, 448.5380081],
+        [223.84295615, 442.8687081],
+        [119.79174207, 442.8687081]
+      ]
+    },
+    {
+      "id": "pdf-rects-79",
+      "pageBoundsPt": [297.5362026, 345.81312675, 311.7094526, 366.2027642],
+      "planBoundsMm": [3135.21, 4265.165, 3385.21, 4624.815],
+      "pageVerticesPt": [
+        [311.7094526, 366.2027642],
+        [297.5362026, 366.2027642],
+        [297.5362026, 345.81312675],
+        [311.7094526, 345.81312675]
+      ]
+    },
+    {
+      "id": "pdf-rects-80",
+      "pageBoundsPt": [311.7094526, 366.2027642, 328.14191865, 371.8720642],
+      "planBoundsMm": [3385.21, 4624.815, 3675.06, 4724.815],
+      "pageVerticesPt": [
+        [328.14191865, 366.2027642],
+        [311.7094526, 366.2027642],
+        [311.7094526, 371.8720642],
+        [328.14191865, 371.8720642]
+      ]
+    },
+    {
+      "id": "pdf-rects-81",
+      "pageBoundsPt": [328.14191865, 297.7913211, 333.81121865, 366.2027642],
+      "planBoundsMm": [3675.06, 3418.115, 3775.06, 4624.815],
+      "pageVerticesPt": [
+        [333.81121865, 366.2027642],
+        [328.14191865, 366.2027642],
+        [328.14191865, 297.7913211],
+        [333.81121865, 297.7913211]
+      ]
+    },
+    {
+      "id": "pdf-rects-84",
+      "pageBoundsPt": [297.74313205, 454.2413239, 398.5007663, 459.9106239],
+      "planBoundsMm": [3138.86, 6177.715, 4916.11, 6277.715],
+      "pageVerticesPt": [
+        [297.74313205, 459.9106239],
+        [398.5007663, 459.9106239],
+        [398.5007663, 454.2413239],
+        [297.74313205, 454.2413239]
+      ]
+    },
+    {
+      "id": "pdf-rects-85",
+      "pageBoundsPt": [398.5007663, 389.90327285, 404.1700663, 475.08734],
+      "planBoundsMm": [4916.11, 5042.865, 5016.11, 6545.415],
+      "pageVerticesPt": [
+        [398.5007663, 389.90327285],
+        [404.1700663, 389.90327285],
+        [404.1700663, 475.08734],
+        [398.5007663, 475.08734]
+      ]
+    },
+    {
+      "id": "pdf-rects-86",
+      "pageBoundsPt": [496.06091535, 297.8026597, 504.28140035, 334.77499965],
+      "planBoundsMm": [6636.96, 3418.315, 6781.96, 4070.465],
+      "pageVerticesPt": [
+        [504.28140035, 297.8026597],
+        [496.06091535, 297.8026597],
+        [496.06091535, 334.77499965],
+        [504.28140035, 334.77499965]
+      ]
+    },
+    {
+      "id": "pdf-rects-90",
+      "pageBoundsPt": [492.48925635, 104.0081274, 500.70974135, 109.26838741],
+      "planBoundsMm": [6573.96, -0.0, 6718.96, 92.785],
+      "pageVerticesPt": [
+        [492.48925635, 104.0081274],
+        [500.70974135, 104.0081274],
+        [500.70974135, 109.26838741],
+        [492.48925635, 109.26838741]
+      ]
+    },
+    {
+      "id": "pdf-rects-91",
+      "pageBoundsPt": [492.48925635, 160.29208741, 500.70974135, 283.6294097],
+      "planBoundsMm": [6573.96, 992.785, 6718.96, 3168.315],
+      "pageVerticesPt": [
+        [492.48925635, 283.6294097],
+        [500.70974135, 283.6294097],
+        [500.70974135, 160.29208741],
+        [492.48925635, 160.29208741]
+      ]
+    },
+    {
+      "id": "pdf-rects-94",
+      "pageBoundsPt": [297.5362026, 239.99450839, 311.7094526, 278.34732289],
+      "planBoundsMm": [3135.21, 2398.645, 3385.21, 3075.145],
+      "pageVerticesPt": [
+        [311.7094526, 278.34732289],
+        [297.5362026, 278.34732289],
+        [297.5362026, 239.99450839],
+        [311.7094526, 239.99450839]
+      ]
+    },
+    {
+      "id": "pdf-rects-95",
+      "pageBoundsPt": [404.1700663, 384.23397285, 404.23526325, 389.90327285],
+      "planBoundsMm": [5016.11, 4942.865, 5017.26, 5042.865],
+      "pageVerticesPt": [
+        [404.1700663, 389.90327285],
+        [404.23526325, 389.90327285],
+        [404.23526325, 384.23397285],
+        [404.1700663, 384.23397285]
+      ]
+    },
+    {
+      "id": "pdf-rects-96",
+      "pageBoundsPt": [449.58966325, 384.23397285, 496.06091535, 389.90327285],
+      "planBoundsMm": [5817.26, 4942.865, 6636.96, 5042.865],
+      "pageVerticesPt": [
+        [449.58966325, 389.90327285],
+        [496.06091535, 389.90327285],
+        [496.06091535, 384.23397285],
+        [449.58966325, 384.23397285]
+      ]
+    },
+    {
+      "id": "pdf-rects-99",
+      "pageBoundsPt": [404.1700663, 463.74874, 449.58966325, 475.08734],
+      "planBoundsMm": [5016.11, 6345.415, 5817.26, 6545.415],
+      "pageVerticesPt": [
+        [404.1700663, 475.08734],
+        [449.58966325, 475.08734],
+        [449.58966325, 463.74874],
+        [404.1700663, 463.74874]
+      ]
+    },
+    {
+      "id": "pdf-rects-100",
+      "pageBoundsPt": [119.79174207, 414.40598745, 223.84295615, 425.74458745],
+      "planBoundsMm": [0.0, 5475.065, 1835.345, 5675.065],
+      "pageVerticesPt": [
+        [119.79174207, 425.74458745],
+        [223.84295615, 425.74458745],
+        [223.84295615, 414.40598745],
+        [119.79174207, 414.40598745]
+      ]
+    },
+    {
+      "id": "pdf-curves-15",
+      "pageBoundsPt": [311.91638205, 475.08450535, 441.1509102, 489.2662593],
+      "planBoundsMm": [3388.86, 6545.365, 5668.41, 6795.515],
+      "pageVerticesPt": [
+        [441.14807555, 475.08450535],
+        [441.1509102, 489.25775535],
+        [311.91638205, 489.2662593],
+        [311.91638205, 475.0930093],
+        [441.14807555, 475.08450535]
+      ]
+    },
+    {
+      "id": "pdf-curves-17",
+      "pageBoundsPt": [297.2640762, 475.09584395, 311.91638205, 552.04525285],
+      "planBoundsMm": [3130.41, 6545.565, 3388.86, 7902.865],
+      "pageVerticesPt": [
+        [311.4373262, 552.04525285],
+        [297.2640762, 552.019741],
+        [297.74313205, 475.09584395],
+        [311.91638205, 475.12419045],
+        [311.4373262, 552.04525285]
+      ]
+    },
+    {
+      "id": "pdf-curves-25",
+      "pageBoundsPt": [223.84295615, 532.8688456, 229.51225615, 551.9006857],
+      "planBoundsMm": [1835.345, 7564.615, 1935.345, 7900.315],
+      "pageVerticesPt": [
+        [223.84295615, 551.8893471],
+        [223.84295615, 532.8688456],
+        [229.51225615, 532.8688456],
+        [229.51225615, 551.9006857],
+        [223.84295615, 551.8893471]
+      ]
+    },
+    {
+      "id": "pdf-curves-29",
+      "pageBoundsPt": [297.64108465, 424.1940339, 311.91638205, 475.12419045],
+      "planBoundsMm": [3137.06, 5647.715, 3388.86, 6546.065],
+      "pageVerticesPt": [
+        [311.81433465, 424.1940339],
+        [311.91638205, 475.12419045],
+        [297.74313205, 475.09584395],
+        [297.64108465, 424.2223804],
+        [311.81433465, 424.1940339]
+      ]
+    },
+    {
+      "id": "pdf-curves-33",
+      "pageBoundsPt": [119.79174207, 551.7022602, 228.55641217, 558.70101105],
+      "planBoundsMm": [0.0, 7896.815, 1918.485, 8020.265],
+      "pageVerticesPt": [
+        [228.55641217, 551.89785105],
+        [228.54422318, 558.70101105],
+        [119.79174207, 558.5054202],
+        [119.79174207, 551.7022602],
+        [228.55641217, 551.89785105]
+      ]
+    },
+    {
+      "id": "pdf-curves-47",
+      "pageBoundsPt": [496.06091535, 385.79869965, 504.28140035, 475.08450535],
+      "planBoundsMm": [6636.96, 4970.465, 6781.96, 6545.365],
+      "pageVerticesPt": [
+        [496.06091535, 475.08450535],
+        [496.06091535, 385.79869965],
+        [498.75383285, 385.79869965],
+        [498.75383285, 428.60191465],
+        [501.58848285, 428.60191465],
+        [501.58848285, 385.79869965],
+        [504.28140035, 385.79869965],
+        [504.28140035, 475.08450535],
+        [496.06091535, 475.08450535]
+      ]
+    }
+  ],
+  "limitations": [
+    "Printed labels take precedence over conflicting vector dimensions; reconciliation is documented in plan-dimension-audit.md.",
+    "Curves preserve source vertices; the model uses reconciled orthogonal box walls.",
+    "The source does not establish opening or furniture heights; ceiling height 2700 mm comes from the earlier user requirement.",
+    "Earlier custom furniture and bathroom arrangements were replaced at the user's request."
+  ]
+}

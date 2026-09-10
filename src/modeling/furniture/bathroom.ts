@@ -32,12 +32,21 @@ export function walkInShower(
   cylinder(`${name} rain head`, x + w - 0.34, z + d * 0.6, 0.13, 0.025, 'dark', 2.085);
 }
 
-export function toilet(model: ModelBuilder, name: string, x: number, z: number) {
+export function toilet(
+  model: ModelBuilder,
+  name: string,
+  x: number,
+  z: number,
+  options: { cistern?: boolean; width?: number; depth?: number } = {},
+) {
   const { box, ellipsoid } = model;
-  box(`${name} cistern wall`, x - 0.3, z + 0.24, 0.6, 0.16, 1.1, 'white');
-  ellipsoid(`${name} bowl`, x, z, 0.37, 0.58, 0.3, 'white', 0.16);
-  ellipsoid(`${name} seat`, x, z - 0.04, 0.38, 0.47, 0.045, 'white', 0.44);
-  ellipsoid(`${name} opening`, x, z - 0.055, 0.245, 0.33, 0.015, 'dark', 0.468);
+  const width = options.width ?? 0.37;
+  const depth = options.depth ?? 0.58;
+  if (options.cistern !== false)
+    box(`${name} cistern wall`, x - 0.3, z + 0.24, 0.6, 0.16, 1.1, 'white');
+  ellipsoid(`${name} bowl`, x, z, width, depth, 0.3, 'white', 0.16);
+  ellipsoid(`${name} seat`, x, z - 0.04, width * 0.95, depth * 0.81, 0.045, 'white', 0.44);
+  ellipsoid(`${name} opening`, x, z - 0.055, width * 0.66, depth * 0.57, 0.015, 'dark', 0.468);
   box(`${name} flush`, x - 0.085, z + 0.228, 0.17, 0.016, 0.085, 'dark', 0.91);
 }
 

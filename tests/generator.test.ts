@@ -17,11 +17,16 @@ const baseline = parseApartmentModel(
     (_key, value: unknown) => (Object.is(value, -0) ? 0 : value),
   ),
 );
+const currentBaseline = parseApartmentModel(
+  JSON.parse(
+    readFileSync(new URL('./fixtures/apartment-plan-2026-09-10.json', import.meta.url), 'utf8'),
+  ),
+);
 
-test('TypeScript generation preserves all source-model details, materials and labels', () => {
+test('generation matches the reviewed final-plan fixture, materials and labels', () => {
   const model = parseApartmentModel(buildApartment());
-  assert.equal(model.parts.length, 761);
-  assert.deepEqual(model, baseline);
+  assert.equal(model.parts.length, 619);
+  assert.deepEqual(model, currentBaseline);
 });
 
 test('repeated generation is independent, including nested arrays and materials', () => {
@@ -33,8 +38,8 @@ test('repeated generation is independent, including nested arrays and materials'
   first.materials.wall![1] = '#000000';
   first.labels[0]![0] = 'Changed';
   first.metadata.ceilingHeight = 99;
-  assert.deepEqual(second, baseline);
-  assert.deepEqual(buildApartment(), baseline);
+  assert.deepEqual(second, currentBaseline);
+  assert.deepEqual(buildApartment(), currentBaseline);
 });
 
 test('room builders do not share their collection or depend on the order of other rooms', () => {
