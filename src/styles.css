@@ -35,8 +35,11 @@ body {
   height: 100dvh;
   padding: 16px 20px;
   display: grid;
-  grid-template-rows: auto auto minmax(180px, 1fr) auto;
+  grid-template-rows: auto auto minmax(260px, 1fr) auto;
   gap: 12px;
+}
+#apartment-view:has(.measurement-panel) {
+  grid-template-rows: auto auto minmax(260px, 1fr) auto auto;
 }
 
 .page-header {
@@ -136,6 +139,14 @@ button[aria-pressed='true'] {
   height: 100%;
   cursor: grab;
 }
+.ap-measurements {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
 .ap-canvas-container {
   position: absolute;
   inset: 0;
@@ -165,6 +176,87 @@ button[aria-pressed='true'] {
   gap: 16px;
   text-align: center;
   padding: 24px;
+}
+.measurement-panel {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  height: 240px;
+  max-height: 240px;
+  overflow: auto;
+}
+.measurement-tools,
+.measurement-pairs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.measurement-tools button[aria-pressed='true'] {
+  background: var(--accent-background);
+  border-color: var(--accent);
+}
+.measurement-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+}
+.measurement-select select {
+  min-width: 0;
+  flex: 1;
+}
+.measurement-hint,
+.measurement-note,
+.measurement-result p {
+  margin: 0;
+  color: var(--muted);
+}
+.measurement-result {
+  display: grid;
+  gap: 4px;
+}
+.measurement-select {
+  min-width: 0;
+}
+.measurement-result p,
+.measurement-note,
+.measurement-hint {
+  font-size: 12px;
+  line-height: 1.45;
+}
+@media (min-width: 960px) {
+  #apartment-view:has(.measurement-panel) {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-rows: auto auto minmax(260px, 1fr) auto;
+  }
+  #apartment-view:has(.measurement-panel) > .page-header,
+  #apartment-view:has(.measurement-panel) > #ap-toolbar,
+  #apartment-view:has(.measurement-panel) > #ap-footer {
+    grid-column: 1 / -1;
+  }
+  .measurement-panel {
+    grid-column: 2;
+    grid-row: 3;
+    height: auto;
+    max-height: none;
+    align-content: start;
+  }
+  .measurement-select {
+    display: grid;
+    gap: 4px;
+  }
+  .measurement-pairs {
+    display: grid;
+  }
+}
+.measurement-result strong {
+  font-size: 15px;
+}
+.measurement-clear {
+  justify-self: start;
 }
 #ap-footer {
   display: flex;

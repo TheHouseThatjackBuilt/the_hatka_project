@@ -7,6 +7,8 @@ import { bindCanvasControls } from './controls.ts';
 import { createRoomLabels } from './labels.ts';
 import type { ApartmentModel } from '../model/types.ts';
 import type { ApartmentMesh, ViewerHandle, ViewerOptions } from './types.ts';
+import { createMeasurements } from './measurements.ts';
+import type { MeasurementSnapshot } from './measurement-types.ts';
 
 extend({
   Group: THREE.Group,
@@ -38,6 +40,7 @@ function ViewerFrame({
   viewport,
   options,
   controls,
+  measurements,
   onReady,
   onError,
 }: {
@@ -46,6 +49,7 @@ function ViewerFrame({
   viewport: HTMLElement;
   options: ViewerOptions;
   controls: ReturnType<typeof bindCanvasControls>;
+  measurements: ReturnType<typeof createMeasurements>;
   onReady(): void;
   onError(error: unknown): void;
 }) {
@@ -59,6 +63,7 @@ function ViewerFrame({
     if (!viewport.clientWidth || !viewport.clientHeight) return;
     try {
       camera.update();
+      measurements.update(camera.camera, viewport.clientWidth, viewport.clientHeight);
       labels.update(
         camera.camera,
         viewport.clientWidth,
@@ -82,6 +87,7 @@ export function createViewer(
   model: ApartmentModel,
   initialOptions: ViewerOptions,
   onError: (error: unknown) => void,
+  onMeasurement: (snapshot: MeasurementSnapshot) => void = () => {},
 ): ViewerHandle {
   const canvas = document.createElement('canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -89,6 +95,7 @@ export function createViewer(
   renderer.toneMappingExposure = 1;
   const root = createRoot(canvas);
   const meshes: ApartmentMesh[] = [];
+  const caps: THREE.Mesh[] = [];
   let state: RootState | undefined;
   let disposed = false;
   let options = { ...initialOptions };
@@ -106,15 +113,27 @@ export function createViewer(
   let labels: ReturnType<typeof createRoomLabels>;
   let controls: ReturnType<typeof bindCanvasControls>;
   let observer: ResizeObserver;
+  let measurements: ReturnType<typeof createMeasurements>;
   try {
     labels = createRoomLabels(labelLayer, model.labels);
-    controls = bindCanvasControls(canvas, camera);
+    measurements = createMeasurements(
+      viewport,
+      canvas,
+      model,
+      meshes,
+      caps,
+      options,
+      invalidate,
+      onMeasurement,
+    );
+    controls = bindCanvasControls(canvas, camera, measurements.interaction);
     observer = new ResizeObserver(resize);
     viewport.append(canvas);
   } catch (error) {
     observer!?.disconnect();
     controls!?.dispose();
     labels!?.dispose();
+    measurements!?.dispose();
     root.unmount();
     renderer.dispose();
     canvas.remove();
@@ -133,6 +152,7 @@ export function createViewer(
     observer.disconnect();
     controls.dispose();
     labels.dispose();
+    measurements.dispose();
     root.unmount();
     renderer.dispose();
     canvas.remove();
@@ -150,13 +170,14 @@ export function createViewer(
     root.render(
       <StrictMode>
         <SceneBoundary onError={fail}>
-          <ApartmentScene model={model} options={options} meshes={meshes}>
+          <ApartmentScene model={model} options={options} meshes={meshes} caps={caps}>
             <ViewerFrame
               camera={camera}
               labels={labels}
               viewport={viewport}
               options={options}
               controls={controls}
+              measurements={measurements}
               onReady={resolveReady}
               onError={fail}
             />
@@ -192,6 +213,7 @@ export function createViewer(
     ready,
     setOptions(next) {
       options = { ...next };
+      measurements.setOptions(options);
       renderScene();
     },
     rotate(angle) {
@@ -202,6 +224,9 @@ export function createViewer(
     },
     fit() {
       if (!disposed) camera.fit();
+    },
+    measurement(command) {
+      if (!disposed) measurements.command(command);
     },
     dispose,
   };

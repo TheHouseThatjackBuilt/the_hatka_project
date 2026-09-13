@@ -1,3 +1,4 @@
+import { buildMeasurements } from './measurements.ts';
 import type { ApartmentModel } from '../model/types.ts';
 import { CEILING_HEIGHT, createModelBuilder } from './core/builder.ts';
 import { createMaterials } from './core/materials.ts';
@@ -28,6 +29,7 @@ export function buildApartment(): ApartmentModel {
   buildCloakroom(model);
   buildBedroom(model);
   buildCeiling(model);
+  const measurements = buildMeasurements(model.parts);
   return {
     metadata: {
       title: 'Квартира по итоговой планировке, лист 09',
@@ -51,5 +53,6 @@ export function buildApartment(): ApartmentModel {
       ['Холл', 4.31, 4.76],
       ['Балкон', 10.79, 5.12],
     ],
+    measurements,
   };
 }

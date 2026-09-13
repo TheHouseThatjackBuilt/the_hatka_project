@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { parseApartmentModel } from '../model/parse-model.ts';
 import type { ViewerHandle, ViewerOptions, ViewerStatus } from '../viewer/types.ts';
+import { EMPTY_MEASUREMENT_SNAPSHOT } from '../viewer/measurement-types.ts';
+import type { MeasurementSnapshot } from '../viewer/measurement-types.ts';
 
 export function useApartmentViewer(options: ViewerOptions) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -8,6 +10,7 @@ export function useApartmentViewer(options: ViewerOptions) {
   const viewerRef = useRef<ViewerHandle | null>(null);
   const latestOptions = useRef(options);
   const [status, setStatus] = useState<ViewerStatus>('loading');
+  const [measurement, setMeasurement] = useState<MeasurementSnapshot>(EMPTY_MEASUREMENT_SNAPSHOT);
 
   useEffect(() => {
     latestOptions.current = options;
@@ -21,6 +24,7 @@ export function useApartmentViewer(options: ViewerOptions) {
     const abort = new AbortController();
     let activeViewer: ViewerHandle | null = null;
     setStatus('loading');
+    setMeasurement(EMPTY_MEASUREMENT_SNAPSHOT);
 
     const start = async () => {
       try {
@@ -40,6 +44,10 @@ export function useApartmentViewer(options: ViewerOptions) {
             if (abort.signal.aborted) return;
             console.error('Apartment viewer:', error);
             setStatus('error');
+            setMeasurement(EMPTY_MEASUREMENT_SNAPSHOT);
+          },
+          (snapshot) => {
+            if (!abort.signal.aborted) setMeasurement(snapshot);
           },
         );
         viewerRef.current = activeViewer;
@@ -50,6 +58,7 @@ export function useApartmentViewer(options: ViewerOptions) {
         if (abort.signal.aborted) return;
         console.error('Apartment viewer:', error);
         setStatus('error');
+        setMeasurement(EMPTY_MEASUREMENT_SNAPSHOT);
       }
     };
 
@@ -62,5 +71,5 @@ export function useApartmentViewer(options: ViewerOptions) {
     };
   }, []);
 
-  return { viewportRef, labelsRef, viewerRef, status };
+  return { viewportRef, labelsRef, viewerRef, status, measurement };
 }

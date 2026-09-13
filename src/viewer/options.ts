@@ -5,6 +5,7 @@ export const DEFAULT_VIEWER_OPTIONS: ViewerOptions = {
   furnitureVisible: true,
   labelsVisible: true,
   panMode: false,
+  measurementTool: 'off',
 };
 
 export const VIEW_MODES: { value: ViewMode; label: string }[] = [

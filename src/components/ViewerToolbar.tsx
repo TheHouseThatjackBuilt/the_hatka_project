@@ -38,6 +38,18 @@ export function ViewerToolbar({ options, disabled, onChange, onFit }: ViewerTool
         />
         Мебель
       </label>
+      <button
+        type="button"
+        aria-pressed={options.measurementTool !== 'off'}
+        onClick={() =>
+          onChange({
+            ...options,
+            measurementTool: options.measurementTool === 'off' ? 'objects' : 'off',
+          })
+        }
+      >
+        Размеры
+      </button>
       <label className="check-field">
         <input
           type="checkbox"
