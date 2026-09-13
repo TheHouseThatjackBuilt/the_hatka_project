@@ -11,8 +11,19 @@ interface Pinch extends Point {
   distance: number;
 }
 
+export interface CanvasMeasurementInteraction {
+  enabled(): boolean;
+  hover(point: Point | null): void;
+  gesture(active: boolean): void;
+  tap(point: Point): void;
+}
+
 // React handles toolbar events; this module owns only canvas pointer gestures.
-export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraController) {
+export function bindCanvasControls(
+  canvas: HTMLCanvasElement,
+  camera: CameraController,
+  measurement?: CanvasMeasurementInteraction,
+) {
   const events = new AbortController();
   function on<K extends keyof HTMLElementEventMap>(
     type: K,
@@ -26,6 +37,9 @@ export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraCont
   const pointers = new Map<number, Point>();
   let drag: Drag | null = null;
   let pinch: Pinch | null = null;
+  let tapCandidate: (Point & { id: number }) | null = null;
+  let keyboardPoint: Point | null = null;
+  const idleCursor = () => (measurement?.enabled() ? 'crosshair' : 'grab');
 
   function gesture(): Pinch | null {
     const [a, b] = [...pointers.values()];
@@ -37,7 +51,11 @@ export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraCont
     if (event.button > 2 || pointers.size >= 2) return;
     event.preventDefault();
     canvas.setPointerCapture(event.pointerId);
+    if (pointers.size === 0 && event.button === 0 && !event.shiftKey && !panMode)
+      tapCandidate = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    else tapCandidate = null;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    measurement?.gesture(true);
     drag = {
       x: event.clientX,
       y: event.clientY,
@@ -47,7 +65,17 @@ export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraCont
     if (pointers.size === 2) pinch = gesture();
   });
   on('pointermove', (event) => {
-    if (!pointers.has(event.pointerId)) return;
+    keyboardPoint = null;
+    if (!pointers.has(event.pointerId)) {
+      if (event.pointerType !== 'touch') measurement?.hover({ x: event.clientX, y: event.clientY });
+      return;
+    }
+    if (
+      tapCandidate &&
+      Math.hypot(event.clientX - tapCandidate.x, event.clientY - tapCandidate.y) > 5
+    )
+      tapCandidate = null;
+    if (measurement?.enabled() && tapCandidate) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointers.size === 2) {
       const next = gesture();
@@ -68,14 +96,45 @@ export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraCont
 
   function release(event: PointerEvent) {
     if (!pointers.delete(event.pointerId)) return;
+    const tap =
+      event.type === 'pointerup' &&
+      tapCandidate?.id === event.pointerId &&
+      Math.hypot(event.clientX - tapCandidate.x, event.clientY - tapCandidate.y) <= 5;
+    tapCandidate = null;
     const remaining = [...pointers.values()][0];
     drag = remaining ? { ...remaining, pan: panMode } : null;
     pinch = null;
-    canvas.style.cursor = remaining ? 'grabbing' : 'grab';
+    canvas.style.cursor = remaining ? 'grabbing' : idleCursor();
+    if (!remaining) {
+      measurement?.gesture(false);
+      if (tap) measurement?.tap({ x: event.clientX, y: event.clientY });
+      if (event.pointerType === 'touch' || event.type !== 'pointerup') measurement?.hover(null);
+      else measurement?.hover({ x: event.clientX, y: event.clientY });
+    }
   }
   on('pointerup', release);
   on('pointercancel', release);
   on('lostpointercapture', release);
+  on('pointerleave', () => {
+    if (!pointers.size) measurement?.hover(null);
+  });
+  on('keydown', (event) => {
+    if (!measurement?.enabled()) return;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', ' '].includes(event.key))
+      return;
+    event.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    keyboardPoint ??= { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    const step = event.shiftKey ? 1 : 10;
+    if (event.key === 'ArrowLeft') keyboardPoint.x -= step;
+    if (event.key === 'ArrowRight') keyboardPoint.x += step;
+    if (event.key === 'ArrowUp') keyboardPoint.y -= step;
+    if (event.key === 'ArrowDown') keyboardPoint.y += step;
+    keyboardPoint.x = Math.max(rect.left, Math.min(rect.right - 1, keyboardPoint.x));
+    keyboardPoint.y = Math.max(rect.top, Math.min(rect.bottom - 1, keyboardPoint.y));
+    measurement.hover({ ...keyboardPoint });
+    if (event.key === 'Enter' || event.key === ' ') measurement.tap({ ...keyboardPoint });
+  });
   on('contextmenu', (event) => event.preventDefault());
   on(
     'wheel',
@@ -96,6 +155,8 @@ export function bindCanvasControls(canvas: HTMLCanvasElement, camera: CameraCont
         if (canvas.hasPointerCapture(id)) canvas.releasePointerCapture(id);
       }
       pointers.clear();
+      tapCandidate = null;
+      measurement?.gesture(false);
     },
   };
 }

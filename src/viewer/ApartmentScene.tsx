@@ -20,6 +20,7 @@ interface Props {
   model: ApartmentModel;
   options: ViewerOptions;
   meshes: ApartmentMesh[];
+  caps?: THREE.Mesh[];
   children?: ReactNode;
 }
 
@@ -77,7 +78,7 @@ function PartMesh({
   );
 }
 
-export function ApartmentScene({ model, options, meshes, children }: Props) {
+export function ApartmentScene({ model, options, meshes, caps, children }: Props) {
   const [allocated, setAllocated] = useState<{
     model: ApartmentModel;
     resources: SceneResources;
@@ -157,12 +158,17 @@ export function ApartmentScene({ model, options, meshes, children }: Props) {
           return (
             <mesh
               key={index}
+              ref={(mesh) => {
+                if (!caps) return;
+                if (mesh) caps[index] = mesh;
+                else delete caps[index];
+              }}
               geometry={resources.geometries.box}
               material={capMaterial}
               position={[part.pos[0], CUT_HEIGHT - 0.002, part.pos[2]]}
               rotation={[0, part.rot, 0]}
               scale={[part.size[0], 0.008, part.size[2]]}
-              userData={{ group: part.group }}
+              userData={{ group: part.group, sourceIndex: index }}
               visible={part.group !== 'furniture' || options.furnitureVisible}
             />
           );
