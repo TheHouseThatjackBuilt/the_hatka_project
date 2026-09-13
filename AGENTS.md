@@ -21,7 +21,7 @@
 
 React 19.2.8 + TypeScript + Vite 8, React Three Fiber 9.7.0 и three.js
 0.160.1. `@react-three/test-renderer` 9.1.1 используется в dev-зависимостях.
-Node `^22.12 || >=24`.
+Node `24.x` (`^24.0.0`), локально и в GitHub Actions.
 
 Сцена собирается декларативными компонентами R3F в `src/viewer/ApartmentScene.tsx`.
 `src/viewer/index.tsx` использует `createRoot` с заранее созданными canvas и

@@ -4,6 +4,7 @@
 и three.js 0.160.1. Dev-проверки используют `@react-three/test-renderer` 9.1.1.
 Версии и команды — в [package.json](../../package.json), правила работы —
 в [AGENTS.md](../../AGENTS.md). Серверного приложения и базы данных нет.
+Локальная разработка и GitHub Actions используют Node 24.x.
 
 ## Основания решений
 
