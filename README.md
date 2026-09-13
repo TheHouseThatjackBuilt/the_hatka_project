@@ -5,7 +5,7 @@
 
 ## Запуск
 
-Нужен Node.js 22.12+ в ветке 22 или Node.js 24+ с npm.
+Нужен Node.js 24.x с npm. Эта же версия используется в GitHub Actions.
 
 ```sh
 npm install
