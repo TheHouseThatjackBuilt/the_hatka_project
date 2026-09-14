@@ -4,6 +4,7 @@ import type { ApartmentMesh, ViewMode, Viewport } from './types.ts';
 
 const MIN_ZOOM = 0.35;
 const MAX_ZOOM = 6;
+const FIT_FILL = 0.88;
 const clampZoom = (value: number) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, value));
 
 export function createCameraController(
@@ -20,8 +21,15 @@ export function createCameraController(
   let elevation = 1.04;
   let zoom = 1;
   let mode: ViewMode = 'cut';
+  let pendingFit = false;
+  const hasSize = () => area.clientWidth > 0 && area.clientHeight > 0;
 
   function update() {
+    if (!hasSize()) return;
+    if (pendingFit) {
+      fit();
+      return;
+    }
     const aspect = area.clientWidth / Math.max(1, area.clientHeight);
     const span =
       Math.max(mode === 'full' ? 11.1 : 10.4, (mode === 'full' ? 13.5 : 13.2) / aspect) / zoom;
@@ -42,6 +50,7 @@ export function createCameraController(
   }
 
   function panPixels(dx: number, dy: number) {
+    if (!hasSize()) return;
     update();
     const units = (camera.top - camera.bottom) / Math.max(1, area.clientHeight);
     cameraRight.setFromMatrixColumn(camera.matrixWorld, 0);
@@ -51,6 +60,7 @@ export function createCameraController(
   }
 
   function zoomAt(factor: number, clientX?: number, clientY?: number) {
+    if (!hasSize() || !Number.isFinite(factor) || factor <= 0) return;
     const nextZoom = clampZoom(zoom * factor);
     if (clientX !== undefined && clientY !== undefined) {
       const rect = area.getBoundingClientRect();
@@ -64,9 +74,11 @@ export function createCameraController(
   }
 
   function fit() {
-    if (!area.clientWidth || !area.clientHeight) return;
-    panOffset.set(0, 0, 0);
-    zoom = 1;
+    if (!hasSize()) {
+      pendingFit = true;
+      return;
+    }
+    pendingFit = false;
     update();
     let minX = Infinity,
       maxX = -Infinity,
@@ -103,7 +115,8 @@ export function createCameraController(
     panOffset
       .addScaledVector(cameraRight, ((minX + maxX) * (camera.right - camera.left)) / 4)
       .addScaledVector(cameraUp, ((minY + maxY) * (camera.top - camera.bottom)) / 4);
-    zoom = clampZoom(0.88 / Math.max((maxX - minX) / 2, (maxY - minY) / 2));
+    zoom = clampZoom((zoom * FIT_FILL) / Math.max((maxX - minX) / 2, (maxY - minY) / 2));
+    update();
     requestRender();
   }
 
