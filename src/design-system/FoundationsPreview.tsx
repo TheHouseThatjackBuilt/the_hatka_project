@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import { Button } from '../components/ui/Button.tsx';
 import { PrimitivesPreview } from './PrimitivesPreview.tsx';
+import { SelectionPreview } from './SelectionPreview.tsx';
 import fontLicenseUrl from './fonts/LICENSE.txt?url';
 import './fonts.css';
 import './tokens.css';
@@ -35,12 +36,13 @@ export default function FoundationsPreview() {
           <h1>
             Хатка <span>/ Визуальная основа</span>
           </h1>
-          <p>R1.1–R1.2 · Визуальная основа и компоненты</p>
+          <p>R1 · Визуальная основа и компоненты</p>
         </div>
         <a href={import.meta.env.BASE_URL}>К квартире →</a>
       </header>
 
       <div className="foundations-content">
+        <SelectionPreview />
         <PrimitivesPreview />
         <section className="foundations-section" aria-labelledby="palette-title">
           <div className="foundations-heading">
@@ -131,7 +133,7 @@ export default function FoundationsPreview() {
           </div>
         </section>
         <footer className="foundations-note">
-          Образцы визуальной системы · Select, SegmentedControl и Tooltip — следующий этап R1.3
+          Образцы визуальной системы · следующий этап R2 — композиция просмотрщика
           {' · '}
           <a href={fontLicenseUrl}>Лицензия шрифта</a>
         </footer>
