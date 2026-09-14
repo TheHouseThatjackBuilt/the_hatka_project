@@ -8,6 +8,7 @@ import { createRoomLabels } from './labels.ts';
 import type { ApartmentModel } from '../model/types.ts';
 import type { ApartmentMesh, ViewerHandle, ViewerOptions } from './types.ts';
 import { createMeasurements } from './measurements.ts';
+import { createResizeFit } from './resize-fit.ts';
 import type { MeasurementSnapshot } from './measurement-types.ts';
 
 extend({
@@ -109,6 +110,12 @@ export function createViewer(
     if (!disposed) state?.invalidate();
   };
   const camera = createCameraController(viewport, meshes, invalidate);
+  const resizeFit = createResizeFit(
+    () => {
+      if (!disposed) camera.fit();
+    },
+    () => viewport.clientWidth > 0 && viewport.clientHeight > 0,
+  );
   Object.assign(camera.camera, { manual: true });
   let labels: ReturnType<typeof createRoomLabels>;
   let controls: ReturnType<typeof bindCanvasControls>;
@@ -129,6 +136,9 @@ export function createViewer(
     controls = bindCanvasControls(canvas, camera, measurements.interaction);
     observer = new ResizeObserver(resize);
     viewport.append(canvas);
+    window.addEventListener('resize', onWindowResize);
+    canvas.addEventListener('pointerdown', cancelResizeFit);
+    canvas.addEventListener('wheel', cancelResizeFit, { passive: true });
   } catch (error) {
     observer!?.disconnect();
     controls!?.dispose();
@@ -142,13 +152,27 @@ export function createViewer(
 
   function resize() {
     if (disposed || !state) return;
+    if (!viewport.clientWidth || !viewport.clientHeight) return;
     state.setDpr(Math.min(window.devicePixelRatio, 2));
     state.setSize(viewport.clientWidth, viewport.clientHeight);
     invalidate();
+    if (resizeFit.pending) resizeFit.schedule();
+  }
+  function onWindowResize() {
+    if (disposed) return;
+    resize();
+    resizeFit.schedule();
+  }
+  function cancelResizeFit() {
+    resizeFit.cancel();
   }
   function dispose() {
     if (disposed) return;
     disposed = true;
+    resizeFit.dispose();
+    window.removeEventListener('resize', onWindowResize);
+    canvas.removeEventListener('pointerdown', cancelResizeFit);
+    canvas.removeEventListener('wheel', cancelResizeFit);
     observer.disconnect();
     controls.dispose();
     labels.dispose();
@@ -212,17 +236,21 @@ export function createViewer(
   return {
     ready,
     setOptions(next) {
+      if (next.mode !== options.mode) resizeFit.cancel();
       options = { ...next };
       measurements.setOptions(options);
       renderScene();
     },
     rotate(angle) {
+      resizeFit.cancel();
       if (!disposed) camera.rotate(angle);
     },
     zoom(factor) {
+      resizeFit.cancel();
       if (!disposed) camera.zoomAt(factor);
     },
     fit() {
+      resizeFit.cancel();
       if (!disposed) camera.fit();
     },
     measurement(command) {
