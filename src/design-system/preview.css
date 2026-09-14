@@ -236,6 +236,10 @@
   border-top: var(--border-width) solid var(--border);
   padding-top: var(--s-5);
 }
+.foundations-selection-columns {
+  border-top: 0;
+  padding-top: 0;
+}
 
 @media (max-width: 760px) {
   .foundations-header {

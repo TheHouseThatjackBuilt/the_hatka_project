@@ -52,6 +52,8 @@
   --control-sm: 28px;
   --control-md: 32px;
   --tooltip-delay: 400ms;
+  --layer-popup: 20;
+  --layer-tooltip: 30;
 
   color: var(--text-1);
   background: var(--scene-bg-edge);

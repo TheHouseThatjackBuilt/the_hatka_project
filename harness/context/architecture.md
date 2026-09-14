@@ -30,7 +30,7 @@ R3F; решения реализации и результаты приёмки 
 React управляет интерфейсом и сценой R3F; внешний контракт остаётся через
 `ViewerHandle` из `src/viewer/types.ts`.
 
-Параметр `?ui=foundations` открывает отдельный экран R1.1–R1.2:
+Параметр `?ui=foundations` открывает отдельный экран R1:
 `src/design-system/FoundationsPreview.tsx` загружается через React.lazy вместо
 App. Его CSS ограничен `.hatka-theme` и `.foundations`, шрифты IBM Plex Sans
 400/500 хранятся локально с лицензией. Vite выделяет demo и стили в отдельные
@@ -38,9 +38,12 @@ chunks, копирует WOFF2 и лицензию в assets. Обычный п�
 эти стили и шрифты. Ссылка «К квартире» выполняет полную навигацию с BASE_URL.
 
 `src/components/ui/` содержит Button, IconButton, FloatingPanel, StatusBadge
-и управляемый Toggle на native checkbox. Общий `ui.css` ограничен `.hatka-theme`
-и использует токены. Примитивы пока подключены только к демонстрации
-`PrimitivesPreview.tsx`; основной интерфейс на них ещё не переведён.
+и управляемый Toggle на native checkbox, SegmentedControl на radio group,
+собственный Select и Tooltip. CSS ограничен `.hatka-theme` и использует токены.
+Select/Tooltip создают portal со своей темой; Select сохраняет фокус на trigger
+через aria-activedescendant, Tooltip передаёт aria-describedby через render prop.
+Примитивы подключены только к `PrimitivesPreview.tsx` и `SelectionPreview.tsx`;
+основной интерфейс на них ещё не переведён.
 
 `src/hooks/useApartmentViewer.ts` одновременно загружает `model.json` и
 динамически импортирует `src/viewer/index.tsx`. `src/model/parse-model.ts`
