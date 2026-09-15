@@ -1,0 +1,91 @@
+.hatka-theme {
+  /* Surfaces */
+  --scene-bg-center: #1a1d21;
+  --scene-bg-edge: #0e1013;
+  --surface-1: rgba(24, 27, 31, 0.92);
+  --surface-2: #22262b;
+  --surface-raised: #2a2f35;
+
+  /* Borders and dividers */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --text-1: #e8eaed;
+  --text-2: #9ba1a8;
+  --text-3: #6b7178;
+
+  /* Accent */
+  --accent: #7fa6c9;
+  --accent-quiet: rgba(127, 166, 201, 0.14);
+
+  /* Radii */
+  --r-sm: 5px;
+  --r-md: 8px;
+
+  /* Spacing */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+
+  /* Shadows */
+  --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.24);
+
+  /* Transitions */
+  --t-fast: 120ms cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* Typography and control semantics */
+  --font-family: 'IBM Plex Sans', Arial, sans-serif;
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-md: 13px;
+  --font-lg: 15px;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --line-height-normal: 1.5;
+  --border-width: 1px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --control-sm: 28px;
+  --control-md: 32px;
+  --tooltip-delay: 400ms;
+  --layer-popup: 20;
+  --layer-tooltip: 30;
+
+  color: var(--text-1);
+  background: var(--scene-bg-edge);
+  color-scheme: dark;
+  font-family: var(--font-family);
+  font-size: var(--font-md);
+  font-weight: var(--weight-regular);
+  line-height: var(--line-height-normal);
+  font-synthesis: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.hatka-theme button,
+.hatka-theme input,
+.hatka-theme select,
+.hatka-theme textarea {
+  font: inherit;
+  font-variant-numeric: inherit;
+}
+
+.hatka-theme :where(button, input, select, textarea, a):focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+
+.hatka-theme :where(button, input, select, textarea):disabled {
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hatka-theme {
+    --t-fast: 0ms linear;
+  }
+}

@@ -7,6 +7,7 @@ import type { MeasurementSnapshot } from '../viewer/measurement-types.ts';
 export function useApartmentViewer(options: ViewerOptions) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const labelsRef = useRef<HTMLDivElement>(null);
+  const fitAreaRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<ViewerHandle | null>(null);
   const latestOptions = useRef(options);
   const [status, setStatus] = useState<ViewerStatus>('loading');
@@ -49,6 +50,17 @@ export function useApartmentViewer(options: ViewerOptions) {
           (snapshot) => {
             if (!abort.signal.aborted) setMeasurement(snapshot);
           },
+          () => {
+            const rect = fitAreaRef.current?.getBoundingClientRect();
+            if (!rect) return undefined;
+            const canvasRect = viewport.getBoundingClientRect();
+            return {
+              left: rect.left - canvasRect.left,
+              top: rect.top - canvasRect.top,
+              width: rect.width,
+              height: rect.height,
+            };
+          },
         );
         viewerRef.current = activeViewer;
         await activeViewer.ready;
@@ -71,5 +83,5 @@ export function useApartmentViewer(options: ViewerOptions) {
     };
   }, []);
 
-  return { viewportRef, labelsRef, viewerRef, status, measurement };
+  return { viewportRef, labelsRef, fitAreaRef, viewerRef, status, measurement };
 }

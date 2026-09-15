@@ -1,0 +1,24 @@
+{
+  "fonts": [
+    {
+      "family": "IBM Plex Sans",
+      "weight": "400",
+      "status": "loaded"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "weight": "500",
+      "status": "loaded"
+    }
+  ],
+  "resources": [
+    "http://127.0.0.1:5173/src/design-system/FoundationsPreview.tsx",
+    "http://127.0.0.1:5173/src/design-system/fonts.css",
+    "http://127.0.0.1:5173/src/design-system/tokens.css",
+    "http://127.0.0.1:5173/src/design-system/fonts/IBMPlexSans-Regular.woff2",
+    "http://127.0.0.1:5173/src/design-system/fonts/IBMPlexSans-Medium.woff2"
+  ],
+  "reducedMotion": false,
+  "transition": "0.12s, 0.12s",
+  "canvases": 0
+}

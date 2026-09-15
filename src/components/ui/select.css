@@ -1,0 +1,76 @@
+.hatka-theme .hatka-select {
+  display: grid;
+  gap: var(--s-2);
+  min-width: 0;
+  width: 100%;
+}
+.hatka-theme .hatka-select-label {
+  font-size: var(--font-sm);
+  color: var(--text-2);
+}
+.hatka-theme .hatka-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-md);
+  padding: var(--s-1) var(--s-3);
+  text-align: left;
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast);
+}
+.hatka-theme .hatka-select-trigger > span:first-child {
+  overflow-wrap: anywhere;
+}
+.hatka-theme .hatka-select-trigger:enabled:hover {
+  background: var(--surface-raised);
+  border-color: var(--accent);
+}
+.hatka-theme .hatka-select-trigger[aria-expanded='true'] {
+  border-color: var(--accent);
+}
+.hatka-theme .hatka-select-trigger:disabled {
+  color: var(--text-3);
+  cursor: not-allowed;
+  opacity: 1;
+}
+.hatka-theme.hatka-select-popup {
+  position: fixed;
+  z-index: var(--layer-popup);
+  box-sizing: border-box;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface-2);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-panel);
+  padding: var(--s-1);
+}
+.hatka-theme .hatka-select-option {
+  padding: var(--s-2);
+  border-radius: var(--r-sm);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: background-color var(--t-fast);
+}
+.hatka-theme .hatka-select-option:hover {
+  background: var(--surface-raised);
+}
+.hatka-theme .hatka-select-option[aria-selected='true'] {
+  background: var(--accent-quiet);
+  outline: var(--border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--border-width));
+}
+.hatka-theme .hatka-select-option[aria-disabled='true'] {
+  color: var(--text-3);
+  cursor: not-allowed;
+  background: transparent;
+}
