@@ -6,7 +6,7 @@ import { createCameraController, type CameraController } from './camera.ts';
 import { bindCanvasControls } from './controls.ts';
 import { createRoomLabels } from './labels.ts';
 import type { ApartmentModel } from '../model/types.ts';
-import type { ApartmentMesh, ViewerHandle, ViewerOptions } from './types.ts';
+import type { ApartmentMesh, FitRect, ViewerHandle, ViewerOptions } from './types.ts';
 import { createMeasurements } from './measurements.ts';
 import { createResizeFit } from './resize-fit.ts';
 import type { MeasurementSnapshot } from './measurement-types.ts';
@@ -89,6 +89,7 @@ export function createViewer(
   initialOptions: ViewerOptions,
   onError: (error: unknown) => void,
   onMeasurement: (snapshot: MeasurementSnapshot) => void = () => {},
+  getFitRect?: () => FitRect | undefined,
 ): ViewerHandle {
   const canvas = document.createElement('canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -109,7 +110,7 @@ export function createViewer(
   const invalidate = () => {
     if (!disposed) state?.invalidate();
   };
-  const camera = createCameraController(viewport, meshes, invalidate);
+  const camera = createCameraController(viewport, meshes, invalidate, getFitRect);
   const resizeFit = createResizeFit(
     () => {
       if (!disposed) camera.fit();

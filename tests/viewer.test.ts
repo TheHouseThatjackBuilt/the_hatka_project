@@ -9,7 +9,7 @@ import type { ApartmentModel } from '../src/model/types.ts';
 import { ApartmentScene } from '../src/viewer/ApartmentScene.tsx';
 import { createCameraController } from '../src/viewer/camera.ts';
 import { DEFAULT_VIEWER_OPTIONS } from '../src/viewer/options.ts';
-import type { ApartmentMesh, ViewerOptions } from '../src/viewer/types.ts';
+import type { ApartmentMesh, FitRect, ViewerOptions } from '../src/viewer/types.ts';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
@@ -216,6 +216,132 @@ test('fit preserves the user view direction and centers every mode after interac
     assert.ok(Math.abs(bounds.minY + bounds.maxY) < 1e-8);
     assert.ok(
       Math.abs(Math.max(bounds.maxX - bounds.minX, bounds.maxY - bounds.minY) / 2 - 0.88) < 1e-8,
+    );
+  }
+});
+
+test('fit uses the measurement area for desktop and mobile layouts', async (t) => {
+  const cases = [
+    [1440, 900, { left: 184, top: 64, width: 1176, height: 788 }],
+    [390, 844, { left: 8, top: 170, width: 374, height: 380 }],
+    [960, 600, { left: 184, top: 64, width: 420, height: 488 }],
+  ] as const;
+  for (const [width, height, fitRect] of cases) {
+    const { renderer, meshes, options, area } = await setup(width, height);
+    t.after(() => renderer.unmount());
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => {},
+      () => fitRect,
+    );
+    for (const mode of ['cut', 'full', 'top'] as const) {
+      await renderer.update(sceneElement(model, { ...options, mode }, meshes));
+      controller.setMode(mode);
+      controller.rotate(0.8, 0.2);
+      controller.panPixels(120, -70);
+      controller.zoomAt(1.6, 600, 350);
+      controller.update();
+      const quaternion = controller.camera.quaternion.clone();
+      controller.fit();
+      controller.update();
+      assert.ok(controller.camera.quaternion.angleTo(quaternion) < 1e-7);
+      const bounds = projectedVisibleBounds(meshes, controller, mode);
+      const toPixelX = (ndc: number) => ((ndc + 1) / 2) * width;
+      const toPixelY = (ndc: number) => ((1 - ndc) / 2) * height;
+      const modelWidth = toPixelX(bounds.maxX) - toPixelX(bounds.minX);
+      const modelHeight = toPixelY(bounds.minY) - toPixelY(bounds.maxY);
+      assert.ok(
+        Math.abs(
+          (toPixelX(bounds.minX) + toPixelX(bounds.maxX)) / 2 - (fitRect.left + fitRect.width / 2),
+        ) < 1e-6,
+      );
+      assert.ok(
+        Math.abs(
+          (toPixelY(bounds.minY) + toPixelY(bounds.maxY)) / 2 - (fitRect.top + fitRect.height / 2),
+        ) < 1e-6,
+      );
+      assert.ok(
+        Math.abs(Math.max(modelWidth / fitRect.width, modelHeight / fitRect.height) - 0.88) < 1e-6,
+      );
+    }
+  }
+});
+
+test('fit ignores rect changes until explicitly requested and remains idempotent', async (t) => {
+  const { renderer, meshes, options, area } = await setup(960, 600);
+  t.after(() => renderer.unmount());
+  let fitRect = { left: 184, top: 64, width: 420, height: 488 };
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    () => fitRect,
+  );
+  await renderer.update(sceneElement(model, { ...options, mode: 'cut' }, meshes));
+  controller.fit();
+  controller.update();
+  const before = controller.camera.matrixWorld.clone();
+  fitRect = { left: 8, top: 170, width: 374, height: 380 };
+  controller.update();
+  assert.deepEqual(controller.camera.matrixWorld.elements, before.elements);
+  controller.fit();
+  controller.update();
+  const after = controller.camera.matrixWorld.clone();
+  controller.fit();
+  controller.update();
+  assert.ok(
+    after.elements.every(
+      (value, index) => Math.abs(value - controller.camera.matrixWorld.elements[index]!) < 1e-9,
+    ),
+  );
+});
+
+test('fit falls back to the full canvas and clips partial out-of-bounds rects', async (t) => {
+  const values: [FitRect | undefined, FitRect][] = [
+    [undefined, { left: 0, top: 0, width: 390, height: 300 }],
+    [
+      { left: 500, top: 500, width: 30, height: 30 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: 0, top: 0, width: 0, height: 0 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: Number.NaN, top: 0, width: 20, height: 20 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: -100, top: -50, width: 300, height: 200 },
+      { left: 0, top: 0, width: 200, height: 150 },
+    ],
+  ];
+  for (const [requested, expected] of values) {
+    const { renderer, meshes, options, area } = await setup(390, 300);
+    t.after(() => renderer.unmount());
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => {},
+      () => requested,
+    );
+    await renderer.update(sceneElement(model, { ...options, mode: 'cut' }, meshes));
+    controller.fit();
+    controller.update();
+    assertFiniteCamera(controller);
+    const bounds = projectedVisibleBounds(meshes, controller, 'cut');
+    const toPixelX = (ndc: number) => ((ndc + 1) / 2) * area.clientWidth;
+    const toPixelY = (ndc: number) => ((1 - ndc) / 2) * area.clientHeight;
+    assert.ok(
+      Math.abs(
+        (toPixelX(bounds.minX) + toPixelX(bounds.maxX)) / 2 - (expected.left + expected.width / 2),
+      ) < 1e-6,
+    );
+    assert.ok(
+      Math.abs(
+        (toPixelY(bounds.minY) + toPixelY(bounds.maxY)) / 2 - (expected.top + expected.height / 2),
+      ) < 1e-6,
     );
   }
 });

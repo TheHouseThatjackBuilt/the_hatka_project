@@ -115,7 +115,24 @@ export function Select({
     place();
     window.addEventListener('resize', place);
     const scroll = (event: Event) => {
-      if (!popup.current?.contains(event.target as Node)) place();
+      if (popup.current?.contains(event.target as Node)) return;
+      const button = trigger.current;
+      if (button && event.target instanceof HTMLElement && event.target.contains(button)) {
+        const anchor = button.getBoundingClientRect();
+        const container = event.target.getBoundingClientRect();
+        if (
+          anchor.bottom <= container.top ||
+          anchor.top >= container.bottom ||
+          anchor.right <= container.left ||
+          anchor.left >= container.right
+        ) {
+          // A scrolled-out trigger must not leave a detached popup over the scene.
+          setExpanded(false);
+          search.current = { text: '', time: 0 };
+          return;
+        }
+      }
+      place();
     };
     window.addEventListener('scroll', scroll, true);
     return () => {

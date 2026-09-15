@@ -1,6 +1,6 @@
 import { OrthographicCamera, Vector3 } from 'three';
 import { CUT_HEIGHT, isClipped } from './scene-resources.ts';
-import type { ApartmentMesh, ViewMode, Viewport } from './types.ts';
+import type { ApartmentMesh, FitRect, ViewMode, Viewport } from './types.ts';
 
 const MIN_ZOOM = 0.35;
 const MAX_ZOOM = 6;
@@ -11,6 +11,7 @@ export function createCameraController(
   area: Viewport,
   meshes: ApartmentMesh[],
   requestRender: () => void,
+  getFitRect: () => FitRect | undefined = () => undefined,
 ) {
   const camera = new OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
   const target = new Vector3();
@@ -80,6 +81,18 @@ export function createCameraController(
     }
     pendingFit = false;
     update();
+    const requested = getFitRect();
+    const width = area.clientWidth,
+      height = area.clientHeight;
+    let rect: FitRect = { left: 0, top: 0, width, height };
+    if (requested && Object.values(requested).every(Number.isFinite)) {
+      const left = Math.max(0, requested.left),
+        top = Math.max(0, requested.top);
+      const right = Math.min(width, requested.left + requested.width);
+      const bottom = Math.min(height, requested.top + requested.height);
+      if (right > left && bottom > top)
+        rect = { left, top, width: right - left, height: bottom - top };
+    }
     let minX = Infinity,
       maxX = -Infinity,
       minY = Infinity,
@@ -115,7 +128,21 @@ export function createCameraController(
     panOffset
       .addScaledVector(cameraRight, ((minX + maxX) * (camera.right - camera.left)) / 4)
       .addScaledVector(cameraUp, ((minY + maxY) * (camera.top - camera.bottom)) / 4);
-    zoom = clampZoom((zoom * FIT_FILL) / Math.max((maxX - minX) / 2, (maxY - minY) / 2));
+    zoom = clampZoom(
+      (zoom * FIT_FILL) /
+        Math.max(
+          (((maxX - minX) / 2) * width) / rect.width,
+          (((maxY - minY) / 2) * height) / rect.height,
+        ),
+    );
+    // Center first, then offset with the final scale: an asymmetric fit area
+    // must keep the same screen center even when fit changes zoom.
+    update();
+    const centerX = (2 * (rect.left + rect.width / 2)) / width - 1;
+    const centerY = 1 - (2 * (rect.top + rect.height / 2)) / height;
+    panOffset
+      .addScaledVector(cameraRight, (-centerX * (camera.right - camera.left)) / 2)
+      .addScaledVector(cameraUp, (-centerY * (camera.top - camera.bottom)) / 2);
     update();
     requestRender();
   }
