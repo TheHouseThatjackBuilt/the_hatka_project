@@ -17,6 +17,7 @@ import type {
 } from './measurement-types.ts';
 import type { CanvasMeasurementInteraction } from './controls.ts';
 import { CUT_HEIGHT, isClipped } from './scene-resources.ts';
+import './measurements.css';
 
 const NS = 'http://www.w3.org/2000/svg';
 const number = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
@@ -350,26 +351,24 @@ export function createMeasurements(
       overlay.append(node);
       return node;
     };
-    const line = (a: PlanPoint, b: PlanPoint, extra: Record<string, string> = {}) =>
-      element('line', {
+    const line = (a: PlanPoint, b: PlanPoint, extra: Record<string, string> = {}) => {
+      const attrs = {
         x1: String(a[0]),
         y1: String(a[1]),
         x2: String(b[0]),
         y2: String(b[1]),
-        stroke: '#087e9b',
-        'stroke-width': '1.5',
         ...extra,
-      });
+      };
+      element('line', { ...attrs, class: 'guide' });
+      return element('line', { ...attrs, class: 'line' });
+    };
     for (const { region, y } of outlines)
       for (const ring of [region.outer, ...(region.holes ?? [])]) {
         const coords = ring.map(([x, z]) => project([x, y, z]));
         if (coords.every((p) => p !== null))
           element('polygon', {
             points: coords.map((p) => p!.join(',')).join(' '),
-            fill: 'none',
-            stroke: '#087e9b',
-            'stroke-width': '1',
-            'stroke-opacity': '0.5',
+            class: 'outline',
           });
       }
     const occupied: PlanPoint[] = [];
@@ -409,12 +408,7 @@ export function createMeasurements(
             x: String(pos[0]),
             y: String(pos[1]),
             'text-anchor': 'middle',
-            fill: '#075c72',
-            stroke: '#fff',
-            'stroke-width': '4',
-            'paint-order': 'stroke',
-            'font-size': '12',
-            'font-weight': '600',
+            class: 'label',
           },
           segment.label,
         );
@@ -428,9 +422,7 @@ export function createMeasurements(
           cx: String(p[0]),
           cy: String(p[1]),
           r: '4',
-          fill: '#087e9b',
-          stroke: 'white',
-          'stroke-width': '2',
+          class: 'point',
         });
     }
     if (document.activeElement === canvas && pointer) {

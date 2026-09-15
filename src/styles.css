@@ -1,17 +1,3 @@
-:root {
-  color-scheme: light dark;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--foreground);
-  background: var(--background);
-  --background: light-dark(#faf9f6, #1c1e20);
-  --foreground: light-dark(#282b2b, #f1f0ec);
-  --muted: light-dark(#626661, #b4b8b1);
-  --surface: light-dark(#ffffff, #282b2d);
-  --border: light-dark(#d8dcd5, #464b48);
-  --accent: light-dark(#416c4b, #a3cea9);
-  --accent-background: light-dark(#e5efe3, #344b37);
-}
-
 * {
   box-sizing: border-box;
 }
@@ -19,51 +5,18 @@
   display: none !important;
 }
 html,
-body {
+body,
+#root {
   margin: 0;
   width: 100%;
   height: 100%;
 }
 body {
   min-width: 280px;
-  font-size: 14px;
 }
-
-#apartment-view {
-  min-height: 540px;
-  height: 100vh;
-  height: 100dvh;
-  padding: 16px 20px;
-  display: grid;
-  grid-template-rows: auto auto minmax(260px, 1fr) auto;
-  gap: 12px;
-}
-#apartment-view:has(.measurement-panel) {
-  grid-template-rows: auto auto minmax(260px, 1fr) auto auto;
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-h1 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 650;
-}
-h1 span {
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 400;
-}
-a {
-  color: var(--accent);
-  text-underline-offset: 3px;
-}
-.page-header a {
-  white-space: nowrap;
+button,
+select {
+  font: inherit;
 }
 fieldset {
   margin: 0;
@@ -71,73 +24,187 @@ fieldset {
   border: 0;
   min-width: 0;
 }
-#ap-toolbar,
+noscript {
+  display: block;
+  padding: 16px;
+}
+
+#apartment-view {
+  --header-height: 48px;
+  --tools-width: 160px;
+  --measurement-width: 288px;
+  --measurement-height: 300px;
+  --background: var(--scene-bg-center);
+  --surface: var(--surface-2);
+  --muted: var(--text-2);
+  --accent-background: var(--accent-quiet);
+  position: relative;
+  isolation: isolate;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 320px;
+  display: grid;
+  grid-template-columns: var(--tools-width) minmax(0, 1fr) auto auto;
+  grid-template-rows: var(--header-height) minmax(0, 1fr) var(--control-md);
+  gap: var(--s-3);
+  padding: 0 var(--s-4) var(--s-2);
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, var(--scene-bg-center), var(--scene-bg-edge));
+}
+.page-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-inline: calc(-1 * var(--s-4));
+  padding-inline: var(--s-4);
+  border-bottom: var(--border-width) solid var(--border);
+  background: var(--surface-1);
+  pointer-events: auto;
+}
+.page-header h1 {
+  margin: 0;
+  font-size: var(--font-md);
+  font-weight: var(--weight-medium);
+}
+.page-header h1 span {
+  margin-left: var(--s-2);
+  color: var(--text-2);
+  font-weight: var(--weight-regular);
+}
+#apartment-view a {
+  text-decoration: none;
+}
+.page-header a {
+  white-space: nowrap;
+}
+#ap-toolbar {
+  grid-row: 2;
+  grid-column: 1;
+  align-self: start;
+  display: grid;
+  gap: var(--s-3);
+  max-height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+}
+#ap-toolbar .hatka-panel {
+  padding: var(--s-2);
+  pointer-events: auto;
+}
+.viewer-settings-panel {
+  display: grid;
+  gap: var(--s-2);
+}
+.viewer-settings-panel .hatka-toggle {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+.viewer-settings-panel .hatka-status {
+  padding-inline: var(--s-1);
+}
+.viewer-fit-area {
+  grid-row: 2;
+  grid-column: 2;
+  min-width: 0;
+  min-height: 0;
+  pointer-events: none;
+}
+#ap-camera {
+  grid-row: 2;
+  grid-column: 4;
+  align-self: end;
+  pointer-events: auto;
+}
+#ap-camera .hatka-panel {
+  padding: var(--s-2);
+}
 #ap-navigation {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: column;
+  gap: var(--s-1);
 }
-.view-field,
-.check-field {
+#ap-footer {
+  grid-column: 1 / -1;
+  grid-row: 3;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: var(--s-2);
 }
-.check-field {
-  min-height: 40px;
+#ap-state {
+  background: var(--surface-1);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+}
+.viewer-help {
+  position: relative;
+  pointer-events: auto;
+  font-size: var(--font-sm);
+}
+.viewer-help summary {
   cursor: pointer;
+  color: var(--text-2);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-1);
 }
-input[type='checkbox'] {
-  width: 17px;
-  height: 17px;
+.viewer-help summary:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+.viewer-help-content {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + var(--s-2));
+  width: min(320px, calc(100vw - 32px));
+  padding: var(--s-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-panel);
+}
+.viewer-help-content p {
+  margin: 0 0 var(--s-2);
+}
+.viewer-help-content p:last-child {
   margin: 0;
-  accent-color: var(--accent);
-}
-button,
-select {
-  font: inherit;
-  color: inherit;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 8px;
-  min-height: 40px;
-  padding: 8px 12px;
-}
-button,
-select {
-  cursor: pointer;
-}
-button:hover {
-  background: var(--accent-background);
-}
-button[aria-pressed='true'] {
-  background: var(--accent-background);
-  border-color: var(--accent);
-}
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-:disabled {
-  cursor: wait;
-  opacity: 0.6;
 }
 
 #ap-scene {
-  position: relative;
-  min-width: 0;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   overflow: hidden;
   touch-action: none;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  pointer-events: auto;
+}
+.ap-canvas-container,
+#ap-room-labels {
+  position: absolute;
+  inset: 0;
 }
 #ap-scene canvas {
   display: block;
   width: 100%;
   height: 100%;
   cursor: grab;
+}
+#ap-room-labels {
+  pointer-events: none;
+  overflow: hidden;
+}
+#ap-room-labels span {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--background);
+  color: var(--text-1);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 .ap-measurements {
   position: absolute;
@@ -147,25 +214,6 @@ button[aria-pressed='true'] {
   pointer-events: none;
   overflow: hidden;
 }
-.ap-canvas-container {
-  position: absolute;
-  inset: 0;
-}
-#ap-room-labels {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-#ap-room-labels span {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  background: var(--background);
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-}
 #ap-loading {
   position: absolute;
   inset: 0;
@@ -173,141 +221,236 @@ button[aria-pressed='true'] {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--s-4);
   text-align: center;
-  padding: 24px;
+  padding: var(--s-5);
 }
+#ap-loading > span {
+  max-width: 400px;
+}
+
+/* Measurement shell keeps its controls visible while only the content scrolls. */
 .measurement-panel {
-  display: grid;
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  height: 240px;
-  max-height: 240px;
-  overflow: auto;
-}
-.measurement-tools,
-.measurement-pairs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.measurement-tools button[aria-pressed='true'] {
-  background: var(--accent-background);
-  border-color: var(--accent);
-}
-.measurement-select {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 180px;
-}
-.measurement-select select {
+  grid-column: 3;
+  grid-row: 2;
+  width: var(--measurement-width);
   min-width: 0;
-  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-panel);
+  pointer-events: auto;
+}
+.measurement-heading,
+.measurement-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+}
+.measurement-heading h2 {
+  margin: 0;
+  font-size: var(--font-md);
+  font-weight: var(--weight-medium);
+}
+.measurement-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-1);
+}
+.measurement-body {
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  align-content: start;
+  gap: var(--s-3);
+  padding: var(--s-1);
+  margin: calc(-1 * var(--s-1));
+  scrollbar-width: thin;
+}
+.measurement-body:focus-visible,
+.measurement-source summary:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--focus-width));
+}
+.measurement-pairs {
+  display: grid;
+  min-width: 0;
+  gap: var(--s-2);
 }
 .measurement-hint,
 .measurement-note,
 .measurement-result p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-2);
+  font-size: var(--font-sm);
 }
 .measurement-result {
   display: grid;
-  gap: 4px;
+  gap: var(--s-2);
 }
-.measurement-select {
-  min-width: 0;
+.measurement-result h3 {
+  margin: 0;
+  font-size: var(--font-lg);
+  font-weight: var(--weight-medium);
+  overflow-wrap: anywhere;
 }
-.measurement-result p,
-.measurement-note,
-.measurement-hint {
-  font-size: 12px;
-  line-height: 1.45;
+.measurement-result dl {
+  display: grid;
+  gap: var(--s-1);
+  margin: 0;
 }
-@media (min-width: 960px) {
-  #apartment-view:has(.measurement-panel) {
-    grid-template-columns: minmax(0, 1fr) 320px;
-    grid-template-rows: auto auto minmax(260px, 1fr) auto;
-  }
-  #apartment-view:has(.measurement-panel) > .page-header,
-  #apartment-view:has(.measurement-panel) > #ap-toolbar,
-  #apartment-view:has(.measurement-panel) > #ap-footer {
-    grid-column: 1 / -1;
-  }
-  .measurement-panel {
-    grid-column: 2;
-    grid-row: 3;
-    height: auto;
-    max-height: none;
-    align-content: start;
-  }
-  .measurement-select {
-    display: grid;
-    gap: 4px;
-  }
-  .measurement-pairs {
-    display: grid;
-  }
-}
-.measurement-result strong {
-  font-size: 15px;
-}
-.measurement-clear {
-  justify-self: start;
-}
-#ap-footer {
+.measurement-result dl > div {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: var(--s-1) var(--s-2);
 }
-#ap-navigation {
-  gap: 6px;
+.measurement-result dt {
+  color: var(--text-2);
 }
-#ap-navigation button {
-  min-width: 40px;
-  font-size: 20px;
-  padding: 4px 10px;
+.measurement-result dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
 }
-.text-muted {
-  color: var(--muted);
-  font-size: 12px;
+.measurement-source summary {
+  cursor: pointer;
+  font-size: var(--font-sm);
+  color: var(--text-2);
 }
-#ap-help {
-  margin-left: auto;
+.measurement-source p {
+  padding-top: var(--s-2);
 }
-noscript {
-  display: block;
-  padding: 16px;
+.measurement-actions {
+  border-top: var(--border-width) solid var(--border);
+  padding-top: var(--s-2);
 }
-
-@media (max-width: 640px) {
+@media (max-width: 959px) {
   #apartment-view {
-    padding: 12px;
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: var(--header-height) auto minmax(0, 1fr) auto auto var(--control-md);
+    padding: 0 var(--s-2) var(--s-2);
+    gap: var(--s-2);
   }
-  h1 span {
-    display: block;
-    font-size: 12px;
-    margin-top: 4px;
+  .page-header {
+    margin-inline: calc(-1 * var(--s-2));
+    padding-inline: var(--s-2);
   }
   #ap-toolbar {
-    gap: 8px 12px;
+    grid-row: 2;
+    grid-column: 1;
+    gap: var(--s-1);
   }
-  .view-field {
-    flex: 1 0 100%;
+  #ap-toolbar .hatka-panel {
+    padding: var(--s-1);
   }
-  .view-field select {
-    flex: 1;
-    min-width: 0;
+  .viewer-view-panel .hatka-segmented {
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
-  #ap-help {
+  .viewer-settings-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .viewer-settings-panel .hatka-status {
     display: none;
   }
+  .viewer-settings-panel .hatka-toggle {
+    flex-direction: row;
+  }
+  .viewer-settings-panel > .hatka-button {
+    margin-left: auto;
+  }
+  .viewer-fit-area {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .measurement-panel {
+    grid-column: 1;
+    grid-row: 4;
+    width: auto;
+    height: min(var(--measurement-height), 40dvh);
+  }
+  .measurement-tools {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  #ap-camera {
+    grid-column: 1;
+    grid-row: 5;
+    justify-self: end;
+  }
+  #ap-camera .hatka-panel {
+    padding: var(--s-1);
+  }
+  #ap-navigation {
+    flex-direction: row;
+  }
   #ap-footer {
-    gap: 8px;
+    grid-column: 1;
+    grid-row: 6;
+  }
+}
+@media (max-width: 480px) {
+  .page-header h1 span {
+    display: none;
+  }
+}
+@media (max-width: 359px) {
+  .measurement-tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-height: 540px) and (min-width: 640px) and (max-width: 959px) {
+  #apartment-view {
+    grid-template-columns: var(--tools-width) minmax(0, 1fr) auto auto;
+    grid-template-rows: var(--header-height) minmax(0, 1fr) var(--control-md);
+    --measurement-width: 240px;
+  }
+  #ap-toolbar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .viewer-view-panel .hatka-segmented {
+    flex-direction: column;
+  }
+  .viewer-settings-panel {
+    display: grid;
+  }
+  .viewer-settings-panel > .hatka-button {
+    margin-left: 0;
+  }
+  .viewer-fit-area {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .measurement-panel {
+    grid-column: 3;
+    grid-row: 2;
+    width: var(--measurement-width);
+    height: auto;
+  }
+  .measurement-tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #ap-camera {
+    grid-column: 4;
+    grid-row: 2;
+  }
+  #ap-navigation {
+    flex-direction: column;
+  }
+  #ap-footer {
+    grid-column: 1 / -1;
+    grid-row: 3;
   }
 }
