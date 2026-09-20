@@ -510,3 +510,219 @@ test('zoom preserves the world point under the cursor', async (t) => {
   assert.ok(Math.abs(projected.x - 0.3) < 1e-9);
   assert.ok(Math.abs(projected.y + 0.2) < 1e-9);
 });
+
+test('camera presets interpolate for 450ms without a start jump and then stop requesting frames', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0,
+    requests = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => requests++,
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.rotate(0.8, -0.2);
+  controller.panPixels(70, 30);
+  controller.update();
+  const start = controller.camera.matrixWorld.clone();
+  const projection = controller.camera.projectionMatrix.clone();
+  controller.setMode('full', true);
+  assert.ok(
+    start.elements.every((v, i) => Math.abs(v - controller.camera.matrixWorld.elements[i]!) < 1e-9),
+  );
+  assert.ok(
+    projection.elements.every(
+      (v, i) => Math.abs(v - controller.camera.projectionMatrix.elements[i]!) < 1e-9,
+    ),
+  );
+  time = 225;
+  controller.advance();
+  controller.update();
+  const middle = controller.camera.matrixWorld.clone();
+  assert.notDeepEqual(middle.elements, start.elements);
+  time = 450;
+  controller.advance();
+  controller.update();
+  assert.notDeepEqual(controller.camera.matrixWorld.elements, middle.elements);
+  const end = controller.camera.matrixWorld.clone();
+  const count = requests;
+  time = 1000;
+  controller.advance();
+  controller.update();
+  assert.equal(requests, count);
+  assert.deepEqual(controller.camera.matrixWorld.elements, end.elements);
+});
+
+test('fit preserves the current angle, reset restores the preset, and input interrupts a transition', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  const initial = controller.camera.quaternion.clone();
+  controller.rotate(1, -0.2);
+  controller.update();
+  const rotated = controller.camera.quaternion.clone();
+  controller.fit(true);
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(rotated.angleTo(controller.camera.quaternion) < 1e-7);
+  controller.reset(true);
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(initial.angleTo(controller.camera.quaternion) < 1e-7);
+  controller.setMode('top', true);
+  time += 150;
+  controller.advance();
+  controller.update();
+  controller.panPixels(20, 10);
+  controller.update();
+  const interrupted = controller.camera.matrixWorld.clone();
+  time += 1000;
+  controller.advance();
+  controller.update();
+  assert.deepEqual(interrupted.elements, controller.camera.matrixWorld.elements);
+});
+
+test('damped gestures settle independent of frame rate and reduced motion completes immediately', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  const results: number[][] = [];
+  for (const step of [1000 / 30, 1000 / 144]) {
+    let time = 0,
+      requests = 0;
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => requests++,
+      undefined,
+      () => time,
+    );
+    controller.setMode('cut');
+    controller.rotate(0.8, -0.1, true);
+    for (; time < 1000; time += step) {
+      controller.advance();
+      controller.update();
+    }
+    const count = requests;
+    controller.advance();
+    assert.equal(requests, count);
+    results.push(controller.camera.matrixWorld.elements.slice());
+    controller.reset(true);
+    controller.setReducedMotion(true);
+    controller.update();
+    const reset = controller.camera.quaternion.clone();
+    controller.rotate(0.8, 0, true);
+    controller.update();
+    assert.ok(reset.angleTo(controller.camera.quaternion) > 0.5);
+    controller.reset(true);
+    controller.update();
+    assert.ok(reset.angleTo(controller.camera.quaternion) < 1e-7);
+    const reducedCount = requests;
+    time += 1000;
+    controller.advance();
+    assert.equal(requests, reducedCount);
+  }
+  assert.ok(results[0]!.every((v, i) => Math.abs(v - results[1]![i]!) < 1e-9));
+});
+
+test('zoom interrupts motion, preserves the cursor anchor, and hidden presets recover finitely', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.setMode('top', true);
+  time = 200;
+  controller.advance();
+  controller.update();
+  const anchor = new THREE.Vector3(0.3, -0.2, 0).unproject(controller.camera);
+  controller.zoomAt(1.4, 20 + area.clientWidth * 0.65, 100 + area.clientHeight * 0.6);
+  time = 1000;
+  controller.advance();
+  controller.update();
+  anchor.project(controller.camera);
+  assert.ok(Math.abs(anchor.x - 0.3) < 1e-9 && Math.abs(anchor.y + 0.2) < 1e-9);
+  area.clientWidth = 0;
+  controller.setMode('full', true);
+  controller.advance();
+  controller.update();
+  assertFiniteCamera(controller);
+  area.clientWidth = 1200;
+  controller.advance();
+  controller.update();
+  assertFiniteCamera(controller);
+  assert.ok(
+    Math.max(...Object.values(projectedVisibleBounds(meshes, controller, 'full')).map(Math.abs)) <=
+      0.881,
+  );
+});
+
+test('replacement presets take the shortest arc, use cubic easing, and damped pan settles exactly', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.rotate(4 * Math.PI + 0.8, 0);
+  controller.update();
+  controller.reset(true);
+  time = 112.5;
+  controller.advance();
+  controller.update();
+  const direction = controller.camera.getWorldDirection(new THREE.Vector3()).negate();
+  assert.ok(Math.abs(Math.atan2(direction.x, direction.z) - (-0.2 + 0.8 * (1 - 0.0625))) < 1e-9);
+  const displayed = controller.camera.matrixWorld.clone();
+  controller.setMode('top', true);
+  assert.ok(
+    displayed.elements.every(
+      (v, i) => Math.abs(v - controller.camera.matrixWorld.elements[i]!) < 1e-9,
+    ),
+  );
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(controller.camera.getWorldDirection(direction).y < -0.99999);
+  controller.setMode('cut');
+  const direct = createCameraController(area, meshes, () => {});
+  direct.setMode('cut');
+  direct.panPixels(120, -40);
+  direct.update();
+  controller.panPixels(120, -40, true);
+  for (let i = 0; i < 100; i++) {
+    time += 10;
+    controller.advance();
+    controller.update();
+  }
+  assert.ok(controller.camera.position.distanceTo(direct.camera.position) < 1e-9);
+  controller.rotate(0, -100, true);
+  for (let i = 0; i < 100; i++) {
+    time += 10;
+    controller.advance();
+    controller.update();
+  }
+  assert.ok(Math.abs(controller.camera.getWorldDirection(direction).y + Math.sin(0.3)) < 1e-9);
+});

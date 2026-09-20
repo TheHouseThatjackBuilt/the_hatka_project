@@ -19,6 +19,8 @@ export interface ViewerHandle {
   rotate(angle: number): void;
   zoom(factor: number): void;
   fit(): void;
+  reset(): void;
+  top(): void;
   measurement(command: MeasurementCommand): void;
   dispose(): void;
 }

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { ViewMode } from './viewer/types.ts';
 import { ViewerToolbar } from './components/ViewerToolbar.tsx';
 import { ViewerViewport } from './components/ViewerViewport.tsx';
 import { ViewerFooter } from './components/ViewerFooter.tsx';
@@ -13,8 +14,13 @@ const MODEL_DOWNLOAD_URL = `${import.meta.env.BASE_URL}models/apartment/apartmen
 export function App() {
   const [options, setOptions] = useState(DEFAULT_VIEWER_OPTIONS);
   const measurementButtonRef = useRef<HTMLButtonElement>(null);
-  const { viewportRef, labelsRef, fitAreaRef, viewerRef, status, measurement } =
-    useApartmentViewer(options);
+  const onModeChange = useCallback((mode: ViewMode) => {
+    setOptions((current) => ({ ...current, mode }));
+  }, []);
+  const { viewportRef, labelsRef, fitAreaRef, viewerRef, status, measurement } = useApartmentViewer(
+    options,
+    onModeChange,
+  );
   const disabled = status !== 'ready';
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -82,6 +88,8 @@ export function App() {
         panMode={options.panMode}
         onPanToggle={() => setOptions((current) => ({ ...current, panMode: !current.panMode }))}
         onFit={() => viewerRef.current?.fit()}
+        onReset={() => viewerRef.current?.reset()}
+        onTop={() => viewerRef.current?.top()}
         onRotate={(angle) => viewerRef.current?.rotate(angle)}
         onZoom={(factor) => viewerRef.current?.zoom(factor)}
       />
