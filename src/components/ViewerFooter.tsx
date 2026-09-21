@@ -5,6 +5,7 @@ import { IconButton } from './ui/IconButton.tsx';
 import { StatusBadge } from './ui/StatusBadge.tsx';
 import { Tooltip } from './ui/Tooltip.tsx';
 import type { ReactNode } from 'react';
+import { ViewerHelp } from './ViewerHelp.tsx';
 
 interface ViewerFooterProps {
   mode: ViewMode;
@@ -14,6 +15,8 @@ interface ViewerFooterProps {
   panMode: boolean;
   onPanToggle(): void;
   onFit(): void;
+  onReset(): void;
+  onTop(): void;
 }
 const Icon = ({ children }: { children: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -57,6 +60,8 @@ export function ViewerFooter({
   panMode,
   onPanToggle,
   onFit,
+  onReset,
+  onTop,
 }: ViewerFooterProps) {
   return (
     <>
@@ -93,24 +98,19 @@ export function ViewerFooter({
           <Action label="Вписать модель" disabled={disabled} onClick={onFit}>
             <Icon> M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5</Icon>
           </Action>
+          <Action label="Сбросить камеру" disabled={disabled} onClick={onReset}>
+            <Icon> M4 12a8 8 0 1 0 2.34-5.66L4 8.68M4 4v4.68h4.68</Icon>
+          </Action>
+          <Action label="Вид сверху" disabled={disabled} onClick={onTop}>
+            <Icon> M4 4h16v16H4zM8 8h8v8H8z</Icon>
+          </Action>
         </FloatingPanel>
       </aside>
       <footer id="ap-footer">
         <StatusBadge id="ap-state" aria-live="polite">
           {MODE_TEXT[mode]}
         </StatusBadge>
-        <details className="viewer-help">
-          <summary>Управление</summary>
-          <div className="viewer-help-content">
-            <p>
-              Вращение — левая кнопка мыши · перемещение — правая или Shift · масштаб — колёсико.
-            </p>
-            <p>
-              На сенсорном экране один палец вращает, два — перемещают и меняют масштаб. «Перемещать
-              камеру» включает панорамирование одним пальцем или левой кнопкой мыши.
-            </p>
-          </div>
-        </details>
+        <ViewerHelp ready={!disabled} />
       </footer>
     </>
   );

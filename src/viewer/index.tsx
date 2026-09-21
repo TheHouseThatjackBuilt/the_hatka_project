@@ -6,7 +6,7 @@ import { createCameraController, type CameraController } from './camera.ts';
 import { bindCanvasControls } from './controls.ts';
 import { createRoomLabels } from './labels.ts';
 import type { ApartmentModel } from '../model/types.ts';
-import type { ApartmentMesh, FitRect, ViewerHandle, ViewerOptions } from './types.ts';
+import type { ApartmentMesh, FitRect, ViewerHandle, ViewerOptions, ViewMode } from './types.ts';
 import { createMeasurements } from './measurements.ts';
 import { createResizeFit } from './resize-fit.ts';
 import type { MeasurementSnapshot } from './measurement-types.ts';
@@ -55,7 +55,7 @@ function ViewerFrame({
   onError(error: unknown): void;
 }) {
   useLayoutEffect(() => {
-    camera.setMode(options.mode);
+    camera.setMode(options.mode, true);
   }, [camera, options.mode]);
   useLayoutEffect(() => {
     controls.setPanMode(options.panMode);
@@ -63,6 +63,7 @@ function ViewerFrame({
   useFrame(() => {
     if (!viewport.clientWidth || !viewport.clientHeight) return;
     try {
+      camera.advance();
       camera.update();
       measurements.update(camera.camera, viewport.clientWidth, viewport.clientHeight);
       labels.update(
@@ -90,6 +91,7 @@ export function createViewer(
   onError: (error: unknown) => void,
   onMeasurement: (snapshot: MeasurementSnapshot) => void = () => {},
   getFitRect?: () => FitRect | undefined,
+  onModeChange: (mode: ViewMode) => void = () => {},
 ): ViewerHandle {
   const canvas = document.createElement('canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -111,6 +113,9 @@ export function createViewer(
     if (!disposed) state?.invalidate();
   };
   const camera = createCameraController(viewport, meshes, invalidate, getFitRect);
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const syncMotion = () => camera.setReducedMotion(motionPreference.matches);
+  syncMotion();
   const resizeFit = createResizeFit(
     () => {
       if (!disposed) camera.fit();
@@ -123,7 +128,7 @@ export function createViewer(
   let observer: ResizeObserver;
   let measurements: ReturnType<typeof createMeasurements>;
   try {
-    labels = createRoomLabels(labelLayer, model.labels);
+    labels = createRoomLabels(labelLayer, model.labels, invalidate);
     measurements = createMeasurements(
       viewport,
       canvas,
@@ -138,9 +143,13 @@ export function createViewer(
     observer = new ResizeObserver(resize);
     viewport.append(canvas);
     window.addEventListener('resize', onWindowResize);
+    motionPreference.addEventListener('change', syncMotion);
     canvas.addEventListener('pointerdown', cancelResizeFit);
     canvas.addEventListener('wheel', cancelResizeFit, { passive: true });
   } catch (error) {
+    motionPreference.removeEventListener('change', syncMotion);
+    window.removeEventListener('resize', onWindowResize);
+    camera.stop();
     observer!?.disconnect();
     controls!?.dispose();
     labels!?.dispose();
@@ -171,6 +180,8 @@ export function createViewer(
     if (disposed) return;
     disposed = true;
     resizeFit.dispose();
+    camera.stop();
+    motionPreference.removeEventListener('change', syncMotion);
     window.removeEventListener('resize', onWindowResize);
     canvas.removeEventListener('pointerdown', cancelResizeFit);
     canvas.removeEventListener('wheel', cancelResizeFit);
@@ -212,6 +223,17 @@ export function createViewer(
     );
     invalidate();
   }
+  function preset(mode: ViewMode) {
+    if (disposed) return;
+    resizeFit.cancel();
+    if (mode === options.mode) camera.reset(true);
+    else {
+      options = { ...options, mode };
+      measurements.setOptions(options);
+      renderScene();
+      onModeChange(mode);
+    }
+  }
   void root
     .configure({
       gl: renderer,
@@ -252,7 +274,13 @@ export function createViewer(
     },
     fit() {
       resizeFit.cancel();
-      if (!disposed) camera.fit();
+      if (!disposed) camera.fit(true);
+    },
+    reset() {
+      preset('cut');
+    },
+    top() {
+      preset('top');
     },
     measurement(command) {
       if (!disposed) measurements.command(command);

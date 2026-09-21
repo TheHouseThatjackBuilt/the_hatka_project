@@ -144,22 +144,20 @@ noscript {
   pointer-events: auto;
   font-size: var(--font-sm);
 }
-.viewer-help summary {
+.viewer-help > button {
   cursor: pointer;
   color: var(--text-2);
   padding: var(--s-1) var(--s-2);
   border-radius: var(--r-sm);
   background: var(--surface-1);
 }
-.viewer-help summary:focus-visible {
-  outline: var(--focus-width) solid var(--accent);
-  outline-offset: var(--focus-offset);
-}
 .viewer-help-content {
   position: absolute;
-  right: 0;
+  right: 64px;
   bottom: calc(100% + var(--s-2));
   width: min(320px, calc(100vw - 32px));
+  max-height: calc(100dvh - 100px);
+  overflow-y: auto;
   padding: var(--s-4);
   border: var(--border-width) solid var(--border);
   border-radius: var(--r-md);
@@ -195,16 +193,6 @@ noscript {
 #ap-room-labels {
   pointer-events: none;
   overflow: hidden;
-}
-#ap-room-labels span {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  background: var(--background);
-  color: var(--text-1);
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
 }
 .ap-measurements {
   position: absolute;
@@ -395,6 +383,10 @@ noscript {
   #ap-navigation {
     flex-direction: row;
   }
+  .viewer-help-content {
+    right: 0;
+    bottom: calc(100% + 56px);
+  }
   #ap-footer {
     grid-column: 1;
     grid-row: 6;
@@ -448,6 +440,10 @@ noscript {
   }
   #ap-navigation {
     flex-direction: column;
+  }
+  .viewer-help-content {
+    right: 56px;
+    bottom: calc(100% + var(--s-2));
   }
   #ap-footer {
     grid-column: 1 / -1;
