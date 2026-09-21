@@ -49,6 +49,7 @@ export function bindCanvasControls(
 
   on('pointerdown', (event) => {
     if (event.button > 2 || pointers.size >= 2) return;
+    camera.stop();
     event.preventDefault();
     canvas.setPointerCapture(event.pointerId);
     if (pointers.size === 0 && event.button === 0 && !event.shiftKey && !panMode)
@@ -88,8 +89,8 @@ export function bindCanvasControls(
     } else if (drag) {
       const dx = event.clientX - drag.x,
         dy = event.clientY - drag.y;
-      if (drag.pan || event.shiftKey) camera.panPixels(dx, dy);
-      else camera.rotate(-dx * 0.007, dy * 0.005);
+      if (drag.pan || event.shiftKey) camera.panPixels(dx, dy, true);
+      else camera.rotate(-dx * 0.007, dy * 0.005, true);
     }
     drag = { x: event.clientX, y: event.clientY, pan: drag?.pan ?? panMode };
   });

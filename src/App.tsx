@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { ViewMode } from './viewer/types.ts';
 import { ViewerToolbar } from './components/ViewerToolbar.tsx';
 import { ViewerViewport } from './components/ViewerViewport.tsx';
 import { ViewerFooter } from './components/ViewerFooter.tsx';
 import { useApartmentViewer } from './hooks/useApartmentViewer.ts';
 import { DEFAULT_VIEWER_OPTIONS } from './viewer/options.ts';
 import { MeasurementPanel } from './components/MeasurementPanel.tsx';
+import './design-system/fonts.css';
+import './design-system/tokens.css';
 
 const MODEL_DOWNLOAD_URL = `${import.meta.env.BASE_URL}models/apartment/apartment.glb`;
 
 export function App() {
   const [options, setOptions] = useState(DEFAULT_VIEWER_OPTIONS);
-  const { viewportRef, labelsRef, viewerRef, status, measurement } = useApartmentViewer(options);
+  const measurementButtonRef = useRef<HTMLButtonElement>(null);
+  const onModeChange = useCallback((mode: ViewMode) => {
+    setOptions((current) => ({ ...current, mode }));
+  }, []);
+  const { viewportRef, labelsRef, fitAreaRef, viewerRef, status, measurement } = useApartmentViewer(
+    options,
+    onModeChange,
+  );
   const disabled = status !== 'ready';
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || options.measurementTool === 'off') return;
+      if (event.defaultPrevented || event.key !== 'Escape' || options.measurementTool === 'off')
+        return;
       if (
         measurement.pinned ||
         measurement.pointCount > 0 ||
@@ -22,19 +33,26 @@ export function App() {
         measurement.result
       )
         viewerRef.current?.measurement({ type: 'clear' });
-      else setOptions((current) => ({ ...current, measurementTool: 'off' }));
+      else {
+        setOptions((current) => ({ ...current, measurementTool: 'off' }));
+        measurementButtonRef.current?.focus();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [measurement, options.measurementTool]);
 
   return (
-    <main id="apartment-view">
+    <main id="apartment-view" className="hatka-theme">
       <header className="page-header">
         <h1>
           Хатка <span>· 3D-модель квартиры</span>
         </h1>
-        <a href={MODEL_DOWNLOAD_URL} download>
+        <a
+          className="hatka-button hatka-button--secondary hatka-control--sm"
+          href={MODEL_DOWNLOAD_URL}
+          download
+        >
           Скачать GLB
         </a>
       </header>
@@ -42,7 +60,7 @@ export function App() {
         options={options}
         disabled={disabled}
         onChange={setOptions}
-        onFit={() => viewerRef.current?.fit()}
+        measurementButtonRef={measurementButtonRef}
       />
       <ViewerViewport
         viewportRef={viewportRef}
@@ -50,6 +68,7 @@ export function App() {
         status={status}
         downloadUrl={MODEL_DOWNLOAD_URL}
       />
+      <div className="viewer-fit-area" ref={fitAreaRef} aria-hidden="true" />
       {status === 'ready' && (
         <MeasurementPanel
           tool={options.measurementTool}
@@ -57,11 +76,20 @@ export function App() {
           onToolChange={(measurementTool) => setOptions({ ...options, measurementTool })}
           onSelect={(id, slot) => viewerRef.current?.measurement({ type: 'select', id, slot })}
           onClear={() => viewerRef.current?.measurement({ type: 'clear' })}
+          onClose={() => {
+            setOptions((current) => ({ ...current, measurementTool: 'off' }));
+            measurementButtonRef.current?.focus();
+          }}
         />
       )}
       <ViewerFooter
         mode={options.mode}
         disabled={disabled}
+        panMode={options.panMode}
+        onPanToggle={() => setOptions((current) => ({ ...current, panMode: !current.panMode }))}
+        onFit={() => viewerRef.current?.fit()}
+        onReset={() => viewerRef.current?.reset()}
+        onTop={() => viewerRef.current?.top()}
         onRotate={(angle) => viewerRef.current?.rotate(angle)}
         onZoom={(factor) => viewerRef.current?.zoom(factor)}
       />

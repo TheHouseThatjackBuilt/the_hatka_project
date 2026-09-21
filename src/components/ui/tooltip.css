@@ -1,0 +1,19 @@
+.hatka-theme .hatka-tooltip-trigger {
+  display: inline-flex;
+}
+.hatka-theme.hatka-tooltip {
+  position: fixed;
+  z-index: var(--layer-tooltip);
+  max-width: min(calc(var(--control-md) * 9), calc(100vw - var(--s-4)));
+  max-height: calc(100vh - var(--s-4));
+  overflow: auto;
+  padding: var(--s-2) var(--s-3);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-raised);
+  color: var(--text-1);
+  box-shadow: var(--shadow-panel);
+  font-size: var(--font-sm);
+  line-height: var(--line-height-normal);
+  pointer-events: auto;
+}

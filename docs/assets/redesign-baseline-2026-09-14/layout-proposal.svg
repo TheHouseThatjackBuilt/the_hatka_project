@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="800" viewBox="0 0 1360 800" role="img" aria-labelledby="title desc">
+  <title id="title">Хатка: эскиз размещения инструментов</title>
+  <desc id="desc">Предложение для обсуждения. Слева desktop с плавающими инструментами и измерениями справа, справа мобильный экран с нижней панелью измерений.</desc>
+  <style>
+    text { font-family: "Segoe UI", sans-serif; fill: #e8eaed; font-size: 14px; }
+    .muted { fill: #9ba1a8; font-size: 12px; }
+    .heading { font-size: 22px; font-weight: 500; }
+    .panel { fill: #22262b; stroke: #444b53; }
+    .active { fill: #2a3541; stroke: #7fa6c9; }
+    .safe { fill: #1a1d21; stroke: #7fa6c9; stroke-dasharray: 6 6; }
+  </style>
+  <rect width="1360" height="800" fill="#101216"/>
+  <text x="28" y="40" class="heading">Хатка · предложение по композиции</text>
+  <text x="28" y="66" class="muted">Схема расположения, не финальный дизайн. Размеры и тема уточняются перед реализацией.</text>
+  <text x="28" y="110">Компьютер · измерения открыты</text>
+  <rect x="28" y="128" width="962" height="572" rx="8" fill="#1a1d21" stroke="#444b53"/>
+  <path d="M28 176H990" stroke="#444b53"/>
+  <text x="44" y="157">Хатка</text><text x="102" y="157" class="muted">3D-модель квартиры</text>
+  <rect x="850" y="138" width="124" height="28" rx="5" class="panel"/><text x="866" y="157">Скачать GLB</text>
+  <rect x="44" y="192" width="142" height="104" rx="8" class="panel"/>
+  <text x="58" y="215">План сверху</text><text x="58" y="247">Полные стены</text>
+  <rect x="51" y="260" width="128" height="28" rx="5" class="active"/><text x="59" y="279">Разрез</text>
+  <rect x="44" y="308" width="142" height="144" rx="8" class="panel"/>
+  <text x="58" y="335">Мебель</text><text x="58" y="367">Названия</text><text x="58" y="399">Перемещать</text><text x="58" y="431">Размеры</text>
+  <rect x="146" y="323" width="25" height="13" rx="6" fill="#7fa6c9"/><rect x="146" y="355" width="25" height="13" rx="6" fill="#7fa6c9"/>
+  <rect x="146" y="387" width="25" height="13" rx="6" fill="#6b7178"/><rect x="146" y="419" width="25" height="13" rx="6" fill="#7fa6c9"/>
+  <rect x="204" y="192" width="494" height="434" rx="8" class="safe"/>
+  <text x="405" y="380" class="heading">Квартира</text>
+  <text x="298" y="416" class="muted">Вписывание в свободную область экрана</text>
+  <text x="286" y="438" class="muted">Сохраняем крупный кадр и доступ к инструментам</text>
+  <rect x="716" y="192" width="258" height="386" rx="8" class="panel"/>
+  <text x="732" y="219">Размеры</text><text x="951" y="219">×</text>
+  <rect x="730" y="234" width="110" height="28" rx="5" class="active"/><text x="744" y="253">Объекты</text>
+  <text x="853" y="253">Комнаты</text><text x="733" y="282">Расстояние</text><text x="853" y="282">Две точки</text>
+  <rect x="730" y="300" width="230" height="36" rx="5" fill="#2a2f35"/><text x="741" y="323">Выбрать предмет</text>
+  <text x="732" y="369" class="muted">Результат измерения</text><text x="732" y="399" class="muted">Размеры и источник данных</text>
+  <text x="732" y="468" class="muted">Панель со своим скроллом.</text><text x="732" y="490" class="muted">Клики не двигают камеру.</text>
+  <text x="732" y="547">Снять выбор</text>
+  <rect x="204" y="642" width="494" height="42" rx="8" class="panel"/>
+  <text x="218" y="668">Вписать · Сброс · Сверху · + / − · Поворот</text>
+  <text x="728" y="619" class="muted">Срез 1,05 м · потолки 2,70 м</text><text x="728" y="645" class="muted">Помощь по управлению</text>
+  <text x="28" y="736" class="muted">При закрытии измерений сцена использует освободившуюся область.</text>
+  <text x="28" y="758" class="muted">Срез остаётся фиксированным. Панорамирование камеры сохраняется; undo/redo не добавляется.</text>
+  <text x="1022" y="110">Телефон · измерения открыты</text>
+  <rect x="1022" y="128" width="310" height="630" rx="18" fill="#1a1d21" stroke="#444b53"/>
+  <text x="1038" y="158">Хатка</text><text x="1225" y="158" class="muted">Скачать GLB</text>
+  <rect x="1038" y="180" width="278" height="36" rx="5" class="panel"/><text x="1050" y="203">Сверху · Стены · Разрез</text>
+  <rect x="1038" y="230" width="278" height="247" rx="8" class="safe"/><text x="1126" y="350" class="heading">Квартира</text>
+  <text x="1060" y="377" class="muted">Подписи без перекрытий</text>
+  <rect x="1038" y="489" width="278" height="32" rx="5" class="panel"/><text x="1050" y="510" class="muted">Вписать · + / − · Настройки · Помощь</text>
+  <rect x="1038" y="533" width="278" height="205" rx="8" class="panel"/>
+  <rect x="1156" y="540" width="42" height="4" rx="2" fill="#6b7178"/>
+  <text x="1052" y="569">Размеры</text><text x="1243" y="569" class="muted">Свернуть</text>
+  <text x="1052" y="600" class="muted">Инструмент · Выбор объекта</text><text x="1052" y="632" class="muted">Результат и примечания</text>
+  <text x="1052" y="700" class="muted">Разворачивается по запросу</text>
+</svg>

@@ -19,6 +19,8 @@ export interface ViewerHandle {
   rotate(angle: number): void;
   zoom(factor: number): void;
   fit(): void;
+  reset(): void;
+  top(): void;
   measurement(command: MeasurementCommand): void;
   dispose(): void;
 }
@@ -30,3 +32,6 @@ export interface Viewport {
   clientHeight: number;
   getBoundingClientRect(): Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>;
 }
+
+/** CSS pixels relative to the canvas; only used when fitting the camera. */
+export type FitRect = Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>;

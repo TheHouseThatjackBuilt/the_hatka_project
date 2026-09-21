@@ -1,0 +1,7 @@
+{
+  "fonts": [],
+  "resources": [],
+  "reducedMotion": false,
+  "transition": "0s",
+  "canvases": 1
+}

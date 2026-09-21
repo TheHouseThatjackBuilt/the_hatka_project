@@ -23,6 +23,10 @@ class MockCanvas extends EventTarget {
 const camera = (): CameraController => ({
   camera: new OrthographicCamera(),
   update() {},
+  advance() {},
+  stop() {},
+  reset() {},
+  setReducedMotion() {},
   fit() {},
   setMode() {},
   panPixels() {},

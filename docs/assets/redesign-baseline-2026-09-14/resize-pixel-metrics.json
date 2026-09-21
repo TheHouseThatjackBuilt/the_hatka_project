@@ -1,0 +1,20 @@
+[
+  {
+    "name": "resize-390x844-top-fit",
+    "viewport": [390, 844],
+    "scene": [364, 565],
+    "bbox": [323, 229]
+  },
+  {
+    "name": "resize-1920x1080-top-before-fit",
+    "viewport": [1920, 1080],
+    "scene": [1878, 903],
+    "bbox": [1004, 723]
+  },
+  {
+    "name": "resize-1920x1080-top-after-fit",
+    "viewport": [1920, 1080],
+    "scene": [1878, 903],
+    "bbox": [994, 715]
+  }
+]

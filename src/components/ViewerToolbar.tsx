@@ -1,73 +1,73 @@
+import { Button } from './ui/Button.tsx';
+import { FloatingPanel } from './ui/FloatingPanel.tsx';
+import { SegmentedControl } from './ui/SegmentedControl.tsx';
+import { StatusBadge } from './ui/StatusBadge.tsx';
+import { Toggle } from './ui/Toggle.tsx';
 import { isViewMode, VIEW_MODES } from '../viewer/options.ts';
 import type { ViewerOptions } from '../viewer/types.ts';
+import type { Ref } from 'react';
 
 interface ViewerToolbarProps {
   options: ViewerOptions;
   disabled: boolean;
   onChange(options: ViewerOptions): void;
-  onFit(): void;
+  measurementButtonRef: Ref<HTMLButtonElement>;
 }
+const VIEW_OPTIONS = VIEW_MODES.map(({ value }) => ({
+  value,
+  label: value === 'cut' ? 'Срез' : value === 'full' ? 'Полный' : 'Сверху',
+}));
 
-export function ViewerToolbar({ options, disabled, onChange, onFit }: ViewerToolbarProps) {
+export function ViewerToolbar({
+  options,
+  disabled,
+  onChange,
+  measurementButtonRef,
+}: ViewerToolbarProps) {
   return (
-    <fieldset id="ap-toolbar" disabled={disabled} aria-label="Настройки просмотра">
-      <label className="view-field" htmlFor="ap-view">
-        Вид
-        <select
-          id="ap-view"
+    <div id="ap-toolbar" className="viewer-tools">
+      <FloatingPanel className="viewer-view-panel" aria-label="Вид квартиры">
+        <SegmentedControl
+          label="Вид квартиры"
+          options={VIEW_OPTIONS}
           value={options.mode}
-          onChange={(event) => {
-            const mode = event.currentTarget.value;
-            if (isViewMode(mode)) onChange({ ...options, mode });
+          disabled={disabled}
+          orientation="vertical"
+          onValueChange={(value) => {
+            if (isViewMode(value)) onChange({ ...options, mode: value });
           }}
-        >
-          {VIEW_MODES.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="check-field">
-        <input
-          type="checkbox"
+        />
+      </FloatingPanel>
+      <FloatingPanel className="viewer-settings-panel" aria-label="Настройки просмотра">
+        <Toggle
+          label="Мебель"
           checked={options.furnitureVisible}
-          onChange={(event) =>
-            onChange({ ...options, furnitureVisible: event.currentTarget.checked })
-          }
+          disabled={disabled}
+          onCheckedChange={(checked) => onChange({ ...options, furnitureVisible: checked })}
         />
-        Мебель
-      </label>
-      <button
-        type="button"
-        aria-pressed={options.measurementTool !== 'off'}
-        onClick={() =>
-          onChange({
-            ...options,
-            measurementTool: options.measurementTool === 'off' ? 'objects' : 'off',
-          })
-        }
-      >
-        Размеры
-      </button>
-      <label className="check-field">
-        <input
-          type="checkbox"
+        <Toggle
+          label="Названия"
           checked={options.labelsVisible}
-          onChange={(event) => onChange({ ...options, labelsVisible: event.currentTarget.checked })}
+          disabled={disabled}
+          onCheckedChange={(checked) => onChange({ ...options, labelsVisible: checked })}
         />
-        Названия
-      </label>
-      <button
-        type="button"
-        aria-pressed={options.panMode}
-        onClick={() => onChange({ ...options, panMode: !options.panMode })}
-      >
-        Перемещать
-      </button>
-      <button type="button" onClick={onFit}>
-        Вписать модель
-      </button>
-    </fieldset>
+        <Button
+          ref={measurementButtonRef}
+          aria-expanded={options.measurementTool !== 'off'}
+          aria-controls={options.measurementTool !== 'off' ? 'ap-measurement-panel' : undefined}
+          aria-pressed={options.measurementTool !== 'off'}
+          disabled={disabled}
+          onClick={() =>
+            onChange({
+              ...options,
+              measurementTool: options.measurementTool === 'off' ? 'objects' : 'off',
+            })
+          }
+        >
+          Размеры
+        </Button>
+        {options.mode === 'cut' && <StatusBadge>Срез · 1,05 м</StatusBadge>}
+      </FloatingPanel>
+    </div>
   );
 }

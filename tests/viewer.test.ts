@@ -9,7 +9,7 @@ import type { ApartmentModel } from '../src/model/types.ts';
 import { ApartmentScene } from '../src/viewer/ApartmentScene.tsx';
 import { createCameraController } from '../src/viewer/camera.ts';
 import { DEFAULT_VIEWER_OPTIONS } from '../src/viewer/options.ts';
-import type { ApartmentMesh, ViewerOptions } from '../src/viewer/types.ts';
+import type { ApartmentMesh, FitRect, ViewerOptions } from '../src/viewer/types.ts';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
@@ -32,10 +32,58 @@ async function setup(width = 1200, height = 700) {
   const area = {
     clientWidth: width,
     clientHeight: height,
-    getBoundingClientRect: () => ({ left: 20, top: 100, width, height }),
+    getBoundingClientRect: () => ({
+      left: 20,
+      top: 100,
+      width: area.clientWidth,
+      height: area.clientHeight,
+    }),
   };
   const controller = createCameraController(area, meshes, () => {});
   return { renderer, meshes, options, controller, area };
+}
+
+function assertFiniteCamera(controller: ReturnType<typeof createCameraController>) {
+  const values = [
+    ...controller.camera.position.toArray(),
+    ...controller.camera.projectionMatrix.elements,
+    ...controller.camera.matrixWorld.elements,
+  ];
+  assert.ok(values.every(Number.isFinite), 'camera matrices must remain finite');
+}
+
+function projectedVisibleBounds(
+  meshes: ApartmentMesh[],
+  controller: ReturnType<typeof createCameraController>,
+  mode: 'cut' | 'full' | 'top',
+) {
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  const point = new THREE.Vector3();
+  for (const mesh of meshes) {
+    if (!mesh.visible || !mesh.parent?.visible) continue;
+    const part = mesh.userData;
+    const bottom = part.pos[1] - part.size[1] / 2;
+    const clippingPlane = mode === 'full' ? undefined : mesh.material.clippingPlanes?.[0];
+    const top = Math.min(clippingPlane?.constant ?? Infinity, part.pos[1] + part.size[1] / 2);
+    if (top < bottom) continue;
+    const cosine = Math.cos(part.rot);
+    const sine = Math.sin(part.rot);
+    for (const x of [-part.size[0] / 2, part.size[0] / 2])
+      for (const y of [bottom, top])
+        for (const z of [-part.size[2] / 2, part.size[2] / 2]) {
+          point
+            .set(part.pos[0] + cosine * x + sine * z, y, part.pos[2] - sine * x + cosine * z)
+            .project(controller.camera);
+          minX = Math.min(minX, point.x);
+          maxX = Math.max(maxX, point.x);
+          minY = Math.min(minY, point.y);
+          maxY = Math.max(maxY, point.y);
+        }
+  }
+  return { minX, maxX, minY, maxY };
 }
 
 test('all model objects retain geometry, materials and transforms in R3F scene', async (t) => {
@@ -141,6 +189,251 @@ test('directional light target has expected world coordinates', async (t) => {
   assert.deepEqual(target.getWorldPosition(new THREE.Vector3()).toArray(), [5, 0, 4]);
 });
 
+test('fit preserves the user view direction and centers every mode after interaction', async (t) => {
+  const { renderer, meshes, controller, options } = await setup();
+  t.after(() => renderer.unmount());
+  for (const mode of ['cut', 'full', 'top'] as const) {
+    await renderer.update(sceneElement(model, { ...options, mode }, meshes));
+    controller.setMode(mode);
+    controller.rotate(0.8, 0.2);
+    controller.panPixels(120, -70);
+    controller.zoomAt(1.6, 600, 350);
+    controller.update();
+    const quaternion = controller.camera.quaternion.clone();
+    controller.fit();
+    controller.update();
+    assert.ok(controller.camera.quaternion.angleTo(quaternion) < 1e-7);
+    const bounds = projectedVisibleBounds(meshes, controller, mode);
+    assert.ok(
+      Math.max(
+        Math.abs(bounds.minX),
+        Math.abs(bounds.maxX),
+        Math.abs(bounds.minY),
+        Math.abs(bounds.maxY),
+      ) <= 0.881,
+    );
+    assert.ok(Math.abs(bounds.minX + bounds.maxX) < 1e-8);
+    assert.ok(Math.abs(bounds.minY + bounds.maxY) < 1e-8);
+    assert.ok(
+      Math.abs(Math.max(bounds.maxX - bounds.minX, bounds.maxY - bounds.minY) / 2 - 0.88) < 1e-8,
+    );
+  }
+});
+
+test('fit uses the measurement area for desktop and mobile layouts', async (t) => {
+  const cases = [
+    [1440, 900, { left: 184, top: 64, width: 1176, height: 788 }],
+    [390, 844, { left: 8, top: 170, width: 374, height: 380 }],
+    [960, 600, { left: 184, top: 64, width: 420, height: 488 }],
+  ] as const;
+  for (const [width, height, fitRect] of cases) {
+    const { renderer, meshes, options, area } = await setup(width, height);
+    t.after(() => renderer.unmount());
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => {},
+      () => fitRect,
+    );
+    for (const mode of ['cut', 'full', 'top'] as const) {
+      await renderer.update(sceneElement(model, { ...options, mode }, meshes));
+      controller.setMode(mode);
+      controller.rotate(0.8, 0.2);
+      controller.panPixels(120, -70);
+      controller.zoomAt(1.6, 600, 350);
+      controller.update();
+      const quaternion = controller.camera.quaternion.clone();
+      controller.fit();
+      controller.update();
+      assert.ok(controller.camera.quaternion.angleTo(quaternion) < 1e-7);
+      const bounds = projectedVisibleBounds(meshes, controller, mode);
+      const toPixelX = (ndc: number) => ((ndc + 1) / 2) * width;
+      const toPixelY = (ndc: number) => ((1 - ndc) / 2) * height;
+      const modelWidth = toPixelX(bounds.maxX) - toPixelX(bounds.minX);
+      const modelHeight = toPixelY(bounds.minY) - toPixelY(bounds.maxY);
+      assert.ok(
+        Math.abs(
+          (toPixelX(bounds.minX) + toPixelX(bounds.maxX)) / 2 - (fitRect.left + fitRect.width / 2),
+        ) < 1e-6,
+      );
+      assert.ok(
+        Math.abs(
+          (toPixelY(bounds.minY) + toPixelY(bounds.maxY)) / 2 - (fitRect.top + fitRect.height / 2),
+        ) < 1e-6,
+      );
+      assert.ok(
+        Math.abs(Math.max(modelWidth / fitRect.width, modelHeight / fitRect.height) - 0.88) < 1e-6,
+      );
+    }
+  }
+});
+
+test('fit ignores rect changes until explicitly requested and remains idempotent', async (t) => {
+  const { renderer, meshes, options, area } = await setup(960, 600);
+  t.after(() => renderer.unmount());
+  let fitRect = { left: 184, top: 64, width: 420, height: 488 };
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    () => fitRect,
+  );
+  await renderer.update(sceneElement(model, { ...options, mode: 'cut' }, meshes));
+  controller.fit();
+  controller.update();
+  const before = controller.camera.matrixWorld.clone();
+  fitRect = { left: 8, top: 170, width: 374, height: 380 };
+  controller.update();
+  assert.deepEqual(controller.camera.matrixWorld.elements, before.elements);
+  controller.fit();
+  controller.update();
+  const after = controller.camera.matrixWorld.clone();
+  controller.fit();
+  controller.update();
+  assert.ok(
+    after.elements.every(
+      (value, index) => Math.abs(value - controller.camera.matrixWorld.elements[index]!) < 1e-9,
+    ),
+  );
+});
+
+test('fit falls back to the full canvas and clips partial out-of-bounds rects', async (t) => {
+  const values: [FitRect | undefined, FitRect][] = [
+    [undefined, { left: 0, top: 0, width: 390, height: 300 }],
+    [
+      { left: 500, top: 500, width: 30, height: 30 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: 0, top: 0, width: 0, height: 0 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: Number.NaN, top: 0, width: 20, height: 20 },
+      { left: 0, top: 0, width: 390, height: 300 },
+    ],
+    [
+      { left: -100, top: -50, width: 300, height: 200 },
+      { left: 0, top: 0, width: 200, height: 150 },
+    ],
+  ];
+  for (const [requested, expected] of values) {
+    const { renderer, meshes, options, area } = await setup(390, 300);
+    t.after(() => renderer.unmount());
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => {},
+      () => requested,
+    );
+    await renderer.update(sceneElement(model, { ...options, mode: 'cut' }, meshes));
+    controller.fit();
+    controller.update();
+    assertFiniteCamera(controller);
+    const bounds = projectedVisibleBounds(meshes, controller, 'cut');
+    const toPixelX = (ndc: number) => ((ndc + 1) / 2) * area.clientWidth;
+    const toPixelY = (ndc: number) => ((1 - ndc) / 2) * area.clientHeight;
+    assert.ok(
+      Math.abs(
+        (toPixelX(bounds.minX) + toPixelX(bounds.maxX)) / 2 - (expected.left + expected.width / 2),
+      ) < 1e-6,
+    );
+    assert.ok(
+      Math.abs(
+        (toPixelY(bounds.minY) + toPixelY(bounds.maxY)) / 2 - (expected.top + expected.height / 2),
+      ) < 1e-6,
+    );
+  }
+});
+
+test('repeated fit is projection and position idempotent', async (t) => {
+  const { renderer, controller } = await setup();
+  t.after(() => renderer.unmount());
+  controller.rotate(0.8, 0.2);
+  controller.panPixels(80, -40);
+  controller.zoomAt(1.3);
+  controller.fit();
+  controller.update();
+  const firstPosition = controller.camera.position.clone();
+  const firstProjection = controller.camera.projectionMatrix.clone();
+  controller.fit();
+  controller.update();
+  assert.ok(controller.camera.position.distanceTo(firstPosition) < 1e-9);
+  assert.ok(
+    controller.camera.projectionMatrix.elements.every(
+      (value, index) => Math.abs(value - firstProjection.elements[index]!) < 1e-9,
+    ),
+  );
+});
+
+test('fit produces the same projection after portrait and landscape resize', async (t) => {
+  const { renderer, meshes, controller, area } = await setup(360, 700);
+  t.after(() => renderer.unmount());
+  controller.rotate(0.45, -0.1);
+  area.clientWidth = 1100;
+  area.clientHeight = 600;
+  controller.fit();
+  controller.update();
+  const resizedProjection = controller.camera.projectionMatrix.clone();
+  const fresh = createCameraController({ ...area }, meshes, () => {});
+  fresh.rotate(0.45, -0.1);
+  fresh.fit();
+  fresh.update();
+  assert.ok(
+    resizedProjection.elements.every(
+      (value, index) => Math.abs(value - fresh.camera.projectionMatrix.elements[index]!) < 1e-9,
+    ),
+  );
+});
+
+test('zero-sized viewport keeps camera finite and recovers after resize', async (t) => {
+  const { renderer, meshes, controller, area } = await setup();
+  t.after(() => renderer.unmount());
+  for (const [width, height] of [
+    [0, 600],
+    [900, 0],
+    [0, 0],
+  ]) {
+    area.clientWidth = width!;
+    area.clientHeight = height!;
+    controller.update();
+    controller.fit();
+    controller.panPixels(20, 30);
+    controller.zoomAt(2, 20, 30);
+    assertFiniteCamera(controller);
+  }
+  area.clientWidth = 900;
+  area.clientHeight = 600;
+  // A deferred fit must recover on the first visible frame without another fit command.
+  controller.update();
+  assertFiniteCamera(controller);
+  assert.ok(
+    Math.max(...Object.values(projectedVisibleBounds(meshes, controller, 'cut')).map(Math.abs)) <=
+      0.881,
+  );
+});
+
+test('extreme positive zoom factors remain finite and fit restores the full view', async (t) => {
+  const { renderer, meshes, controller } = await setup();
+  t.after(() => renderer.unmount());
+  controller.zoomAt(Number.MAX_VALUE);
+  controller.zoomAt(Number.MIN_VALUE);
+  controller.update();
+  assertFiniteCamera(controller);
+  controller.fit();
+  controller.update();
+  assertFiniteCamera(controller);
+  const bounds = projectedVisibleBounds(meshes, controller, 'cut');
+  assert.ok(
+    Math.max(
+      Math.abs(bounds.minX),
+      Math.abs(bounds.maxX),
+      Math.abs(bounds.minY),
+      Math.abs(bounds.maxY),
+    ) <= 0.881,
+  );
+});
+
 test('furniture cut caps follow furniture visibility and mode', async (t) => {
   const { renderer, meshes, options } = await setup();
   t.after(() => renderer.unmount());
@@ -216,4 +509,220 @@ test('zoom preserves the world point under the cursor', async (t) => {
   const projected = anchor.project(controller.camera);
   assert.ok(Math.abs(projected.x - 0.3) < 1e-9);
   assert.ok(Math.abs(projected.y + 0.2) < 1e-9);
+});
+
+test('camera presets interpolate for 450ms without a start jump and then stop requesting frames', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0,
+    requests = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => requests++,
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.rotate(0.8, -0.2);
+  controller.panPixels(70, 30);
+  controller.update();
+  const start = controller.camera.matrixWorld.clone();
+  const projection = controller.camera.projectionMatrix.clone();
+  controller.setMode('full', true);
+  assert.ok(
+    start.elements.every((v, i) => Math.abs(v - controller.camera.matrixWorld.elements[i]!) < 1e-9),
+  );
+  assert.ok(
+    projection.elements.every(
+      (v, i) => Math.abs(v - controller.camera.projectionMatrix.elements[i]!) < 1e-9,
+    ),
+  );
+  time = 225;
+  controller.advance();
+  controller.update();
+  const middle = controller.camera.matrixWorld.clone();
+  assert.notDeepEqual(middle.elements, start.elements);
+  time = 450;
+  controller.advance();
+  controller.update();
+  assert.notDeepEqual(controller.camera.matrixWorld.elements, middle.elements);
+  const end = controller.camera.matrixWorld.clone();
+  const count = requests;
+  time = 1000;
+  controller.advance();
+  controller.update();
+  assert.equal(requests, count);
+  assert.deepEqual(controller.camera.matrixWorld.elements, end.elements);
+});
+
+test('fit preserves the current angle, reset restores the preset, and input interrupts a transition', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  const initial = controller.camera.quaternion.clone();
+  controller.rotate(1, -0.2);
+  controller.update();
+  const rotated = controller.camera.quaternion.clone();
+  controller.fit(true);
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(rotated.angleTo(controller.camera.quaternion) < 1e-7);
+  controller.reset(true);
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(initial.angleTo(controller.camera.quaternion) < 1e-7);
+  controller.setMode('top', true);
+  time += 150;
+  controller.advance();
+  controller.update();
+  controller.panPixels(20, 10);
+  controller.update();
+  const interrupted = controller.camera.matrixWorld.clone();
+  time += 1000;
+  controller.advance();
+  controller.update();
+  assert.deepEqual(interrupted.elements, controller.camera.matrixWorld.elements);
+});
+
+test('damped gestures settle independent of frame rate and reduced motion completes immediately', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  const results: number[][] = [];
+  for (const step of [1000 / 30, 1000 / 144]) {
+    let time = 0,
+      requests = 0;
+    const controller = createCameraController(
+      area,
+      meshes,
+      () => requests++,
+      undefined,
+      () => time,
+    );
+    controller.setMode('cut');
+    controller.rotate(0.8, -0.1, true);
+    for (; time < 1000; time += step) {
+      controller.advance();
+      controller.update();
+    }
+    const count = requests;
+    controller.advance();
+    assert.equal(requests, count);
+    results.push(controller.camera.matrixWorld.elements.slice());
+    controller.reset(true);
+    controller.setReducedMotion(true);
+    controller.update();
+    const reset = controller.camera.quaternion.clone();
+    controller.rotate(0.8, 0, true);
+    controller.update();
+    assert.ok(reset.angleTo(controller.camera.quaternion) > 0.5);
+    controller.reset(true);
+    controller.update();
+    assert.ok(reset.angleTo(controller.camera.quaternion) < 1e-7);
+    const reducedCount = requests;
+    time += 1000;
+    controller.advance();
+    assert.equal(requests, reducedCount);
+  }
+  assert.ok(results[0]!.every((v, i) => Math.abs(v - results[1]![i]!) < 1e-9));
+});
+
+test('zoom interrupts motion, preserves the cursor anchor, and hidden presets recover finitely', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.setMode('top', true);
+  time = 200;
+  controller.advance();
+  controller.update();
+  const anchor = new THREE.Vector3(0.3, -0.2, 0).unproject(controller.camera);
+  controller.zoomAt(1.4, 20 + area.clientWidth * 0.65, 100 + area.clientHeight * 0.6);
+  time = 1000;
+  controller.advance();
+  controller.update();
+  anchor.project(controller.camera);
+  assert.ok(Math.abs(anchor.x - 0.3) < 1e-9 && Math.abs(anchor.y + 0.2) < 1e-9);
+  area.clientWidth = 0;
+  controller.setMode('full', true);
+  controller.advance();
+  controller.update();
+  assertFiniteCamera(controller);
+  area.clientWidth = 1200;
+  controller.advance();
+  controller.update();
+  assertFiniteCamera(controller);
+  assert.ok(
+    Math.max(...Object.values(projectedVisibleBounds(meshes, controller, 'full')).map(Math.abs)) <=
+      0.881,
+  );
+});
+
+test('replacement presets take the shortest arc, use cubic easing, and damped pan settles exactly', async (t) => {
+  const { renderer, meshes, area } = await setup();
+  t.after(() => renderer.unmount());
+  let time = 0;
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    () => time,
+  );
+  controller.setMode('cut');
+  controller.rotate(4 * Math.PI + 0.8, 0);
+  controller.update();
+  controller.reset(true);
+  time = 112.5;
+  controller.advance();
+  controller.update();
+  const direction = controller.camera.getWorldDirection(new THREE.Vector3()).negate();
+  assert.ok(Math.abs(Math.atan2(direction.x, direction.z) - (-0.2 + 0.8 * (1 - 0.0625))) < 1e-9);
+  const displayed = controller.camera.matrixWorld.clone();
+  controller.setMode('top', true);
+  assert.ok(
+    displayed.elements.every(
+      (v, i) => Math.abs(v - controller.camera.matrixWorld.elements[i]!) < 1e-9,
+    ),
+  );
+  time += 450;
+  controller.advance();
+  controller.update();
+  assert.ok(controller.camera.getWorldDirection(direction).y < -0.99999);
+  controller.setMode('cut');
+  const direct = createCameraController(area, meshes, () => {});
+  direct.setMode('cut');
+  direct.panPixels(120, -40);
+  direct.update();
+  controller.panPixels(120, -40, true);
+  for (let i = 0; i < 100; i++) {
+    time += 10;
+    controller.advance();
+    controller.update();
+  }
+  assert.ok(controller.camera.position.distanceTo(direct.camera.position) < 1e-9);
+  controller.rotate(0, -100, true);
+  for (let i = 0; i < 100; i++) {
+    time += 10;
+    controller.advance();
+    controller.update();
+  }
+  assert.ok(Math.abs(controller.camera.getWorldDirection(direction).y + Math.sin(0.3)) < 1e-9);
 });
