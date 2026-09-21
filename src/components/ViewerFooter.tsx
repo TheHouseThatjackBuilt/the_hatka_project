@@ -5,6 +5,7 @@ import { IconButton } from './ui/IconButton.tsx';
 import { StatusBadge } from './ui/StatusBadge.tsx';
 import { Tooltip } from './ui/Tooltip.tsx';
 import type { ReactNode } from 'react';
+import { ViewerHelp } from './ViewerHelp.tsx';
 
 interface ViewerFooterProps {
   mode: ViewMode;
@@ -109,22 +110,7 @@ export function ViewerFooter({
         <StatusBadge id="ap-state" aria-live="polite">
           {MODE_TEXT[mode]}
         </StatusBadge>
-        <details className="viewer-help">
-          <summary>Управление</summary>
-          <div className="viewer-help-content">
-            <p>
-              Вращение — левая кнопка мыши · перемещение — правая или Shift · масштаб — колёсико.
-            </p>
-            <p>
-              На сенсорном экране один палец вращает, два — перемещают и меняют масштаб. «Перемещать
-              камеру» включает панорамирование одним пальцем или левой кнопкой мыши.
-            </p>
-            <p>
-              «Вписать модель» сохраняет ракурс. «Сбросить камеру» возвращает исходный ракурс и
-              режим «Срез». «Вид сверху» открывает план.
-            </p>
-          </div>
-        </details>
+        <ViewerHelp ready={!disabled} />
       </footer>
     </>
   );
