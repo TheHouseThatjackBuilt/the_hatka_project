@@ -1,9 +1,11 @@
 import { Button } from './ui/Button.tsx';
 import { FloatingPanel } from './ui/FloatingPanel.tsx';
 import { SegmentedControl } from './ui/SegmentedControl.tsx';
+import { Select } from './ui/Select.tsx';
 import { StatusBadge } from './ui/StatusBadge.tsx';
 import { Toggle } from './ui/Toggle.tsx';
 import { isViewMode, VIEW_MODES } from '../viewer/options.ts';
+import { isPerformanceProfile, PERFORMANCE_OPTIONS } from '../viewer/performance.ts';
 import type { ViewerOptions } from '../viewer/types.ts';
 import type { Ref } from 'react';
 
@@ -51,6 +53,19 @@ export function ViewerToolbar({
           disabled={disabled}
           onCheckedChange={(checked) => onChange({ ...options, labelsVisible: checked })}
         />
+        <Select
+          label="Графика"
+          options={PERFORMANCE_OPTIONS}
+          value={options.performanceProfile}
+          disabled={disabled}
+          aria-describedby="performance-profile-help"
+          onValueChange={(value) => {
+            if (isPerformanceProfile(value)) onChange({ ...options, performanceProfile: value });
+          }}
+        />
+        <span id="performance-profile-help" className="sr-only">
+          Быстрее отключает тени; баланс и качество повышают чёткость изображения и теней.
+        </span>
         <Button
           ref={measurementButtonRef}
           aria-expanded={options.measurementTool !== 'off'}

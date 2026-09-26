@@ -1,11 +1,13 @@
 import type { BufferGeometry, Mesh, MeshStandardMaterial } from 'three';
 import type { ModelPart } from '../model/types.ts';
 import type { MeasurementCommand, MeasurementTool } from './measurement-types.ts';
+import type { PerformanceProfile } from './performance.ts';
 
 export type ViewMode = 'cut' | 'full' | 'top';
 export type ViewerStatus = 'loading' | 'ready' | 'error';
 
 export interface ViewerOptions {
+  performanceProfile: PerformanceProfile;
   mode: ViewMode;
   furnitureVisible: boolean;
   labelsVisible: boolean;

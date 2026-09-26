@@ -1,0 +1,49 @@
+{
+  "trials": [
+    {
+      "fps": 146.66666666666666,
+      "interval": {
+        "median": 6.700000002980232,
+        "p95": 7.899999991059303
+      },
+      "cpuSubmission": {
+        "median": 6,
+        "p95": 7
+      },
+      "idleDelta": 0,
+      "calls": 1,
+      "triangles": 1,
+      "samples": 440
+    },
+    {
+      "fps": 140,
+      "interval": {
+        "median": 7.0999999940395355,
+        "p95": 8.299999997019768
+      },
+      "cpuSubmission": {
+        "median": 6.299999997019768,
+        "p95": 7.4000000059604645
+      },
+      "idleDelta": 0,
+      "calls": 1,
+      "triangles": 1,
+      "samples": 420
+    },
+    {
+      "fps": 153,
+      "interval": {
+        "median": 6.4000000059604645,
+        "p95": 7.5999999940395355
+      },
+      "cpuSubmission": {
+        "median": 5.700000002980232,
+        "p95": 6.700000002980232
+      },
+      "idleDelta": 0,
+      "calls": 1,
+      "triangles": 1,
+      "samples": 459
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+[
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 424.5,
+        "height": 364.5,
+        "id": "ap-toolbar",
+        "left": 16,
+        "right": 176,
+        "top": 60,
+        "width": 160,
+        "x": 16,
+        "y": 60
+      },
+      {
+        "bottom": 848,
+        "height": 788,
+        "id": "viewer-fit-area",
+        "left": 188,
+        "right": 1062,
+        "top": 60,
+        "width": 874,
+        "x": 188,
+        "y": 60
+      },
+      {
+        "bottom": 848,
+        "height": 788,
+        "id": "ap-measurement-panel",
+        "left": 1074,
+        "right": 1362,
+        "top": 60,
+        "width": 288,
+        "x": 1074,
+        "y": 60
+      },
+      {
+        "bottom": 848,
+        "height": 302,
+        "id": "ap-camera",
+        "left": 1374,
+        "right": 1424,
+        "top": 546,
+        "width": 50,
+        "x": 1374,
+        "y": 546
+      }
+    ],
+    "size": [1440, 900]
+  },
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 424.5,
+        "height": 364.5,
+        "id": "ap-toolbar",
+        "left": 16,
+        "right": 176,
+        "top": 60,
+        "width": 160,
+        "x": 16,
+        "y": 60
+      },
+      {
+        "bottom": 1028,
+        "height": 968,
+        "id": "viewer-fit-area",
+        "left": 188,
+        "right": 1542,
+        "top": 60,
+        "width": 1354,
+        "x": 188,
+        "y": 60
+      },
+      {
+        "bottom": 1028,
+        "height": 968,
+        "id": "ap-measurement-panel",
+        "left": 1554,
+        "right": 1842,
+        "top": 60,
+        "width": 288,
+        "x": 1554,
+        "y": 60
+      },
+      {
+        "bottom": 1028,
+        "height": 302,
+        "id": "ap-camera",
+        "left": 1854,
+        "right": 1904,
+        "top": 726,
+        "width": 50,
+        "x": 1854,
+        "y": 726
+      }
+    ],
+    "size": [1920, 1080]
+  },
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 424.5,
+        "height": 364.5,
+        "id": "ap-toolbar",
+        "left": 16,
+        "right": 176,
+        "top": 60,
+        "width": 160,
+        "x": 16,
+        "y": 60
+      },
+      {
+        "bottom": 1388,
+        "height": 1328,
+        "id": "viewer-fit-area",
+        "left": 188,
+        "right": 2182,
+        "top": 60,
+        "width": 1994,
+        "x": 188,
+        "y": 60
+      },
+      {
+        "bottom": 1388,
+        "height": 1328,
+        "id": "ap-measurement-panel",
+        "left": 2194,
+        "right": 2482,
+        "top": 60,
+        "width": 288,
+        "x": 2194,
+        "y": 60
+      },
+      {
+        "bottom": 1388,
+        "height": 302,
+        "id": "ap-camera",
+        "left": 2494,
+        "right": 2544,
+        "top": 1086,
+        "width": 50,
+        "x": 2494,
+        "y": 1086
+      }
+    ],
+    "size": [2560, 1440]
+  },
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 220,
+        "height": 164,
+        "id": "ap-toolbar",
+        "left": 8,
+        "right": 382,
+        "top": 56,
+        "width": 374,
+        "x": 8,
+        "y": 56
+      },
+      {
+        "bottom": 438,
+        "height": 210,
+        "id": "viewer-fit-area",
+        "left": 8,
+        "right": 382,
+        "top": 228,
+        "width": 374,
+        "x": 8,
+        "y": 228
+      },
+      {
+        "bottom": 746,
+        "height": 300,
+        "id": "ap-measurement-panel",
+        "left": 8,
+        "right": 382,
+        "top": 446,
+        "width": 374,
+        "x": 8,
+        "y": 446
+      },
+      {
+        "bottom": 796,
+        "height": 42,
+        "id": "ap-camera",
+        "left": 88,
+        "right": 382,
+        "top": 754,
+        "width": 294,
+        "x": 88,
+        "y": 754
+      }
+    ],
+    "size": [390, 844]
+  },
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 220,
+        "height": 164,
+        "id": "ap-toolbar",
+        "left": 8,
+        "right": 312,
+        "top": 56,
+        "width": 304,
+        "x": 8,
+        "y": 56
+      },
+      {
+        "bottom": 338,
+        "height": 110,
+        "id": "viewer-fit-area",
+        "left": 8,
+        "right": 312,
+        "top": 228,
+        "width": 304,
+        "x": 8,
+        "y": 228
+      },
+      {
+        "bottom": 642,
+        "height": 296,
+        "id": "ap-measurement-panel",
+        "left": 8,
+        "right": 312,
+        "top": 346,
+        "width": 304,
+        "x": 8,
+        "y": 346
+      },
+      {
+        "bottom": 692,
+        "height": 42,
+        "id": "ap-camera",
+        "left": 18,
+        "right": 312,
+        "top": 650,
+        "width": 294,
+        "x": 18,
+        "y": 650
+      }
+    ],
+    "size": [320, 740]
+  },
+  {
+    "overflow": [false, false],
+    "panels": [
+      {
+        "bottom": 342,
+        "height": 286,
+        "id": "ap-toolbar",
+        "left": 8,
+        "right": 168,
+        "top": 56,
+        "width": 160,
+        "x": 8,
+        "y": 56
+      },
+      {
+        "bottom": 342,
+        "height": 286,
+        "id": "viewer-fit-area",
+        "left": 176,
+        "right": 538,
+        "top": 56,
+        "width": 362,
+        "x": 176,
+        "y": 56
+      },
+      {
+        "bottom": 342,
+        "height": 286,
+        "id": "ap-measurement-panel",
+        "left": 546,
+        "right": 786,
+        "top": 56,
+        "width": 240,
+        "x": 546,
+        "y": 56
+      },
+      {
+        "bottom": 342,
+        "height": 294,
+        "id": "ap-camera",
+        "left": 794,
+        "right": 836,
+        "top": 48,
+        "width": 42,
+        "x": 794,
+        "y": 48
+      }
+    ],
+    "size": [844, 390]
+  }
+]

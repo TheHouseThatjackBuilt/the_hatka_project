@@ -98,6 +98,20 @@ noscript {
   display: grid;
   gap: var(--s-2);
 }
+.viewer-settings-panel .hatka-select {
+  width: min(100%, 13rem);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .viewer-settings-panel .hatka-toggle {
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -349,6 +363,11 @@ noscript {
     align-items: center;
     flex-wrap: wrap;
     gap: var(--s-2);
+  }
+  .viewer-settings-panel .hatka-select {
+    flex: 1 1 8rem;
+    width: auto;
+    max-width: 13rem;
   }
   .viewer-settings-panel .hatka-status {
     display: none;
