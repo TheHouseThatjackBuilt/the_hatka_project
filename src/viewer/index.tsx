@@ -9,6 +9,9 @@ import type { ApartmentModel } from '../model/types.ts';
 import type { ApartmentMesh, FitRect, ViewerHandle, ViewerOptions, ViewMode } from './types.ts';
 import { createMeasurements } from './measurements.ts';
 import { createResizeFit } from './resize-fit.ts';
+import { PERFORMANCE_PROFILES, renderDpr } from './performance.ts';
+import { StudioEnvironment } from './StudioEnvironment.tsx';
+import { ContactShadows } from './ContactShadows.tsx';
 import type { MeasurementSnapshot } from './measurement-types.ts';
 
 extend({
@@ -17,6 +20,8 @@ extend({
   MeshStandardMaterial: THREE.MeshStandardMaterial,
   HemisphereLight: THREE.HemisphereLight,
   DirectionalLight: THREE.DirectionalLight,
+  PlaneGeometry: THREE.PlaneGeometry,
+  MeshBasicMaterial: THREE.MeshBasicMaterial,
 });
 
 class SceneBoundary extends Component<
@@ -163,7 +168,7 @@ export function createViewer(
   function resize() {
     if (disposed || !state) return;
     if (!viewport.clientWidth || !viewport.clientHeight) return;
-    state.setDpr(Math.min(window.devicePixelRatio, 2));
+    state.setDpr(renderDpr(options.performanceProfile, window.devicePixelRatio));
     state.setSize(viewport.clientWidth, viewport.clientHeight);
     invalidate();
     if (resizeFit.pending) resizeFit.schedule();
@@ -203,10 +208,15 @@ export function createViewer(
   }
   function renderScene() {
     if (disposed || !state) return;
+    const profile = PERFORMANCE_PROFILES[options.performanceProfile];
     root.render(
       <StrictMode>
         <SceneBoundary onError={fail}>
           <ApartmentScene model={model} options={options} meshes={meshes} caps={caps}>
+            {profile.environmentIntensity > 0 && <StudioEnvironment />}
+            {profile.contactShadows && options.furnitureVisible && (
+              <ContactShadows meshes={meshes} revision={options.mode} />
+            )}
             <ViewerFrame
               camera={camera}
               labels={labels}
@@ -240,7 +250,7 @@ export function createViewer(
       camera: camera.camera,
       frameloop: 'demand',
       shadows: 'soft',
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr: renderDpr(options.performanceProfile, window.devicePixelRatio),
       size: { width: viewport.clientWidth, height: viewport.clientHeight, top: 0, left: 0 },
       onCreated: (created) => {
         state = created;
@@ -249,6 +259,10 @@ export function createViewer(
     })
     .then(() => {
       if (disposed) return;
+      // Pin presentation after Fiber has applied its renderer defaults.
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1;
       // render() returns the root store before the first React commit.
       state = root.render(null).getState();
       observer.observe(viewport);
@@ -261,6 +275,7 @@ export function createViewer(
     setOptions(next) {
       if (next.mode !== options.mode) resizeFit.cancel();
       options = { ...next };
+      if (!disposed) state?.setDpr(renderDpr(options.performanceProfile, window.devicePixelRatio));
       measurements.setOptions(options);
       renderScene();
     },

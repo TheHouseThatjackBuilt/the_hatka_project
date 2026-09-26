@@ -1,6 +1,7 @@
 import type { ViewerOptions, ViewMode } from './types.ts';
 
 export const DEFAULT_VIEWER_OPTIONS: ViewerOptions = {
+  performanceProfile: 'balanced',
   mode: 'cut',
   furnitureVisible: true,
   labelsVisible: true,

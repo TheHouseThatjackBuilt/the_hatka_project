@@ -1,0 +1,173 @@
+{
+  "roots": 1,
+  "canvases": 1,
+  "renderer": {
+    "colorSpace": "srgb",
+    "toneMapping": 4,
+    "exposure": 1,
+    "shadowMap": 2,
+    "shadows": true,
+    "antialias": true,
+    "dpr": 1
+  },
+  "canvas": {
+    "width": 1280,
+    "height": 720,
+    "cssWidth": 1280,
+    "cssHeight": 720
+  },
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+  "gpu": {
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5080 (0x00002C02) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "vendor": "Google Inc. (NVIDIA)"
+  },
+  "render": {
+    "frame": 1,
+    "calls": 658,
+    "triangles": 31004,
+    "points": 0,
+    "lines": 0
+  },
+  "lights": [
+    {
+      "type": "HemisphereLight",
+      "position": [0, 1, 0],
+      "intensity": 1.7,
+      "color": "ffffff"
+    },
+    {
+      "type": "DirectionalLight",
+      "position": [-4, 14, -5],
+      "intensity": 2.5,
+      "color": "ffffff",
+      "bias": -0.00025,
+      "normalBias": 0.025,
+      "mapSize": [2048, 2048]
+    },
+    {
+      "type": "DirectionalLight",
+      "position": [12, 8, 12],
+      "intensity": 0.5,
+      "color": "ffffff",
+      "bias": 0,
+      "normalBias": 0,
+      "mapSize": [512, 512]
+    }
+  ],
+  "materials": [
+    {
+      "name": "Concrete slab",
+      "color": "aaa59b",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Oak flooring",
+      "color": "d5bea0",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Warm grey tile",
+      "color": "c5c5bc",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Pale stone worktop",
+      "color": "e0dfd5",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Tile grout",
+      "color": "aeafa7",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Floor joints",
+      "color": "bca58b",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Warm plaster",
+      "color": "eeeae2",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Porcelain and painted joinery",
+      "color": "f5f2ea",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Window glass",
+      "color": "a9c4ca",
+      "roughness": 0.23,
+      "metalness": 0
+    },
+    {
+      "name": "Oak front",
+      "color": "cfb99a",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Graphite metal",
+      "color": "41464a",
+      "roughness": 0.85,
+      "metalness": 0.22
+    },
+    {
+      "name": "Natural oak",
+      "color": "bba081",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Ivory upholstery",
+      "color": "e4ded0",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Sage upholstery",
+      "color": "9da993",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Clay textile",
+      "color": "b47e66",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Appliance glass",
+      "color": "252c30",
+      "roughness": 0.23,
+      "metalness": 0
+    },
+    {
+      "name": "Leaves",
+      "color": "658463",
+      "roughness": 0.85,
+      "metalness": 0
+    },
+    {
+      "name": "Mirror",
+      "color": "b8c7c6",
+      "roughness": 0.23,
+      "metalness": 0
+    },
+    {
+      "name": "",
+      "color": "9a958b",
+      "roughness": 1,
+      "metalness": 0
+    }
+  ]
+}

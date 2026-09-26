@@ -98,7 +98,15 @@ test('all model objects retain geometry, materials and transforms in R3F scene',
     assert.deepEqual(mesh.position.toArray(), part.pos);
     assert.deepEqual(mesh.scale.toArray(), part.size);
     assert.equal(mesh.rotation.y, part.rot);
-    assert.equal(`#${mesh.material.color.getHexString()}`, material[1]);
+    assert.equal(
+      `#${mesh.material.color.getHexString()}`,
+      part.mat === 'wall' ? '#f2eee8' : material[1],
+    );
+    if (part.mat === 'wall') {
+      assert.equal(mesh.material.roughness, 0.92);
+      assert.equal(mesh.material.metalness, 0);
+      assert.equal(material[1], '#eeeae2', 'source palette must remain unchanged');
+    }
   });
   assert.equal(renderer.scene.findByProps({ name: 'ceiling' }).instance.visible, false);
 });
@@ -187,6 +195,41 @@ test('directional light target has expected world coordinates', async (t) => {
   const target = light.target;
   target.updateWorldMatrix(true, false);
   assert.deepEqual(target.getWorldPosition(new THREE.Vector3()).toArray(), [5, 0, 4]);
+});
+
+test('graphics changes replace only sunlight and release its shadow map', async (t) => {
+  const { renderer, meshes, options } = await setup();
+  t.after(() => renderer.unmount());
+  const originalMeshes = [...meshes];
+  const materials = meshes.map((mesh) => mesh.material);
+  let previous = renderer.scene.findByProps({ name: 'sunlight' })
+    .instance as THREE.DirectionalLight;
+  for (const [performanceProfile, size] of [
+    ['quality', 2048],
+    ['performance', 0],
+    ['balanced', 1024],
+    ['quality', 2048],
+  ] as const) {
+    const map = new THREE.WebGLRenderTarget(4, 4);
+    previous.shadow.map = map;
+    let released = 0;
+    map.addEventListener('dispose', () => released++);
+    await renderer.update(sceneElement(model, { ...options, performanceProfile }, meshes));
+    const light = renderer.scene.findByProps({ name: 'sunlight' })
+      .instance as THREE.DirectionalLight;
+    assert.notEqual(light, previous);
+    assert.equal(released, 1);
+    assert.equal(light.castShadow, size > 0);
+    assert.deepEqual(light.shadow.mapSize.toArray(), [size || 1, size || 1]);
+    light.target.updateWorldMatrix(true, false);
+    assert.deepEqual(light.target.getWorldPosition(new THREE.Vector3()).toArray(), [5, 0, 4]);
+    meshes.forEach((mesh, index) => {
+      assert.equal(mesh, originalMeshes[index]);
+      assert.equal(mesh.material, materials[index]);
+      assert.equal(mesh.material.envMapIntensity, performanceProfile === 'quality' ? 0.25 : 0);
+    });
+    previous = light;
+  }
 });
 
 test('fit preserves the user view direction and centers every mode after interaction', async (t) => {
