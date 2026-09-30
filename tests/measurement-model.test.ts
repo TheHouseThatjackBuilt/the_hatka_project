@@ -9,19 +9,29 @@ import type { ModelPart } from '../src/model/types.ts';
 
 const model = buildApartment();
 const targets = new Map(model.measurements!.targets.map((target) => [target.id, target]));
-test('measurement metadata preserves all reviewed geometry and covers every furniture part', () => {
+test('historical measurement geometry preserves the reviewed plan and 136 targets', () => {
+  const historical = parseApartmentModel(
+    JSON.parse(
+      readFileSync(
+        new URL('./fixtures/apartment-measurements-2026-09-10.json', import.meta.url),
+        'utf8',
+      ),
+    ),
+  );
   const old = JSON.parse(
     readFileSync(new URL('./fixtures/apartment-plan-2026-09-10.json', import.meta.url), 'utf8'),
   );
   const geometry = JSON.parse(
-    JSON.stringify(model, (key, value) =>
+    JSON.stringify(historical, (key, value) =>
       ['measurementId', 'measurements', 'floorSurfaceId', 'flooring'].includes(key)
         ? undefined
         : value,
     ),
   );
   assert.deepEqual(geometry, old);
-  assert.equal(targets.size, 136);
+  assert.equal(historical.measurements!.targets.length, 136);
+});
+test('current measurement metadata covers every furniture part', () => {
   assert.ok(
     model.parts
       .filter((part) => part.group === 'furniture')

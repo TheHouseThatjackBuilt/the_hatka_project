@@ -107,6 +107,16 @@
       "Woven rug",
       "#d6ccba",
       1
+    ],
+    "door_metal": [
+      "Black door metal",
+      "#202121",
+      1
+    ],
+    "door_glass": [
+      "Patterned door glass · visual approximation",
+      "#d8d4c8",
+      0.38
     ]
   },
   "parts": [
@@ -4426,54 +4436,18 @@
       "shape": "box",
       "pos": [
         6.6515,
-        2.4,
+        2.566,
         0.543
       ],
       "size": [
         0.145,
-        0.6,
+        0.268,
         0.9
       ],
       "mat": "wall",
       "group": "walls",
       "rot": 0,
       "measurementId": "wall-study-partition-with-door-lintel-1"
-    },
-    {
-      "name": "Study door open",
-      "shape": "box",
-      "pos": [
-        6.199,
-        1.045,
-        0.133
-      ],
-      "size": [
-        0.82,
-        2.09,
-        0.04
-      ],
-      "mat": "oak_light",
-      "group": "doors",
-      "rot": -3.141593,
-      "measurementId": "door-study-door-open"
-    },
-    {
-      "name": "Study door open hinge",
-      "shape": "cylinder",
-      "pos": [
-        6.609,
-        1.045,
-        0.133
-      ],
-      "size": [
-        0.034,
-        2.07,
-        0.034
-      ],
-      "mat": "dark",
-      "group": "doors",
-      "rot": 0,
-      "measurementId": "door-study-door-open"
     },
     {
       "name": "Kitchen and bedroom transverse wall",
@@ -4570,54 +4544,18 @@
       "shape": "box",
       "pos": [
         3.26,
-        2.4,
+        2.566,
         5.2095
       ],
       "size": [
         0.25,
-        0.6,
+        0.268,
         0.923
       ],
       "mat": "wall",
       "group": "walls",
       "rot": 0,
       "measurementId": "wall-hall-utility-entrance-wall-lintel-1"
-    },
-    {
-      "name": "Hall utility door open",
-      "shape": "box",
-      "pos": [
-        2.7135,
-        1.045,
-        5.631
-      ],
-      "size": [
-        0.843,
-        2.09,
-        0.04
-      ],
-      "mat": "oak_light",
-      "group": "doors",
-      "rot": -3.141593,
-      "measurementId": "door-hall-utility-door-open"
-    },
-    {
-      "name": "Hall utility door open hinge",
-      "shape": "cylinder",
-      "pos": [
-        3.135,
-        1.045,
-        5.631
-      ],
-      "size": [
-        0.034,
-        2.07,
-        0.034
-      ],
-      "mat": "dark",
-      "group": "doors",
-      "rot": 0,
-      "measurementId": "door-hall-utility-door-open"
     },
     {
       "name": "Bedroom entrance upper pier",
@@ -4804,54 +4742,18 @@
       "shape": "box",
       "pos": [
         1.885,
-        2.4,
+        2.566,
         4.513
       ],
       "size": [
         0.1,
-        0.6,
+        0.268,
         0.8
       ],
       "mat": "wall",
       "group": "walls",
       "rot": 0,
       "measurementId": "wall-bathroom-1-east-wall-lintel-1"
-    },
-    {
-      "name": "Bathroom 1 door open",
-      "shape": "box",
-      "pos": [
-        2.295,
-        1.045,
-        4.873
-      ],
-      "size": [
-        0.72,
-        2.09,
-        0.04
-      ],
-      "mat": "oak_light",
-      "group": "doors",
-      "rot": 0,
-      "measurementId": "door-bathroom-1-door-open"
-    },
-    {
-      "name": "Bathroom 1 door open hinge",
-      "shape": "cylinder",
-      "pos": [
-        1.935,
-        1.045,
-        4.873
-      ],
-      "size": [
-        0.034,
-        2.07,
-        0.034
-      ],
-      "mat": "dark",
-      "group": "doors",
-      "rot": 0,
-      "measurementId": "door-bathroom-1-door-open"
     },
     {
       "name": "Bathroom 1 south wall",
@@ -4912,12 +4814,12 @@
       "shape": "box",
       "pos": [
         1.885,
-        2.4,
+        2.566,
         7.165
       ],
       "size": [
         0.1,
-        0.6,
+        0.268,
         0.8
       ],
       "mat": "wall",
@@ -4960,42 +4862,6 @@
       "group": "walls",
       "rot": 0,
       "measurementId": "wall-cloakroom-south-storage-partition-1"
-    },
-    {
-      "name": "Cloakroom door open",
-      "shape": "box",
-      "pos": [
-        1.46,
-        1.045,
-        7.525
-      ],
-      "size": [
-        0.72,
-        2.09,
-        0.04
-      ],
-      "mat": "oak_light",
-      "group": "doors",
-      "rot": -3.141593,
-      "measurementId": "door-cloakroom-door-open"
-    },
-    {
-      "name": "Cloakroom door open hinge",
-      "shape": "cylinder",
-      "pos": [
-        1.82,
-        1.045,
-        7.525
-      ],
-      "size": [
-        0.034,
-        2.07,
-        0.034
-      ],
-      "mat": "dark",
-      "group": "doors",
-      "rot": 0,
-      "measurementId": "door-cloakroom-door-open"
     },
     {
       "name": "Ensuite west wall",
@@ -5122,6 +4988,1788 @@
       "group": "walls",
       "rot": 0,
       "measurementId": "wall-utility-south-nib-1"
+    },
+    {
+      "name": "Bathroom 1 concealed door leaf",
+      "shape": "box",
+      "pos": [
+        1.915,
+        1.228,
+        4.513
+      ],
+      "size": [
+        0.04,
+        2.4,
+        0.792
+      ],
+      "mat": "wall",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        1.228,
+        4.115
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        1.228,
+        4.911
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door top seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        2.43,
+        4.513
+      ],
+      "size": [
+        0.014,
+        0.004,
+        0.8
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door handle plate -1",
+      "shape": "box",
+      "pos": [
+        1.892,
+        1.03,
+        4.203
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door handle lever -1",
+      "shape": "box",
+      "pos": [
+        1.88,
+        1.035,
+        4.238
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door handle plate 1",
+      "shape": "box",
+      "pos": [
+        1.938,
+        1.03,
+        4.203
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Bathroom 1 concealed door handle lever 1",
+      "shape": "box",
+      "pos": [
+        1.95,
+        1.035,
+        4.238
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-main-bathroom"
+    },
+    {
+      "name": "Cloakroom concealed door leaf",
+      "shape": "box",
+      "pos": [
+        1.915,
+        1.228,
+        7.165
+      ],
+      "size": [
+        0.04,
+        2.4,
+        0.792
+      ],
+      "mat": "wall",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        1.228,
+        6.767
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        1.228,
+        7.563
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door top seam",
+      "shape": "box",
+      "pos": [
+        1.925,
+        2.43,
+        7.165
+      ],
+      "size": [
+        0.014,
+        0.004,
+        0.8
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door handle plate -1",
+      "shape": "box",
+      "pos": [
+        1.892,
+        1.03,
+        6.855
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door handle lever -1",
+      "shape": "box",
+      "pos": [
+        1.88,
+        1.035,
+        6.89
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door handle plate 1",
+      "shape": "box",
+      "pos": [
+        1.938,
+        1.03,
+        6.855
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Cloakroom concealed door handle lever 1",
+      "shape": "box",
+      "pos": [
+        1.95,
+        1.035,
+        6.89
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door leaf",
+      "shape": "box",
+      "pos": [
+        3.155,
+        1.228,
+        5.2095
+      ],
+      "size": [
+        0.04,
+        2.4,
+        0.915
+      ],
+      "mat": "wall",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        3.145,
+        1.228,
+        4.75
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        3.145,
+        1.228,
+        5.669
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door top seam",
+      "shape": "box",
+      "pos": [
+        3.145,
+        2.43,
+        5.2095
+      ],
+      "size": [
+        0.014,
+        0.004,
+        0.923
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door handle plate -1",
+      "shape": "box",
+      "pos": [
+        3.132,
+        1.03,
+        4.838
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door handle lever -1",
+      "shape": "box",
+      "pos": [
+        3.12,
+        1.035,
+        4.873
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door handle plate 1",
+      "shape": "box",
+      "pos": [
+        3.178,
+        1.03,
+        4.838
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Master cloakroom concealed door handle lever 1",
+      "shape": "box",
+      "pos": [
+        3.19,
+        1.035,
+        4.873
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-master-cloakroom"
+    },
+    {
+      "name": "Study concealed door leaf",
+      "shape": "box",
+      "pos": [
+        6.599,
+        1.228,
+        0.543
+      ],
+      "size": [
+        0.04,
+        2.4,
+        0.892
+      ],
+      "mat": "wall",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        6.589,
+        1.228,
+        0.095
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door recessed seam",
+      "shape": "box",
+      "pos": [
+        6.589,
+        1.228,
+        0.991
+      ],
+      "size": [
+        0.014,
+        2.408,
+        0.004
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door top seam",
+      "shape": "box",
+      "pos": [
+        6.589,
+        2.43,
+        0.543
+      ],
+      "size": [
+        0.014,
+        0.004,
+        0.9
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door handle plate -1",
+      "shape": "box",
+      "pos": [
+        6.576,
+        1.03,
+        0.183
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door handle lever -1",
+      "shape": "box",
+      "pos": [
+        6.564,
+        1.035,
+        0.218
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door handle plate 1",
+      "shape": "box",
+      "pos": [
+        6.622,
+        1.03,
+        0.183
+      ],
+      "size": [
+        0.006,
+        0.03,
+        0.03
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Study concealed door handle lever 1",
+      "shape": "box",
+      "pos": [
+        6.634,
+        1.035,
+        0.218
+      ],
+      "size": [
+        0.024,
+        0.014,
+        0.09
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-study"
+    },
+    {
+      "name": "Living glazed frame jamb",
+      "shape": "box",
+      "pos": [
+        1.949,
+        1.299,
+        3.171
+      ],
+      "size": [
+        0.028,
+        2.55,
+        0.05
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-frame"
+    },
+    {
+      "name": "Living glazed frame jamb",
+      "shape": "box",
+      "pos": [
+        3.121,
+        1.299,
+        3.171
+      ],
+      "size": [
+        0.028,
+        2.55,
+        0.05
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-frame"
+    },
+    {
+      "name": "Living glazed frame header",
+      "shape": "box",
+      "pos": [
+        2.535,
+        2.56,
+        3.171
+      ],
+      "size": [
+        1.144,
+        0.028,
+        0.05
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-frame"
+    },
+    {
+      "name": "Living glazed left leaf stile",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.287,
+        3.182
+      ],
+      "size": [
+        0.022,
+        2.51,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf stile",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.287,
+        3.725
+      ],
+      "size": [
+        0.022,
+        2.51,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf rail",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.043,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.022,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf rail",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.531,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.022,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf centre muntin",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.287,
+        3.4535
+      ],
+      "size": [
+        0.01,
+        2.466,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.32411,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.59922,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 3",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.87433,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 4",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.14944,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 5",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.42456,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 6",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.69967,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 7",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.97478,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf crossbar 8",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.24989,
+        3.4535
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 1-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.18656,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 1-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.18656,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 2-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.46167,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 2-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.46167,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 3-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.73678,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 3-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        0.73678,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 4-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.01189,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 4-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.01189,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 5-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.287,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 5-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.287,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 6-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.56211,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 6-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.56211,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 7-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.83722,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 7-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        1.83722,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 8-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.11233,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 8-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.11233,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 9-1",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.38744,
+        3.32075
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf glass 9-2",
+      "shape": "box",
+      "pos": [
+        1.967,
+        2.38744,
+        3.58625
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed left leaf handle",
+      "shape": "box",
+      "pos": [
+        2.002,
+        1.08,
+        3.725
+      ],
+      "size": [
+        0.015,
+        0.18,
+        0.032
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": -1.570796,
+      "measurementId": "door-living-left"
+    },
+    {
+      "name": "Living glazed right leaf stile",
+      "shape": "box",
+      "pos": [
+        2.549,
+        1.287,
+        3.171
+      ],
+      "size": [
+        0.022,
+        2.51,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf stile",
+      "shape": "box",
+      "pos": [
+        3.092,
+        1.287,
+        3.171
+      ],
+      "size": [
+        0.022,
+        2.51,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf rail",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        0.043,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.022,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf rail",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        2.531,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.022,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf centre muntin",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        1.287,
+        3.171
+      ],
+      "size": [
+        0.01,
+        2.466,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 1",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        0.32411,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 2",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        0.59922,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 3",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        0.87433,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 4",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        1.14944,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 5",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        1.42456,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 6",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        1.69967,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 7",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        1.97478,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf crossbar 8",
+      "shape": "box",
+      "pos": [
+        2.8205,
+        2.24989,
+        3.171
+      ],
+      "size": [
+        0.521,
+        0.01,
+        0.038
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 1-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        0.18656,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 1-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        0.18656,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 2-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        0.46167,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 2-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        0.46167,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 3-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        0.73678,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 3-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        0.73678,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 4-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        1.01189,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 4-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        1.01189,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 5-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        1.287,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 5-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        1.287,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 6-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        1.56211,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 6-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        1.56211,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 7-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        1.83722,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 7-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        1.83722,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 8-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        2.11233,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 8-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        2.11233,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 9-1",
+      "shape": "box",
+      "pos": [
+        2.68775,
+        2.38744,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf glass 9-2",
+      "shape": "box",
+      "pos": [
+        2.95325,
+        2.38744,
+        3.171
+      ],
+      "size": [
+        0.2555,
+        0.26511,
+        0.008
+      ],
+      "mat": "door_glass",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
+    },
+    {
+      "name": "Living glazed right leaf handle",
+      "shape": "box",
+      "pos": [
+        2.549,
+        1.08,
+        3.206
+      ],
+      "size": [
+        0.015,
+        0.18,
+        0.032
+      ],
+      "mat": "door_metal",
+      "group": "doors",
+      "rot": 0,
+      "measurementId": "door-living-right"
     },
     {
       "name": "Sofa plinth",
@@ -34254,12 +35902,12 @@
         "heightSource": "схематичный участок стены или перемычка",
         "origin": [
           6.6515,
-          2.4,
+          2.566,
           0.543
         ],
         "size": [
           0.9000000000000001,
-          0.5999999999999996,
+          0.2679999999999998,
           0.14499999999999957
         ],
         "footprint": [
@@ -34494,12 +36142,12 @@
         "heightSource": "схематичный участок стены или перемычка",
         "origin": [
           3.26,
-          2.4,
+          2.566,
           5.2095
         ],
         "size": [
           0.923,
-          0.5999999999999996,
+          0.2679999999999998,
           0.25
         ],
         "footprint": [
@@ -34894,12 +36542,12 @@
         "heightSource": "схематичный участок стены или перемычка",
         "origin": [
           1.885,
-          2.4,
+          2.566,
           4.513
         ],
         "size": [
           0.8000000000000007,
-          0.5999999999999996,
+          0.2679999999999998,
           0.10000000000000009
         ],
         "footprint": [
@@ -35054,12 +36702,12 @@
         "heightSource": "схематичный участок стены или перемычка",
         "origin": [
           1.885,
-          2.4,
+          2.566,
           7.165
         ],
         "size": [
           0.8000000000000007,
-          0.5999999999999996,
+          0.2679999999999998,
           0.10000000000000009
         ],
         "footprint": [
@@ -35360,6 +37008,2126 @@
               [
                 -0.891,
                 0.05
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-main-bathroom",
+        "label": "Большой санузел · скрытая дверь",
+        "kind": "object",
+        "rotation": 1.5707963267948966,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          1.9149999999999998,
+          1.228,
+          4.513
+        ],
+        "size": [
+          0.8000000000000007,
+          2.408,
+          0.09400000000000008
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                0.396,
+                -0.019999999999999803
+              ],
+              [
+                0.396,
+                0.020000000000000198
+              ],
+              [
+                -0.396,
+                0.020000000000000247
+              ],
+              [
+                -0.396,
+                -0.019999999999999754
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3999999999999997,
+                0.0030000000000002308
+              ],
+              [
+                0.3999999999999997,
+                0.01700000000000023
+              ],
+              [
+                0.3959999999999997,
+                0.01700000000000023
+              ],
+              [
+                0.3959999999999997,
+                0.0030000000000002308
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.3959999999999997,
+                0.0030000000000002308
+              ],
+              [
+                -0.3959999999999997,
+                0.01700000000000023
+              ],
+              [
+                -0.3999999999999997,
+                0.01700000000000023
+              ],
+              [
+                -0.3999999999999997,
+                0.0030000000000002308
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.4,
+                0.0030000000000002065
+              ],
+              [
+                0.4,
+                0.017000000000000206
+              ],
+              [
+                -0.4,
+                0.017000000000000254
+              ],
+              [
+                -0.4,
+                0.003000000000000255
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3249999999999996,
+                -0.025999999999999912
+              ],
+              [
+                0.3249999999999996,
+                -0.01999999999999991
+              ],
+              [
+                0.2949999999999996,
+                -0.019999999999999907
+              ],
+              [
+                0.2949999999999996,
+                -0.02599999999999991
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.31999999999999945,
+                -0.046999999999999924
+              ],
+              [
+                0.31999999999999945,
+                -0.022999999999999923
+              ],
+              [
+                0.22999999999999948,
+                -0.022999999999999916
+              ],
+              [
+                0.22999999999999948,
+                -0.04699999999999992
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3249999999999996,
+                0.02000000000000013
+              ],
+              [
+                0.3249999999999996,
+                0.02600000000000013
+              ],
+              [
+                0.2949999999999996,
+                0.026000000000000134
+              ],
+              [
+                0.2949999999999996,
+                0.020000000000000132
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.31999999999999945,
+                0.02300000000000014
+              ],
+              [
+                0.31999999999999945,
+                0.04700000000000014
+              ],
+              [
+                0.22999999999999948,
+                0.047000000000000146
+              ],
+              [
+                0.22999999999999948,
+                0.023000000000000145
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-cloakroom",
+        "label": "Гардеробная · скрытая дверь",
+        "kind": "object",
+        "rotation": 1.5707963267948966,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          1.915,
+          1.228,
+          7.165
+        ],
+        "size": [
+          0.8000000000000007,
+          2.408,
+          0.09400000000000008
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                0.396,
+                -0.020000000000000025
+              ],
+              [
+                0.396,
+                0.019999999999999976
+              ],
+              [
+                -0.396,
+                0.020000000000000025
+              ],
+              [
+                -0.396,
+                -0.019999999999999976
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3999999999999997,
+                0.0030000000000000087
+              ],
+              [
+                0.3999999999999997,
+                0.017000000000000008
+              ],
+              [
+                0.3959999999999997,
+                0.017000000000000008
+              ],
+              [
+                0.3959999999999997,
+                0.0030000000000000087
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.3959999999999997,
+                0.0030000000000000087
+              ],
+              [
+                -0.3959999999999997,
+                0.017000000000000008
+              ],
+              [
+                -0.3999999999999997,
+                0.017000000000000008
+              ],
+              [
+                -0.3999999999999997,
+                0.0030000000000000087
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.4,
+                0.0029999999999999844
+              ],
+              [
+                0.4,
+                0.016999999999999984
+              ],
+              [
+                -0.4,
+                0.017000000000000032
+              ],
+              [
+                -0.4,
+                0.003000000000000033
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3249999999999996,
+                -0.026000000000000134
+              ],
+              [
+                0.3249999999999996,
+                -0.020000000000000132
+              ],
+              [
+                0.2949999999999996,
+                -0.02000000000000013
+              ],
+              [
+                0.2949999999999996,
+                -0.02600000000000013
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.32000000000000034,
+                -0.047000000000000146
+              ],
+              [
+                0.32000000000000034,
+                -0.023000000000000145
+              ],
+              [
+                0.23000000000000037,
+                -0.02300000000000014
+              ],
+              [
+                0.23000000000000037,
+                -0.04700000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3249999999999996,
+                0.019999999999999907
+              ],
+              [
+                0.3249999999999996,
+                0.02599999999999991
+              ],
+              [
+                0.2949999999999996,
+                0.025999999999999912
+              ],
+              [
+                0.2949999999999996,
+                0.01999999999999991
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.32000000000000034,
+                0.022999999999999916
+              ],
+              [
+                0.32000000000000034,
+                0.04699999999999992
+              ],
+              [
+                0.23000000000000037,
+                0.046999999999999924
+              ],
+              [
+                0.23000000000000037,
+                0.022999999999999923
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-master-cloakroom",
+        "label": "Мастер-гардеробная · скрытая дверь",
+        "kind": "object",
+        "rotation": 1.5707963267948966,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          3.155,
+          1.228,
+          5.2095
+        ],
+        "size": [
+          0.923,
+          2.408,
+          0.09399999999999986
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                0.4575,
+                -0.020000000000000028
+              ],
+              [
+                0.4575,
+                0.019999999999999973
+              ],
+              [
+                -0.4575,
+                0.020000000000000028
+              ],
+              [
+                -0.4575,
+                -0.019999999999999973
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.46150000000000024,
+                -0.016999999999999786
+              ],
+              [
+                0.46150000000000024,
+                -0.0029999999999997867
+              ],
+              [
+                0.45750000000000024,
+                -0.0029999999999997867
+              ],
+              [
+                0.45750000000000024,
+                -0.016999999999999786
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.45749999999999935,
+                -0.016999999999999786
+              ],
+              [
+                -0.45749999999999935,
+                -0.0029999999999997867
+              ],
+              [
+                -0.46149999999999936,
+                -0.0029999999999997867
+              ],
+              [
+                -0.46149999999999936,
+                -0.016999999999999786
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.4615,
+                -0.016999999999999814
+              ],
+              [
+                0.4615,
+                -0.0029999999999998153
+              ],
+              [
+                -0.4615,
+                -0.002999999999999758
+              ],
+              [
+                -0.4615,
+                -0.01699999999999976
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3865000000000002,
+                -0.02599999999999969
+              ],
+              [
+                0.3865000000000002,
+                -0.019999999999999688
+              ],
+              [
+                0.35650000000000015,
+                -0.019999999999999685
+              ],
+              [
+                0.35650000000000015,
+                -0.025999999999999687
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3815,
+                -0.0469999999999997
+              ],
+              [
+                0.3815,
+                -0.0229999999999997
+              ],
+              [
+                0.29150000000000004,
+                -0.022999999999999694
+              ],
+              [
+                0.29150000000000004,
+                -0.046999999999999695
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3865000000000002,
+                0.02000000000000013
+              ],
+              [
+                0.3865000000000002,
+                0.02600000000000013
+              ],
+              [
+                0.35650000000000015,
+                0.026000000000000134
+              ],
+              [
+                0.35650000000000015,
+                0.020000000000000132
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.3815,
+                0.02300000000000014
+              ],
+              [
+                0.3815,
+                0.04700000000000014
+              ],
+              [
+                0.29150000000000004,
+                0.047000000000000146
+              ],
+              [
+                0.29150000000000004,
+                0.023000000000000145
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-study",
+        "label": "Кабинет · скрытая дверь",
+        "kind": "object",
+        "rotation": 1.5707963267948966,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          6.599,
+          1.228,
+          0.543
+        ],
+        "size": [
+          0.9000000000000001,
+          2.408,
+          0.09399999999999942
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                0.446,
+                -0.020000000000000028
+              ],
+              [
+                0.446,
+                0.019999999999999973
+              ],
+              [
+                -0.446,
+                0.020000000000000028
+              ],
+              [
+                -0.446,
+                -0.019999999999999973
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.45,
+                -0.016999999999999786
+              ],
+              [
+                0.45,
+                -0.0029999999999997867
+              ],
+              [
+                0.446,
+                -0.0029999999999997867
+              ],
+              [
+                0.446,
+                -0.016999999999999786
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.44599999999999995,
+                -0.016999999999999786
+              ],
+              [
+                -0.44599999999999995,
+                -0.0029999999999997867
+              ],
+              [
+                -0.44999999999999996,
+                -0.0029999999999997867
+              ],
+              [
+                -0.44999999999999996,
+                -0.016999999999999786
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.45,
+                -0.016999999999999814
+              ],
+              [
+                0.45,
+                -0.0029999999999998144
+              ],
+              [
+                -0.45,
+                -0.002999999999999759
+              ],
+              [
+                -0.45,
+                -0.01699999999999976
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.375,
+                -0.026000000000000578
+              ],
+              [
+                0.375,
+                -0.020000000000000576
+              ],
+              [
+                0.345,
+                -0.020000000000000573
+              ],
+              [
+                0.345,
+                -0.026000000000000575
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.36999999999999994,
+                -0.047000000000000146
+              ],
+              [
+                0.36999999999999994,
+                -0.023000000000000145
+              ],
+              [
+                0.27999999999999997,
+                -0.02300000000000014
+              ],
+              [
+                0.27999999999999997,
+                -0.04700000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.375,
+                0.019999999999999685
+              ],
+              [
+                0.375,
+                0.025999999999999687
+              ],
+              [
+                0.345,
+                0.02599999999999969
+              ],
+              [
+                0.345,
+                0.019999999999999688
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.37,
+                0.02300000000000014
+              ],
+              [
+                0.37,
+                0.04700000000000014
+              ],
+              [
+                0.28,
+                0.047000000000000146
+              ],
+              [
+                0.28,
+                0.023000000000000145
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-living-frame",
+        "label": "Кухня-гостиная · рама входной группы",
+        "kind": "object",
+        "rotation": 0,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          2.535,
+          1.299,
+          3.171
+        ],
+        "size": [
+          1.1999999999999997,
+          2.55,
+          0.04999999999999982
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                -0.6000000000000001,
+                -0.025
+              ],
+              [
+                -0.5720000000000001,
+                -0.025
+              ],
+              [
+                -0.5720000000000001,
+                0.025
+              ],
+              [
+                -0.6000000000000001,
+                0.025
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.5719999999999998,
+                -0.025
+              ],
+              [
+                0.5999999999999999,
+                -0.025
+              ],
+              [
+                0.5999999999999999,
+                0.025
+              ],
+              [
+                0.5719999999999998,
+                0.025
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.572,
+                -0.025
+              ],
+              [
+                0.572,
+                -0.025
+              ],
+              [
+                0.572,
+                0.025
+              ],
+              [
+                -0.572,
+                0.025
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-living-left",
+        "label": "Кухня-гостиная · левая створка",
+        "kind": "object",
+        "rotation": -1.5707963267948966,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          1.9829999586604454,
+          1.2870000000000001,
+          3.4535
+        ],
+        "size": [
+          0.5650000124182046,
+          2.5100000000000002,
+          0.07000008758102982
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                -0.28250000620910254,
+                -0.0030000377448097804
+              ],
+              [
+                -0.2605000062091037,
+                -0.003000044934297501
+              ],
+              [
+                -0.2604999937908976,
+                0.03499995506570047
+              ],
+              [
+                -0.28249999379089646,
+                0.03499996225518819
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.2604999937908976,
+                -0.0030000377448097804
+              ],
+              [
+                0.28249999379089646,
+                -0.003000044934297501
+              ],
+              [
+                0.28250000620910254,
+                0.03499995506570047
+              ],
+              [
+                0.2605000062091037,
+                0.03499996225518819
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.005000006209102766,
+                -0.003000039705579157
+              ],
+              [
+                0.0049999937908967,
+                -0.003000042973528124
+              ],
+              [
+                0.005000006209102766,
+                0.03499995702646985
+              ],
+              [
+                -0.0049999937908967,
+                0.03499996029441882
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000062090891,
+                -0.0029999562094831095
+              ],
+              [
+                0.26049999379088307,
+                -0.0030001264696241717
+              ],
+              [
+                0.2605000062090891,
+                0.0349998735303738
+              ],
+              [
+                -0.26049999379088307,
+                0.03500004379051486
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000013071729,
+                0.012000000408493583
+              ],
+              [
+                -0.005000001307186558,
+                0.011999916912397535
+              ],
+              [
+                -0.004999998692827384,
+                0.01999991691239711
+              ],
+              [
+                -0.2604999986928137,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.004999998692827384,
+                0.012000000408493583
+              ],
+              [
+                0.2604999986928137,
+                0.011999916912397535
+              ],
+              [
+                0.2605000013071729,
+                0.01999991691239711
+              ],
+              [
+                0.005000001307186558,
+                0.020000000408493156
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.2639999947712821,
+                -0.03500003888859155
+              ],
+              [
+                0.27899999477128135,
+                -0.035000043790515
+              ],
+              [
+                0.27900000522871804,
+                -0.0030000437905167085
+              ],
+              [
+                0.2640000052287188,
+                -0.003000038888593258
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "door-living-right",
+        "label": "Кухня-гостиная · правая створка",
+        "kind": "object",
+        "rotation": 0,
+        "planSource": "существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода",
+        "heightSource": "указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны",
+        "origin": [
+          2.8205,
+          1.2870000000000001,
+          3.187
+        ],
+        "size": [
+          0.5650000000000004,
+          2.5100000000000002,
+          0.07000000000000028
+        ],
+        "footprint": [
+          {
+            "outer": [
+              [
+                -0.2825000000000001,
+                -0.03500000000000002
+              ],
+              [
+                -0.26050000000000006,
+                -0.03500000000000002
+              ],
+              [
+                -0.26050000000000006,
+                0.0029999999999999853
+              ],
+              [
+                -0.2825000000000001,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.26050000000000006,
+                -0.03500000000000002
+              ],
+              [
+                0.2825000000000001,
+                -0.03500000000000002
+              ],
+              [
+                0.2825000000000001,
+                0.0029999999999999853
+              ],
+              [
+                0.26050000000000006,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.005,
+                -0.03500000000000002
+              ],
+              [
+                0.005,
+                -0.03500000000000002
+              ],
+              [
+                0.005,
+                0.0029999999999999853
+              ],
+              [
+                -0.005,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                -0.03500000000000002
+              ],
+              [
+                0.2605,
+                0.0029999999999999853
+              ],
+              [
+                -0.2605,
+                0.0029999999999999853
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                -0.005000000000000143,
+                -0.012000000000000014
+              ],
+              [
+                -0.2605000000000002,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                0.005000000000000143,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.020000000000000014
+              ],
+              [
+                0.2605000000000002,
+                -0.012000000000000014
+              ],
+              [
+                0.005000000000000143,
+                -0.012000000000000014
+              ]
+            ]
+          },
+          {
+            "outer": [
+              [
+                -0.2790000000000001,
+                0.0030000000000001276
+              ],
+              [
+                -0.26400000000000007,
+                0.0030000000000001276
+              ],
+              [
+                -0.26400000000000007,
+                0.03500000000000013
+              ],
+              [
+                -0.2790000000000001,
+                0.03500000000000013
               ]
             ]
           }
@@ -35710,352 +39478,8 @@
         ]
       },
       {
-        "id": "door-study-door-open",
-        "label": "Полотно двери · 3",
-        "kind": "object",
-        "rotation": -3.141593,
-        "planSource": "полотно и петли модели; не размер проёма",
-        "heightSource": "схематичная геометрия модели",
-        "origin": [
-          6.207499999999987,
-          1.045,
-          0.1330000029444868
-        ],
-        "size": [
-          0.8369999999999758,
-          2.09,
-          0.039999999999999994
-        ],
-        "footprint": [
-          {
-            "outer": [
-              [
-                -0.4015000000000127,
-                -0.02
-              ],
-              [
-                0.41849999999998727,
-                -0.02
-              ],
-              [
-                0.41849999999998727,
-                0.02
-              ],
-              [
-                -0.4015000000000127,
-                0.02
-              ]
-            ]
-          },
-          {
-            "outer": [
-              [
-                -0.41849999999998694,
-                1.4791715822562412e-7
-              ],
-              [
-                -0.4181733509157236,
-                -0.003316387670270731
-              ],
-              [
-                -0.4172059543062915,
-                -0.006505470881319328
-              ],
-              [
-                -0.4156349866808688,
-                -0.009444547036645436
-              ],
-              [
-                -0.4135208194442917,
-                -0.01202066908785277
-              ],
-              [
-                -0.4109446988578232,
-                -0.014134838109219321
-              ],
-              [
-                -0.4080056237908962,
-                -0.01570580777089363
-              ],
-              [
-                -0.4048165412500805,
-                -0.016673206589787465
-              ],
-              [
-                -0.4015000058889615,
-                -0.016999857971814268
-              ],
-              [
-                -0.39818347030153256,
-                -0.016673208887550944
-              ],
-              [
-                -0.39499438709048396,
-                -0.01570581227811882
-              ],
-              [
-                -0.39205531093515783,
-                -0.014134844652696097
-              ],
-              [
-                -0.3894791888839505,
-                -0.012020677416118982
-              ],
-              [
-                -0.3873650198625839,
-                -0.009444556829650482
-              ],
-              [
-                -0.3857940502009096,
-                -0.006505481762723521
-              ],
-              [
-                -0.38482665138201577,
-                -0.0033163992219078127
-              ],
-              [
-                -0.384499999999989,
-                1.3613921119848282e-7
-              ],
-              [
-                -0.38482664908425235,
-                0.003316671726640159
-              ],
-              [
-                -0.3857940456936845,
-                0.006505754937688752
-              ],
-              [
-                -0.38736501331910717,
-                0.009444831093014859
-              ],
-              [
-                -0.38947918055568426,
-                0.012020953144222196
-              ],
-              [
-                -0.39205530114215276,
-                0.014135122165588748
-              ],
-              [
-                -0.39499437620907973,
-                0.015706091827263048
-              ],
-              [
-                -0.39818345874989547,
-                0.01667349064615689
-              ],
-              [
-                -0.40149999411101445,
-                0.017000142028183694
-              ],
-              [
-                -0.4048165296984434,
-                0.01667349294392037
-              ],
-              [
-                -0.408005612909492,
-                0.015706096334488242
-              ],
-              [
-                -0.4109446890648181,
-                0.014135128709065525
-              ],
-              [
-                -0.41352081111602546,
-                0.01202096147248841
-              ],
-              [
-                -0.41563498013739203,
-                0.009444840886019908
-              ],
-              [
-                -0.41720594979906633,
-                0.006505765819092955
-              ],
-              [
-                -0.4181733486179602,
-                0.0033166832782772406
-              ]
-            ]
-          }
-        ]
-      },
-      {
-        "id": "door-hall-utility-door-open",
-        "label": "Полотно двери · 4",
-        "kind": "object",
-        "rotation": -3.141593,
-        "planSource": "полотно и петли модели; не размер проёма",
-        "heightSource": "схематичная геометрия модели",
-        "origin": [
-          2.721999999999987,
-          1.045,
-          5.6310000029444875
-        ],
-        "size": [
-          0.8599999999999746,
-          2.09,
-          0.03999999999999915
-        ],
-        "footprint": [
-          {
-            "outer": [
-              [
-                -0.4130000000000127,
-                -0.02
-              ],
-              [
-                0.4299999999999873,
-                -0.02
-              ],
-              [
-                0.4299999999999873,
-                0.02
-              ],
-              [
-                -0.4130000000000127,
-                0.02
-              ]
-            ]
-          },
-          {
-            "outer": [
-              [
-                -0.42999999999998634,
-                1.519008756371284e-7
-              ],
-              [
-                -0.429673350915723,
-                -0.0033163836865533194
-              ],
-              [
-                -0.4287059543062909,
-                -0.006505466897601916
-              ],
-              [
-                -0.4271349866808682,
-                -0.009444543052928024
-              ],
-              [
-                -0.4250208194442911,
-                -0.012020665104135358
-              ],
-              [
-                -0.4224446988578226,
-                -0.01413483412550191
-              ],
-              [
-                -0.4195056237908956,
-                -0.015705803787176217
-              ],
-              [
-                -0.4163165412500799,
-                -0.016673202606070053
-              ],
-              [
-                -0.4130000058889609,
-                -0.016999853988096857
-              ],
-              [
-                -0.40968347030153196,
-                -0.016673204903833533
-              ],
-              [
-                -0.40649438709048336,
-                -0.015705808294401408
-              ],
-              [
-                -0.40355531093515723,
-                -0.014134840668978686
-              ],
-              [
-                -0.4009791888839499,
-                -0.01202067343240157
-              ],
-              [
-                -0.3988650198625833,
-                -0.00944455284593307
-              ],
-              [
-                -0.397294050200909,
-                -0.00650547777900611
-              ],
-              [
-                -0.39632665138201517,
-                -0.003316395238190401
-              ],
-              [
-                -0.3959999999999884,
-                1.401229286099871e-7
-              ],
-              [
-                -0.39632664908425175,
-                0.0033166757103575703
-              ],
-              [
-                -0.3972940456936839,
-                0.0065057589214061635
-              ],
-              [
-                -0.39886501331910656,
-                0.00944483507673227
-              ],
-              [
-                -0.40097918055568366,
-                0.012020957127939607
-              ],
-              [
-                -0.40355530114215216,
-                0.014135126149306159
-              ],
-              [
-                -0.40649437620907913,
-                0.01570609581098046
-              ],
-              [
-                -0.40968345874989487,
-                0.016673494629874303
-              ],
-              [
-                -0.41299999411101385,
-                0.017000146011901106
-              ],
-              [
-                -0.4163165296984428,
-                0.016673496927637782
-              ],
-              [
-                -0.4195056129094914,
-                0.015706100318205653
-              ],
-              [
-                -0.4224446890648175,
-                0.014135132692782937
-              ],
-              [
-                -0.42502081111602485,
-                0.012020965456205821
-              ],
-              [
-                -0.42713498013739143,
-                0.00944484486973732
-              ],
-              [
-                -0.42870594979906573,
-                0.006505769802810367
-              ],
-              [
-                -0.4296733486179596,
-                0.003316687261994652
-              ]
-            ]
-          }
-        ]
-      },
-      {
         "id": "door-bedroom-sliding-leaf-open",
-        "label": "Полотно двери · 5",
+        "label": "Полотно двери · 3",
         "kind": "object",
         "rotation": 1.570796,
         "planSource": "полотно и петли модели; не размер проёма",
@@ -36094,352 +39518,8 @@
         ]
       },
       {
-        "id": "door-bathroom-1-door-open",
-        "label": "Полотно двери · 6",
-        "kind": "object",
-        "rotation": 0,
-        "planSource": "полотно и петли модели; не размер проёма",
-        "heightSource": "схематичная геометрия модели",
-        "origin": [
-          2.2865,
-          1.045,
-          4.873
-        ],
-        "size": [
-          0.7369999999999997,
-          2.09,
-          0.03999999999999915
-        ],
-        "footprint": [
-          {
-            "outer": [
-              [
-                -0.35150000000000026,
-                -0.02
-              ],
-              [
-                0.3684999999999997,
-                -0.02
-              ],
-              [
-                0.3684999999999997,
-                0.02
-              ],
-              [
-                -0.35150000000000026,
-                0.02
-              ]
-            ]
-          },
-          {
-            "outer": [
-              [
-                -0.33450000000000013,
-                0
-              ],
-              [
-                -0.33482665023314523,
-                0.0033165354742741805
-              ],
-              [
-                -0.33579404794730827,
-                0.0065056183502065264
-              ],
-              [
-                -0.3373650165908569,
-                0.009444693961333238
-              ],
-              [
-                -0.33947918471982885,
-                0.012020815280171307
-              ],
-              [
-                -0.3420553060386669,
-                0.01413498340914327
-              ],
-              [
-                -0.3449943816497936,
-                0.015705952052691877
-              ],
-              [
-                -0.34818346452572596,
-                0.016673349766854917
-              ],
-              [
-                -0.35150000000000015,
-                0.017
-              ],
-              [
-                -0.35481653547427433,
-                0.016673349766854917
-              ],
-              [
-                -0.35800561835020667,
-                0.015705952052691877
-              ],
-              [
-                -0.3609446939613334,
-                0.014134983409143272
-              ],
-              [
-                -0.36352081528017144,
-                0.01202081528017131
-              ],
-              [
-                -0.3656349834091434,
-                0.009444693961333238
-              ],
-              [
-                -0.367205952052692,
-                0.006505618350206529
-              ],
-              [
-                -0.36817334976685506,
-                0.0033165354742741866
-              ],
-              [
-                -0.36850000000000016,
-                2.0818995585505005e-18
-              ],
-              [
-                -0.36817334976685506,
-                -0.0033165354742741822
-              ],
-              [
-                -0.367205952052692,
-                -0.006505618350206525
-              ],
-              [
-                -0.3656349834091434,
-                -0.009444693961333234
-              ],
-              [
-                -0.36352081528017144,
-                -0.012020815280171307
-              ],
-              [
-                -0.3609446939613334,
-                -0.01413498340914327
-              ],
-              [
-                -0.35800561835020667,
-                -0.01570595205269187
-              ],
-              [
-                -0.35481653547427433,
-                -0.016673349766854917
-              ],
-              [
-                -0.35150000000000015,
-                -0.017
-              ],
-              [
-                -0.34818346452572596,
-                -0.016673349766854917
-              ],
-              [
-                -0.3449943816497936,
-                -0.015705952052691874
-              ],
-              [
-                -0.3420553060386669,
-                -0.014134983409143273
-              ],
-              [
-                -0.33947918471982885,
-                -0.012020815280171312
-              ],
-              [
-                -0.3373650165908569,
-                -0.009444693961333238
-              ],
-              [
-                -0.33579404794730827,
-                -0.006505618350206537
-              ],
-              [
-                -0.33482665023314523,
-                -0.0033165354742741883
-              ]
-            ]
-          }
-        ]
-      },
-      {
-        "id": "door-cloakroom-door-open",
-        "label": "Полотно двери · 7",
-        "kind": "object",
-        "rotation": -3.141593,
-        "planSource": "полотно и петли модели; не размер проёма",
-        "heightSource": "схематичная геометрия модели",
-        "origin": [
-          1.468499999999989,
-          1.045,
-          7.525000002944488
-        ],
-        "size": [
-          0.7369999999999786,
-          2.09,
-          0.03999999999999915
-        ],
-        "footprint": [
-          {
-            "outer": [
-              [
-                -0.3515000000000107,
-                -0.02
-              ],
-              [
-                0.3684999999999893,
-                -0.02
-              ],
-              [
-                0.3684999999999893,
-                0.02
-              ],
-              [
-                -0.3515000000000107,
-                0.02
-              ]
-            ]
-          },
-          {
-            "outer": [
-              [
-                -0.3684999999999882,
-                1.3059664792183755e-7
-              ],
-              [
-                -0.3681733509157249,
-                -0.0033164049907810347
-              ],
-              [
-                -0.36720595430629277,
-                -0.006505488201829631
-              ],
-              [
-                -0.3656349866808701,
-                -0.00944456435715574
-              ],
-              [
-                -0.363520819444293,
-                -0.012020686408363073
-              ],
-              [
-                -0.3609446988578245,
-                -0.014134855429729625
-              ],
-              [
-                -0.3580056237908975,
-                -0.015705825091403933
-              ],
-              [
-                -0.3548165412500818,
-                -0.01667322391029777
-              ],
-              [
-                -0.3515000058889628,
-                -0.016999875292324572
-              ],
-              [
-                -0.34818347030153385,
-                -0.016673226208061248
-              ],
-              [
-                -0.34499438709048524,
-                -0.015705829598629123
-              ],
-              [
-                -0.3420553109351591,
-                -0.014134861973206401
-              ],
-              [
-                -0.3394791888839518,
-                -0.012020694736629286
-              ],
-              [
-                -0.3373650198625852,
-                -0.009444574150160786
-              ],
-              [
-                -0.3357940502009109,
-                -0.006505499083233825
-              ],
-              [
-                -0.33482665138201706,
-                -0.0033164165424181165
-              ],
-              [
-                -0.3344999999999903,
-                1.1881870089469627e-7
-              ],
-              [
-                -0.33482664908425364,
-                0.003316654406129855
-              ],
-              [
-                -0.33579404569368576,
-                0.006505737617178448
-              ],
-              [
-                -0.33736501331910845,
-                0.009444813772504555
-              ],
-              [
-                -0.33947918055568554,
-                0.012020935823711892
-              ],
-              [
-                -0.34205530114215404,
-                0.014135104845078444
-              ],
-              [
-                -0.344994376209081,
-                0.015706074506752744
-              ],
-              [
-                -0.34818345874989676,
-                0.016673473325646587
-              ],
-              [
-                -0.35149999411101573,
-                0.01700012470767339
-              ],
-              [
-                -0.3548165296984447,
-                0.016673475623410067
-              ],
-              [
-                -0.3580056129094933,
-                0.015706079013977938
-              ],
-              [
-                -0.3609446890648194,
-                0.014135111388555222
-              ],
-              [
-                -0.36352081111602674,
-                0.012020944151978106
-              ],
-              [
-                -0.3656349801373933,
-                0.009444823565509604
-              ],
-              [
-                -0.3672059497990676,
-                0.006505748498582651
-              ],
-              [
-                -0.36817334861796147,
-                0.003316665957766937
-              ]
-            ]
-          }
-        ]
-      },
-      {
         "id": "door-ensuite-door-open",
-        "label": "Полотно двери · 8",
+        "label": "Полотно двери · 4",
         "kind": "object",
         "rotation": 1.570796,
         "planSource": "полотно и петли модели; не размер проёма",

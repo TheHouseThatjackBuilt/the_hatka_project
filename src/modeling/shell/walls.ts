@@ -1,6 +1,7 @@
 import type { ModelBuilder } from '../core/builder.ts';
 import { PLAN } from '../plan.ts';
 import { createArchitecture } from './openings.ts';
+import { CONCEALED_HEAD } from './doors.ts';
 
 export function buildWalls(model: ModelBuilder) {
   const { box } = model;
@@ -162,9 +163,8 @@ export function buildWalls(model: ModelBuilder) {
     s.doorStart,
     s.doorStart + s.doorWidth,
     0,
-    2.1,
+    CONCEALED_HEAD,
   );
-  door('Study door open', k.east + 0.03, s.doorStart + 0.04, s.doorWidth - 0.08, 180);
   wall(
     'Kitchen and bedroom transverse wall',
     k.west,
@@ -196,14 +196,7 @@ export function buildWalls(model: ModelBuilder) {
     h.doorStart - h.returnSouth,
     h.doorStart + h.doorWidth - h.returnSouth,
     0,
-    2.1,
-  );
-  door(
-    'Hall utility door open',
-    l.pierX,
-    h.doorStart + h.doorWidth - 0.04,
-    h.doorWidth - 0.08,
-    180,
+    CONCEALED_HEAD,
   );
 
   wall(
@@ -257,14 +250,7 @@ export function buildWalls(model: ModelBuilder) {
     bath.doorStart - bath.north,
     bath.doorStart + bath.doorWidth - bath.north,
     0,
-    2.1,
-  );
-  door(
-    'Bathroom 1 door open',
-    bath.width + bath.partition,
-    bath.doorStart + bath.doorWidth - 0.04,
-    bath.doorWidth - 0.08,
-    0,
+    CONCEALED_HEAD,
   );
   wall('Bathroom 1 south wall', 0, bathSouth, bath.width + bath.partition, bath.partition);
 
@@ -279,7 +265,7 @@ export function buildWalls(model: ModelBuilder) {
     cloak.doorStart - cloak.northStorageZ,
     cloak.doorStart + cloak.doorWidth - cloak.northStorageZ,
     0,
-    2.1,
+    CONCEALED_HEAD,
   );
   wall(
     'Cloakroom north storage partition',
@@ -294,13 +280,6 @@ export function buildWalls(model: ModelBuilder) {
     cloak.southPartitionZ,
     cloak.width,
     cloak.southPartitionDepth,
-  );
-  door(
-    'Cloakroom door open',
-    cloak.width - 0.015,
-    cloak.doorStart + cloak.doorWidth - 0.04,
-    cloak.doorWidth - 0.08,
-    180,
   );
 
   const en = PLAN.ensuite;

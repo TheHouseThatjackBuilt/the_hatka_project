@@ -19,13 +19,13 @@ const baseline = parseApartmentModel(
 );
 const currentBaseline = parseApartmentModel(
   JSON.parse(
-    readFileSync(new URL('./fixtures/apartment-flooring-2026-09-30.json', import.meta.url), 'utf8'),
+    readFileSync(new URL('./fixtures/apartment-doors-2026-09-30.json', import.meta.url), 'utf8'),
   ),
 );
 
-test('generation matches the reviewed final-plan fixture, materials and labels', () => {
+test('generation matches the reviewed door-stage fixture, materials and labels', () => {
   const model = parseApartmentModel(buildApartment());
-  assert.equal(model.parts.length, 619);
+  assert.equal(model.parts.length, currentBaseline.parts.length);
   assert.deepEqual(model, currentBaseline);
 });
 

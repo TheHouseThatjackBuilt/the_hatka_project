@@ -7,6 +7,7 @@ import type { ModelPart } from '../model/types.ts';
 import { makeMeasurementTarget } from './core/measurement-target.ts';
 import { PLAN } from './plan.ts';
 import { CEILING_HEIGHT } from './core/builder.ts';
+import { DOOR_ASSEMBLIES } from './shell/doors.ts';
 
 const PLAN_SOURCE = 'габарит геометрии по проектному плану; декоративные детали схематичны';
 const SCHEMATIC = 'схематичная геометрия модели';
@@ -212,7 +213,26 @@ export function buildMeasurements(parts: ModelPart[]): ModelMeasurements {
     );
   }
   let doorIndex = 0;
-  for (const part of parts.filter((p) => p.group === 'doors' && !p.name.endsWith(' hinge'))) {
+  for (const assembly of DOOR_ASSEMBLIES) {
+    const selected = parts.filter(
+      (p) => p.group === 'doors' && p.name.startsWith(`${assembly.prefix} `),
+    );
+    targets.push(
+      makeMeasurementTarget(selected, {
+        id: assembly.id,
+        label: assembly.label,
+        kind: 'object',
+        rotation: assembly.rotation,
+        planSource:
+          'существующий проём по проектному плану; сечения, зазоры и фурнитура — визуальное приближение по референсу, разрешённое 2026-09-30; не размер светового прохода',
+        heightSource:
+          'указание пользователя 2026-09-30: скрытое полотно 2400 мм, стеклянная группа 2550 мм; фурнитура и зазоры схематичны',
+      }),
+    );
+  }
+  for (const part of parts.filter(
+    (p) => p.group === 'doors' && !p.measurementId && !p.name.endsWith(' hinge'),
+  )) {
     const selected = parts.filter(
       (p) => p.group === 'doors' && (p.name === part.name || p.name === `${part.name} hinge`),
     );

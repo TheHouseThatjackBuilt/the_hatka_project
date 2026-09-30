@@ -6,6 +6,11 @@ import { buildApartment } from '../src/modeling/build-apartment.ts';
 import { serializeApartment } from '../src/modeling/export/index.ts';
 import type { ApartmentModel } from '../src/model/types.ts';
 
+const historicalFloor = parseApartmentModel(
+  JSON.parse(
+    readFileSync(new URL('./fixtures/apartment-flooring-2026-09-30.json', import.meta.url), 'utf8'),
+  ),
+);
 const previous = parseApartmentModel(
   JSON.parse(
     readFileSync(
@@ -15,8 +20,8 @@ const previous = parseApartmentModel(
   ),
 );
 
-test('floor preparation preserves the reviewed model and binary/text exports', () => {
-  const current = parseApartmentModel(buildApartment());
+test('historical floor preparation preserves the reviewed model and binary/text exports', () => {
+  const current = historicalFloor;
   const projected = JSON.parse(
     JSON.stringify(current, (key, value) =>
       ['flooring', 'floorSurfaceId'].includes(key) ? undefined : value,
@@ -73,7 +78,7 @@ test('floor metadata is independent between generations and optional for older m
   first.flooring!.surfaces[0]!.coveringId = null;
   first.parts.find((part) => part.floorSurfaceId)!.floorSurfaceId = 'changed';
   assert.deepEqual(next, buildApartment());
-  assert.doesNotThrow(() => parseApartmentModel(previous));
+  assert.doesNotThrow(() => parseApartmentModel(historicalFloor));
 });
 
 test('floor parser rejects dangling, duplicated and misplaced references', () => {
