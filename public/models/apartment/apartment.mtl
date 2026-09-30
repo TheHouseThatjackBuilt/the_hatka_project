@@ -97,3 +97,13 @@ newmtl rug
 Kd 0.8392 0.8000 0.7294
 d 1.000
 Ns 30
+
+newmtl door_metal
+Kd 0.1255 0.1294 0.1294
+d 1.000
+Ns 30
+
+newmtl door_glass
+Kd 0.8471 0.8314 0.7843
+d 0.380
+Ns 30

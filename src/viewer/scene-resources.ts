@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { ApartmentModel } from '../model/types.ts';
 import { DEFAULT_CUT_HEIGHT } from './cut-height.ts';
+import { createDoorGlassRelief } from './door-glass-relief.ts';
 
 export const CUT_HEIGHT = DEFAULT_CUT_HEIGHT;
 
@@ -24,6 +25,7 @@ export interface SceneResources {
 
 export function createSceneResources(model: ApartmentModel): SceneResources {
   const materials: Record<string, THREE.MeshStandardMaterial> = {};
+  const glassRelief = model.materials.door_glass ? createDoorGlassRelief() : undefined;
   for (const [key, [name, color, opacity]] of Object.entries(model.materials)) {
     materials[key] = new THREE.MeshStandardMaterial({
       name,
@@ -33,10 +35,13 @@ export function createSceneResources(model: ApartmentModel): SceneResources {
       roughness:
         key === 'wall'
           ? 0.92
-          : ['glass', 'showerglass', 'mirror', 'black'].includes(key)
-            ? 0.23
-            : 0.85,
-      metalness: key === 'dark' ? 0.22 : 0,
+          : key === 'door_glass'
+            ? 0.36
+            : ['glass', 'showerglass', 'mirror', 'black'].includes(key)
+              ? 0.23
+              : 0.85,
+      metalness: ['dark', 'door_metal'].includes(key) ? 0.22 : 0,
+      ...(key === 'door_glass' ? { map: glassRelief, bumpMap: glassRelief, bumpScale: 0.008 } : {}),
       transparent: opacity < 1,
       depthWrite: opacity === 1,
       side: opacity < 1 ? THREE.DoubleSide : THREE.FrontSide,
@@ -60,6 +65,7 @@ export function createSceneResources(model: ApartmentModel): SceneResources {
       disposed = true;
       Object.values(geometries).forEach((geometry) => geometry.dispose());
       Object.values(materials).forEach((material) => material.dispose());
+      glassRelief?.dispose();
       capMaterial.dispose();
     },
   };

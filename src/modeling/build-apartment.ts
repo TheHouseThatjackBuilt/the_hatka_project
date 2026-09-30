@@ -5,6 +5,7 @@ import { createMaterials } from './core/materials.ts';
 import { createFlooring } from './flooring.ts';
 import { buildFloors } from './shell/floors.ts';
 import { buildWalls } from './shell/walls.ts';
+import { buildDoors } from './shell/doors.ts';
 import { buildCeiling } from './shell/ceiling.ts';
 import { buildLivingRoom } from './rooms/living-room.ts';
 import { buildKitchen } from './rooms/kitchen.ts';
@@ -21,6 +22,7 @@ export function buildApartment(): ApartmentModel {
   // Shell and furniture use the same dimension register; exporters retain this order.
   buildFloors(model);
   buildWalls(model);
+  buildDoors(model);
   buildLivingRoom(model);
   buildKitchen(model);
   buildStudy(model);

@@ -21,6 +21,8 @@ const MATERIALS = {
   mirror: ['Mirror', '#b8c7c6', 0.75],
   green: ['Leaves', '#658463', 1],
   rug: ['Woven rug', '#d6ccba', 1],
+  door_metal: ['Black door metal', '#202121', 1],
+  door_glass: ['Patterned door glass · visual approximation', '#d8d4c8', 0.38],
 } satisfies Record<string, ModelMaterial>;
 
 export type MaterialId = keyof typeof MATERIALS;

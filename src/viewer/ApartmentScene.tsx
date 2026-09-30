@@ -68,7 +68,9 @@ function PartMesh({
       position={part.pos}
       rotation={[0, part.rot, 0]}
       scale={part.size}
-      castShadow={part.group !== 'floor' && !['glass', 'showerglass'].includes(part.mat)}
+      castShadow={
+        part.group !== 'floor' && !['glass', 'showerglass', 'door_glass'].includes(part.mat)
+      }
       receiveShadow
       visible={!hiddenWallFurniture && !hideFloorJoint}
       geometry={resources.geometries[part.shape]}
@@ -82,6 +84,9 @@ function PartMesh({
           opacity={material.opacity}
           roughness={material.roughness}
           metalness={material.metalness}
+          map={material.map}
+          bumpMap={material.bumpMap}
+          bumpScale={material.bumpScale}
           envMapIntensity={PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity}
           transparent={material.transparent}
           depthWrite={material.depthWrite}
