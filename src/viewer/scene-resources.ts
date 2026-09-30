@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { ApartmentModel } from '../model/types.ts';
+import { DEFAULT_CUT_HEIGHT } from './cut-height.ts';
 
-export const CUT_HEIGHT = 1.05;
+export const CUT_HEIGHT = DEFAULT_CUT_HEIGHT;
 
 const CLIPPED_GROUPS = new Set(['walls', 'windows', 'doors', 'furniture']);
 
@@ -26,9 +27,15 @@ export function createSceneResources(model: ApartmentModel): SceneResources {
   for (const [key, [name, color, opacity]] of Object.entries(model.materials)) {
     materials[key] = new THREE.MeshStandardMaterial({
       name,
-      color,
+      // Viewer presentation only; exported material colors remain unchanged.
+      color: key === 'wall' ? '#f2eee8' : color,
       opacity,
-      roughness: ['glass', 'mirror', 'black'].includes(key) ? 0.23 : 0.85,
+      roughness:
+        key === 'wall'
+          ? 0.92
+          : ['glass', 'showerglass', 'mirror', 'black'].includes(key)
+            ? 0.23
+            : 0.85,
       metalness: key === 'dark' ? 0.22 : 0,
       transparent: opacity < 1,
       depthWrite: opacity === 1,

@@ -31,7 +31,7 @@ export function ViewerViewport({
               : 'Загрузка 3D…'}
           </span>
           {status === 'error' && (
-            <a href={downloadUrl} download>
+            <a className="hatka-button hatka-button--secondary" href={downloadUrl} download>
               Скачать модель GLB
             </a>
           )}

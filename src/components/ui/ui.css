@@ -1,0 +1,169 @@
+.hatka-theme .hatka-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--control-md);
+  padding: var(--s-1) var(--s-3);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-size: var(--font-md);
+  font-weight: var(--weight-medium);
+  line-height: var(--line-height-normal);
+  cursor: pointer;
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.hatka-theme .hatka-button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--scene-bg-edge);
+}
+.hatka-theme .hatka-button--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-2);
+}
+.hatka-theme .hatka-button:enabled:hover {
+  background: var(--surface-raised);
+  border-color: var(--accent);
+  color: var(--text-1);
+}
+.hatka-theme .hatka-button--primary:enabled:hover {
+  background: var(--text-1);
+  color: var(--scene-bg-edge);
+}
+.hatka-theme .hatka-button:enabled:active,
+.hatka-theme .hatka-button[aria-pressed='true']:enabled {
+  background: var(--accent-quiet);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hatka-theme .hatka-button:disabled {
+  background: var(--surface-2);
+  border-color: var(--border);
+  color: var(--text-3);
+  cursor: not-allowed;
+  opacity: 1;
+}
+.hatka-theme .hatka-button--ghost:disabled {
+  background: transparent;
+  border-color: transparent;
+}
+.hatka-theme .hatka-control--sm {
+  min-height: var(--control-sm);
+  padding-inline: var(--s-2);
+  font-size: var(--font-sm);
+}
+.hatka-theme .hatka-icon-button {
+  width: var(--control-md);
+  height: var(--control-md);
+  flex: none;
+  padding: 0;
+}
+.hatka-theme .hatka-icon-button.hatka-control--sm {
+  width: var(--control-sm);
+  height: var(--control-sm);
+}
+.hatka-theme .hatka-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--s-4);
+  height: var(--s-4);
+  pointer-events: none;
+}
+.hatka-theme .hatka-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.hatka-theme .hatka-panel {
+  min-width: 0;
+  padding: var(--s-4);
+  background: var(--surface-1);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-panel);
+}
+.hatka-theme .hatka-status {
+  color: var(--text-2);
+  font-size: var(--font-xs);
+  font-weight: var(--weight-regular);
+  font-variant-numeric: tabular-nums;
+}
+.hatka-theme .hatka-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--control-md);
+  color: var(--text-1);
+  cursor: pointer;
+}
+.hatka-theme .hatka-toggle-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.hatka-theme .hatka-toggle-track {
+  display: flex;
+  align-items: center;
+  flex: none;
+  width: var(--control-md);
+  height: calc(var(--s-4) + var(--s-1));
+  padding: var(--border-width);
+  background: var(--surface-2);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--control-md);
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast);
+}
+.hatka-theme .hatka-toggle-track::before {
+  content: '';
+  width: var(--s-3);
+  height: var(--s-3);
+  background: var(--text-2);
+  border-radius: var(--control-md);
+  transition: background-color var(--t-fast);
+}
+.hatka-theme .hatka-toggle-input:checked + .hatka-toggle-track {
+  justify-content: flex-end;
+  background: var(--accent-quiet);
+  border-color: var(--accent);
+}
+.hatka-theme .hatka-toggle-input:checked + .hatka-toggle-track::before {
+  background: var(--accent);
+}
+.hatka-theme .hatka-toggle-input:enabled:hover + .hatka-toggle-track {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+}
+.hatka-theme .hatka-toggle-input:focus-visible + .hatka-toggle-track {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+.hatka-theme .hatka-toggle-input:disabled {
+  cursor: not-allowed;
+}
+.hatka-theme .hatka-toggle-input:disabled ~ .hatka-toggle-label {
+  color: var(--text-3);
+}
+.hatka-theme .hatka-toggle-input:disabled + .hatka-toggle-track {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+.hatka-theme .hatka-toggle-input:disabled + .hatka-toggle-track::before {
+  background: var(--text-3);
+}

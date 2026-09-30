@@ -1,21 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { parseApartmentModel } from '../model/parse-model.ts';
-import type { ViewerHandle, ViewerOptions, ViewerStatus } from '../viewer/types.ts';
+import type { ViewerHandle, ViewerOptions, ViewerStatus, ViewMode } from '../viewer/types.ts';
 import { EMPTY_MEASUREMENT_SNAPSHOT } from '../viewer/measurement-types.ts';
 import type { MeasurementSnapshot } from '../viewer/measurement-types.ts';
 
-export function useApartmentViewer(options: ViewerOptions) {
+export function useApartmentViewer(options: ViewerOptions, onModeChange: (mode: ViewMode) => void) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const labelsRef = useRef<HTMLDivElement>(null);
+  const fitAreaRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<ViewerHandle | null>(null);
   const latestOptions = useRef(options);
+  const latestModeChange = useRef(onModeChange);
   const [status, setStatus] = useState<ViewerStatus>('loading');
   const [measurement, setMeasurement] = useState<MeasurementSnapshot>(EMPTY_MEASUREMENT_SNAPSHOT);
 
   useEffect(() => {
     latestOptions.current = options;
+    latestModeChange.current = onModeChange;
     viewerRef.current?.setOptions(options);
-  }, [options]);
+  }, [options, onModeChange]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -49,6 +52,18 @@ export function useApartmentViewer(options: ViewerOptions) {
           (snapshot) => {
             if (!abort.signal.aborted) setMeasurement(snapshot);
           },
+          () => {
+            const rect = fitAreaRef.current?.getBoundingClientRect();
+            if (!rect) return undefined;
+            const canvasRect = viewport.getBoundingClientRect();
+            return {
+              left: rect.left - canvasRect.left,
+              top: rect.top - canvasRect.top,
+              width: rect.width,
+              height: rect.height,
+            };
+          },
+          (mode) => latestModeChange.current(mode),
         );
         viewerRef.current = activeViewer;
         await activeViewer.ready;
@@ -71,5 +86,5 @@ export function useApartmentViewer(options: ViewerOptions) {
     };
   }, []);
 
-  return { viewportRef, labelsRef, viewerRef, status, measurement };
+  return { viewportRef, labelsRef, fitAreaRef, viewerRef, status, measurement };
 }

@@ -1,6 +1,10 @@
 import type { ViewerOptions, ViewMode } from './types.ts';
+import { DEFAULT_CUT_HEIGHT } from './cut-height.ts';
+export { MIN_CUT_HEIGHT, MAX_CUT_HEIGHT, CUT_HEIGHT_STEP, formatCutHeight } from './cut-height.ts';
 
 export const DEFAULT_VIEWER_OPTIONS: ViewerOptions = {
+  cutHeight: DEFAULT_CUT_HEIGHT,
+  performanceProfile: 'balanced',
   mode: 'cut',
   furnitureVisible: true,
   labelsVisible: true,

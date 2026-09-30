@@ -3,12 +3,9 @@ import type { ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { ApartmentModel, ModelPart } from '../model/types.ts';
 import type { ApartmentMesh, ViewerOptions } from './types.ts';
-import {
-  CUT_HEIGHT,
-  createSceneResources,
-  isClipped,
-  type SceneResources,
-} from './scene-resources.ts';
+import { PERFORMANCE_PROFILES } from './performance.ts';
+import { createSceneResources, isClipped, type SceneResources } from './scene-resources.ts';
+import { effectiveCutHeight } from './cut-height.ts';
 
 declare module 'react' {
   namespace JSX {
@@ -46,9 +43,12 @@ function PartMesh({
   );
   const material = resources.materials[part.mat];
   if (!material) throw new Error(`Unknown model material: ${part.mat}`);
-  const clipped = isClipped(part, options.mode);
+  const cutHeight = effectiveCutHeight(options.mode, options.cutHeight);
+  // Avoid clipping coplanar top faces: GPU precision otherwise produces stripes at 2.70 m.
+  const clipped =
+    isClipped(part, options.mode) && part.pos[1] + part.size[1] / 2 > cutHeight + 1e-7;
   const hiddenWallFurniture =
-    clipped && part.group === 'furniture' && part.pos[1] - part.size[1] / 2 > CUT_HEIGHT - 0.01;
+    clipped && part.group === 'furniture' && part.pos[1] - part.size[1] / 2 >= cutHeight;
   return (
     <mesh
       ref={register}
@@ -68,6 +68,7 @@ function PartMesh({
         opacity={material.opacity}
         roughness={material.roughness}
         metalness={material.metalness}
+        envMapIntensity={PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity}
         transparent={material.transparent}
         depthWrite={material.depthWrite}
         side={material.side}
@@ -79,6 +80,7 @@ function PartMesh({
 }
 
 export function ApartmentScene({ model, options, meshes, caps, children }: Props) {
+  const cutHeight = effectiveCutHeight(options.mode, options.cutHeight);
   const [allocated, setAllocated] = useState<{
     model: ApartmentModel;
     resources: SceneResources;
@@ -88,13 +90,27 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
     setAllocated({ model, resources });
     return () => resources.dispose();
   }, [model]);
+  const environmentIntensity =
+    PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity;
+  useLayoutEffect(() => {
+    if (allocated) allocated.resources.clippingPlane.constant = cutHeight;
+  }, [allocated, cutHeight]);
+  useLayoutEffect(() => {
+    if (!allocated) return;
+    for (const material of [
+      ...Object.values(allocated.resources.materials),
+      allocated.resources.capMaterial,
+    ])
+      material.envMapIntensity = environmentIntensity;
+  }, [allocated, environmentIntensity]);
   const sunlightRef = useRef<THREE.DirectionalLight>(null);
   const targetRef = useRef<THREE.Group>(null);
   useLayoutEffect(() => {
     if (sunlightRef.current && targetRef.current) sunlightRef.current.target = targetRef.current;
-  }, [allocated?.resources]);
+  }, [allocated?.resources, options.performanceProfile]);
   if (!allocated || allocated.model !== model) return null;
   const { resources } = allocated;
+  const { shadowMapSize } = PERFORMANCE_PROFILES[options.performanceProfile];
   const groups = new Map<string, number[]>();
   model.parts.forEach((part, index) => {
     const indices = groups.get(part.group) ?? [];
@@ -103,13 +119,15 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
   });
   return (
     <>
-      <hemisphereLight args={[0xffffff, 0xa7a099, 1.7]} />
+      <hemisphereLight args={[0xdce8f5, 0xbca88b, 1.25]} />
       <directionalLight
+        key={options.performanceProfile}
+        name="sunlight"
         ref={sunlightRef}
         position={[-4, 14, -5]}
-        intensity={2.5}
-        castShadow
-        shadow-mapSize={[2048, 2048]}
+        intensity={2.8}
+        castShadow={shadowMapSize > 0}
+        shadow-mapSize={[shadowMapSize || 1, shadowMapSize || 1]}
         shadow-camera-left={-11}
         shadow-camera-right={11}
         shadow-camera-top={11}
@@ -120,7 +138,6 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
         shadow-normalBias={0.025}
       />
       <group ref={targetRef} position={[5, 0, 4]} />
-      <directionalLight position={[12, 8, 12]} intensity={0.5} />
       {Array.from(groups, ([groupName, indices]) => (
         <group
           key={groupName}
@@ -148,8 +165,8 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
           if (
             part.shape !== 'box' ||
             !['walls', 'furniture'].includes(part.group) ||
-            bottom >= CUT_HEIGHT ||
-            top <= CUT_HEIGHT
+            bottom >= cutHeight - 1e-7 ||
+            top <= cutHeight + 1e-7
           )
             return null;
           const capMaterial =
@@ -165,7 +182,7 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
               }}
               geometry={resources.geometries.box}
               material={capMaterial}
-              position={[part.pos[0], CUT_HEIGHT - 0.002, part.pos[2]]}
+              position={[part.pos[0], cutHeight - 0.002, part.pos[2]]}
               rotation={[0, part.rot, 0]}
               scale={[part.size[0], 0.008, part.size[2]]}
               userData={{ group: part.group, sourceIndex: index }}

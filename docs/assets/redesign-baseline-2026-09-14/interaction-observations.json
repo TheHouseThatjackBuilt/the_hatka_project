@@ -1,0 +1,33 @@
+[
+  {
+    "test": "pan",
+    "pressed": "true",
+    "before": {
+      "left": "642.286px",
+      "text": "Кухня-гостиная",
+      "top": "269.477px"
+    },
+    "after": {
+      "left": "762.286px",
+      "text": "Кухня-гостиная",
+      "top": "309.477px"
+    }
+  },
+  {
+    "test": "wheel and fit",
+    "zoomedLabel": {
+      "left": "705.707px",
+      "text": "Кухня-гостиная",
+      "top": "309.999px"
+    },
+    "fittedLabel": {
+      "left": "642.286px",
+      "text": "Кухня-гостиная",
+      "top": "269.477px"
+    }
+  },
+  {
+    "test": "labels off",
+    "visibleLabels": 0
+  }
+]

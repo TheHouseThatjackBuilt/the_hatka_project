@@ -1,0 +1,38 @@
+.hatka-theme .ap-measurements .line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: calc(var(--border-width) * 1.5);
+  stroke-linejoin: round;
+}
+
+.hatka-theme .ap-measurements .guide {
+  fill: none;
+  stroke: var(--scene-bg-edge);
+  stroke-width: calc(var(--border-width) * 3.5);
+  stroke-linejoin: round;
+}
+
+.hatka-theme .ap-measurements .outline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: var(--border-width);
+  stroke-opacity: 0.5;
+  stroke-linejoin: round;
+}
+
+.hatka-theme .ap-measurements .label {
+  fill: var(--text-1);
+  stroke: var(--surface-2);
+  stroke-width: var(--s-1);
+  stroke-linejoin: round;
+  paint-order: stroke;
+  font-family: inherit;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+}
+
+.hatka-theme .ap-measurements .point {
+  fill: var(--accent);
+  stroke: var(--scene-bg-edge);
+  stroke-width: calc(var(--border-width) * 2);
+}

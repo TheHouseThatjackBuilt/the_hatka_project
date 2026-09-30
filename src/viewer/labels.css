@@ -1,0 +1,34 @@
+.hatka-theme #ap-room-labels .room-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0 var(--s-1);
+  border-radius: var(--r-sm);
+  background: var(--surface-1);
+  color: var(--text-1);
+  font-size: var(--font-xs);
+  font-weight: var(--weight-regular);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.hatka-theme #ap-room-labels .room-label--primary {
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+}
+
+.hatka-theme .room-label-leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hatka-theme .room-label-leaders line {
+  stroke: var(--text-2);
+  stroke-width: var(--border-width);
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}

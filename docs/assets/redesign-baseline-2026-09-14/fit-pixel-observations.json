@@ -1,0 +1,26 @@
+[
+  {
+    "name": "1920x1080-cut-initial",
+    "box": [413, 54, 1465, 849],
+    "widthFraction": 0.5602,
+    "heightFraction": 0.8804
+  },
+  {
+    "name": "1920x1080-cut-fit",
+    "box": [413, 54, 1465, 849],
+    "widthFraction": 0.5602,
+    "heightFraction": 0.8804
+  },
+  {
+    "name": "1920x1080-top-from-mobile-before-fit",
+    "box": [435, 49, 1439, 772],
+    "widthFraction": 0.5346,
+    "heightFraction": 0.8007
+  },
+  {
+    "name": "1920x1080-top-from-mobile-after-fit",
+    "box": [440, 54, 1434, 769],
+    "widthFraction": 0.5293,
+    "heightFraction": 0.7918
+  }
+]

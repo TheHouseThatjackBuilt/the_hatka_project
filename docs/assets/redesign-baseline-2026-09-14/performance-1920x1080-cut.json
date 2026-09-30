@@ -1,0 +1,53 @@
+{
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+    "viewport": [1920, 1080],
+    "canvas": [1878, 903],
+    "dpr": 1,
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5080 (0x00002C02) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "outputColorSpace": "srgb",
+    "toneMapping": 4,
+    "exposure": 1,
+    "shadowMapType": 2,
+    "antialias": true,
+    "frameloop": "demand",
+    "mode": "cut",
+    "measurements": false
+  },
+  "protocol": "3 trials; 1s warmup + 4s sampling; rotate-right button once per requestAnimationFrame (22.5deg per step); 1s idle; CPU measures R3F frame callback plus render submission, not GPU time",
+  "trials": [
+    {
+      "frameIntervals": 952,
+      "fps": 238.0119005952071,
+      "intervalMedianMs": 4.199999995529652,
+      "intervalP95Ms": 4.799999997019768,
+      "cpuSubmissionMedianMs": 3.399999998509884,
+      "cpuSubmissionP95Ms": 4.100000001490116,
+      "idleFramesInOneSecond": 0,
+      "drawCallsLastFrame": 658,
+      "trianglesLastFrame": 31004
+    },
+    {
+      "frameIntervals": 956,
+      "fps": 239.14348609156585,
+      "intervalMedianMs": 4.199999995529652,
+      "intervalP95Ms": 4.700000002980232,
+      "cpuSubmissionMedianMs": 3.2999999970197678,
+      "cpuSubmissionP95Ms": 3.7000000029802322,
+      "idleFramesInOneSecond": 0,
+      "drawCallsLastFrame": 658,
+      "trianglesLastFrame": 31004
+    },
+    {
+      "frameIntervals": 957,
+      "fps": 239.22009748781403,
+      "intervalMedianMs": 4.199999995529652,
+      "intervalP95Ms": 4.600000001490116,
+      "cpuSubmissionMedianMs": 3.2999999970197678,
+      "cpuSubmissionP95Ms": 3.7999999970197678,
+      "idleFramesInOneSecond": 0,
+      "drawCallsLastFrame": 658,
+      "trianglesLastFrame": 31004
+    }
+  ]
+}

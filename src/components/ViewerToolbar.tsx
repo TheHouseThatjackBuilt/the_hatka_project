@@ -1,73 +1,114 @@
-import { isViewMode, VIEW_MODES } from '../viewer/options.ts';
+import { Button } from './ui/Button.tsx';
+import { FloatingPanel } from './ui/FloatingPanel.tsx';
+import { SegmentedControl } from './ui/SegmentedControl.tsx';
+import { Select } from './ui/Select.tsx';
+import { Toggle } from './ui/Toggle.tsx';
+import {
+  MAX_CUT_HEIGHT,
+  MIN_CUT_HEIGHT,
+  CUT_HEIGHT_STEP,
+  formatCutHeight,
+  isViewMode,
+  VIEW_MODES,
+} from '../viewer/options.ts';
+import { isPerformanceProfile, PERFORMANCE_OPTIONS } from '../viewer/performance.ts';
 import type { ViewerOptions } from '../viewer/types.ts';
+import type { Ref } from 'react';
 
 interface ViewerToolbarProps {
   options: ViewerOptions;
   disabled: boolean;
   onChange(options: ViewerOptions): void;
-  onFit(): void;
+  measurementButtonRef: Ref<HTMLButtonElement>;
 }
+const VIEW_OPTIONS = VIEW_MODES.map(({ value }) => ({
+  value,
+  label: value === 'cut' ? 'Срез' : value === 'full' ? 'Полный' : 'Сверху',
+}));
 
-export function ViewerToolbar({ options, disabled, onChange, onFit }: ViewerToolbarProps) {
+export function ViewerToolbar({
+  options,
+  disabled,
+  onChange,
+  measurementButtonRef,
+}: ViewerToolbarProps) {
   return (
-    <fieldset id="ap-toolbar" disabled={disabled} aria-label="Настройки просмотра">
-      <label className="view-field" htmlFor="ap-view">
-        Вид
-        <select
-          id="ap-view"
+    <div id="ap-toolbar" className="viewer-tools">
+      <FloatingPanel className="viewer-view-panel" aria-label="Вид квартиры">
+        <SegmentedControl
+          label="Вид квартиры"
+          options={VIEW_OPTIONS}
           value={options.mode}
-          onChange={(event) => {
-            const mode = event.currentTarget.value;
-            if (isViewMode(mode)) onChange({ ...options, mode });
+          disabled={disabled}
+          orientation="vertical"
+          onValueChange={(value) => {
+            if (isViewMode(value)) onChange({ ...options, mode: value });
           }}
-        >
-          {VIEW_MODES.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="check-field">
-        <input
-          type="checkbox"
+        />
+      </FloatingPanel>
+      <FloatingPanel className="viewer-settings-panel" aria-label="Настройки просмотра">
+        <Toggle
+          label="Мебель"
           checked={options.furnitureVisible}
-          onChange={(event) =>
-            onChange({ ...options, furnitureVisible: event.currentTarget.checked })
-          }
+          disabled={disabled}
+          onCheckedChange={(checked) => onChange({ ...options, furnitureVisible: checked })}
         />
-        Мебель
-      </label>
-      <button
-        type="button"
-        aria-pressed={options.measurementTool !== 'off'}
-        onClick={() =>
-          onChange({
-            ...options,
-            measurementTool: options.measurementTool === 'off' ? 'objects' : 'off',
-          })
-        }
-      >
-        Размеры
-      </button>
-      <label className="check-field">
-        <input
-          type="checkbox"
+        <Toggle
+          label="Названия"
           checked={options.labelsVisible}
-          onChange={(event) => onChange({ ...options, labelsVisible: event.currentTarget.checked })}
+          disabled={disabled}
+          onCheckedChange={(checked) => onChange({ ...options, labelsVisible: checked })}
         />
-        Названия
-      </label>
-      <button
-        type="button"
-        aria-pressed={options.panMode}
-        onClick={() => onChange({ ...options, panMode: !options.panMode })}
-      >
-        Перемещать
-      </button>
-      <button type="button" onClick={onFit}>
-        Вписать модель
-      </button>
-    </fieldset>
+        <Select
+          label="Графика"
+          options={PERFORMANCE_OPTIONS}
+          value={options.performanceProfile}
+          disabled={disabled}
+          aria-describedby="performance-profile-help"
+          onValueChange={(value) => {
+            if (isPerformanceProfile(value)) onChange({ ...options, performanceProfile: value });
+          }}
+        />
+        <span id="performance-profile-help" className="sr-only">
+          Быстрее отключает тени; баланс и качество повышают чёткость изображения и теней.
+        </span>
+        <Button
+          ref={measurementButtonRef}
+          aria-expanded={options.measurementTool !== 'off'}
+          aria-controls={options.measurementTool !== 'off' ? 'ap-measurement-panel' : undefined}
+          aria-pressed={options.measurementTool !== 'off'}
+          disabled={disabled}
+          onClick={() =>
+            onChange({
+              ...options,
+              measurementTool: options.measurementTool === 'off' ? 'objects' : 'off',
+            })
+          }
+        >
+          Размеры
+        </Button>
+        {options.mode === 'cut' && (
+          <div className="cut-height-control">
+            <label htmlFor="cut-height">Высота среза</label>
+            <output htmlFor="cut-height" aria-live="polite">
+              {formatCutHeight(options.cutHeight)} м
+            </output>
+            <input
+              id="cut-height"
+              type="range"
+              min={MIN_CUT_HEIGHT}
+              max={MAX_CUT_HEIGHT}
+              step={CUT_HEIGHT_STEP}
+              value={options.cutHeight}
+              disabled={disabled}
+              aria-label="Высота среза"
+              onChange={(event) =>
+                onChange({ ...options, cutHeight: event.currentTarget.valueAsNumber })
+              }
+            />
+          </div>
+        )}
+      </FloatingPanel>
+    </div>
   );
 }

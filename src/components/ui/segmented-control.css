@@ -1,0 +1,89 @@
+.hatka-theme .hatka-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  min-width: 0;
+  margin: 0;
+  padding: var(--s-1);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+}
+
+.hatka-theme .hatka-segmented--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.hatka-theme .hatka-segmented-legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hatka-theme .hatka-segmented-option {
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: var(--control-md);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  font-size: var(--font-md);
+  font-weight: var(--weight-medium);
+  line-height: var(--line-height-normal);
+  cursor: pointer;
+  transition:
+    background-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.hatka-theme .hatka-segmented--sm .hatka-segmented-option {
+  min-height: var(--control-sm);
+  padding-inline: var(--s-2);
+  font-size: var(--font-sm);
+}
+
+.hatka-theme .hatka-segmented-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+}
+
+.hatka-theme .hatka-segmented-input:checked + .hatka-segmented-label {
+  color: var(--text-1);
+}
+
+.hatka-theme .hatka-segmented-option:has(.hatka-segmented-input:checked) {
+  background: var(--surface-raised);
+}
+
+.hatka-theme .hatka-segmented-option:has(.hatka-segmented-input:enabled):hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.hatka-theme .hatka-segmented-input:focus-visible + .hatka-segmented-label {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+
+.hatka-theme .hatka-segmented-option:has(.hatka-segmented-input:disabled) {
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+
+.hatka-theme .hatka-segmented-input:disabled + .hatka-segmented-label {
+  color: var(--text-3);
+}
