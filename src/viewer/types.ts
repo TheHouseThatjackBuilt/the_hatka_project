@@ -2,6 +2,7 @@ import type { BufferGeometry, Mesh, MeshStandardMaterial } from 'three';
 import type { ModelPart } from '../model/types.ts';
 import type { MeasurementCommand, MeasurementTool } from './measurement-types.ts';
 import type { PerformanceProfile } from './performance.ts';
+import type { FloorSelection } from './flooring-options.ts';
 
 export type ViewMode = 'cut' | 'full' | 'top';
 export type ViewerStatus = 'loading' | 'ready' | 'error';
@@ -14,6 +15,7 @@ export interface ViewerOptions {
   labelsVisible: boolean;
   panMode: boolean;
   measurementTool: MeasurementTool;
+  flooring?: FloorSelection;
 }
 
 export interface ViewerHandle {

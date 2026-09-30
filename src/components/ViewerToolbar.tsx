@@ -3,6 +3,8 @@ import { FloatingPanel } from './ui/FloatingPanel.tsx';
 import { SegmentedControl } from './ui/SegmentedControl.tsx';
 import { Select } from './ui/Select.tsx';
 import { Toggle } from './ui/Toggle.tsx';
+import { FloorControls } from './FloorControls.tsx';
+import { FLOOR_COMPARISON_FORMATS } from '../viewer/flooring-options.ts';
 import {
   MAX_CUT_HEIGHT,
   MIN_CUT_HEIGHT,
@@ -107,6 +109,14 @@ export function ViewerToolbar({
               }
             />
           </div>
+        )}
+        {options.flooring && (
+          <FloorControls
+            selection={options.flooring}
+            formats={FLOOR_COMPARISON_FORMATS}
+            disabled={disabled}
+            onChange={(flooring) => onChange({ ...options, flooring })}
+          />
         )}
       </FloatingPanel>
     </div>

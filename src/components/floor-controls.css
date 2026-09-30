@@ -1,0 +1,66 @@
+.hatka-theme .floor-controls {
+  min-width: 0;
+  width: 100%;
+  color: var(--text-1);
+}
+
+.hatka-theme .floor-controls > summary {
+  min-width: 0;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.hatka-theme .floor-controls > summary:hover {
+  background: var(--surface-2);
+}
+
+.hatka-theme .floor-controls > summary:focus-visible {
+  outline: var(--border-width) solid var(--accent);
+  outline-offset: var(--border-width);
+}
+
+.hatka-theme .floor-controls-content {
+  display: grid;
+  gap: var(--s-2);
+  min-width: 0;
+  padding: var(--s-2) 0 0;
+}
+
+.hatka-theme .floor-controls-content h2 {
+  min-width: 0;
+  margin: 0;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.hatka-theme .floor-controls-help,
+.hatka-theme .floor-controls-summary,
+.hatka-theme .floor-controls-note {
+  margin: 0;
+  color: var(--text-2);
+  font-size: var(--font-sm);
+}
+
+@media (max-width: 959px) {
+  .hatka-theme .floor-controls {
+    width: auto;
+    flex: 0 1 auto;
+  }
+  .hatka-theme .floor-controls[open] {
+    flex: 1 1 100%;
+  }
+
+  .hatka-theme .floor-controls[open] .floor-controls-content {
+    grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  }
+
+  .hatka-theme .floor-controls[open] .floor-controls-content h2,
+  .hatka-theme .floor-controls[open] .floor-controls-help,
+  .hatka-theme .floor-controls[open] .floor-controls-summary,
+  .hatka-theme .floor-controls[open] .floor-controls-note {
+    grid-column: 1 / -1;
+  }
+}

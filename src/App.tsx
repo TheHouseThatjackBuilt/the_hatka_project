@@ -1,18 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ViewMode } from './viewer/types.ts';
+import type { ViewerOptions, ViewMode } from './viewer/types.ts';
 import { ViewerToolbar } from './components/ViewerToolbar.tsx';
 import { ViewerViewport } from './components/ViewerViewport.tsx';
 import { ViewerFooter } from './components/ViewerFooter.tsx';
 import { useApartmentViewer } from './hooks/useApartmentViewer.ts';
 import { DEFAULT_VIEWER_OPTIONS } from './viewer/options.ts';
 import { MeasurementPanel } from './components/MeasurementPanel.tsx';
+import {
+  DEFAULT_FLOOR_SELECTION,
+  readFloorSelection,
+  writeFloorSelection,
+} from './viewer/flooring-options.ts';
 import './design-system/fonts.css';
 import './design-system/tokens.css';
 
 const MODEL_DOWNLOAD_URL = `${import.meta.env.BASE_URL}models/apartment/apartment.glb`;
 
 export function App() {
-  const [options, setOptions] = useState(DEFAULT_VIEWER_OPTIONS);
+  const [options, setOptions] = useState<ViewerOptions>(() => {
+    let flooring = { ...DEFAULT_FLOOR_SELECTION };
+    try {
+      flooring = readFloorSelection(window.localStorage);
+    } catch {
+      /* Storage can be blocked. */
+    }
+    return { ...DEFAULT_VIEWER_OPTIONS, flooring };
+  });
+  useEffect(() => {
+    if (!options.flooring) return;
+    try {
+      writeFloorSelection(window.localStorage, options.flooring);
+    } catch {
+      /* Keep the in-memory choice. */
+    }
+  }, [options.flooring]);
   const measurementButtonRef = useRef<HTMLButtonElement>(null);
   const onModeChange = useCallback((mode: ViewMode) => {
     setOptions((current) => ({ ...current, mode }));
@@ -52,8 +73,9 @@ export function App() {
           className="hatka-button hatka-button--secondary hatka-control--sm"
           href={MODEL_DOWNLOAD_URL}
           download
+          title="Исходная модель без пробной отделки пола"
         >
-          Скачать GLB
+          Исходный GLB
         </a>
       </header>
       <ViewerToolbar

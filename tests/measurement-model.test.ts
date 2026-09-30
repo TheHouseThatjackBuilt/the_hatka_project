@@ -15,7 +15,9 @@ test('measurement metadata preserves all reviewed geometry and covers every furn
   );
   const geometry = JSON.parse(
     JSON.stringify(model, (key, value) =>
-      ['measurementId', 'measurements'].includes(key) ? undefined : value,
+      ['measurementId', 'measurements', 'floorSurfaceId', 'flooring'].includes(key)
+        ? undefined
+        : value,
     ),
   );
   assert.deepEqual(geometry, old);

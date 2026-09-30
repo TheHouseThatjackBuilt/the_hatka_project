@@ -2,6 +2,7 @@ import { buildMeasurements } from './measurements.ts';
 import type { ApartmentModel } from '../model/types.ts';
 import { CEILING_HEIGHT, createModelBuilder } from './core/builder.ts';
 import { createMaterials } from './core/materials.ts';
+import { createFlooring } from './flooring.ts';
 import { buildFloors } from './shell/floors.ts';
 import { buildWalls } from './shell/walls.ts';
 import { buildCeiling } from './shell/ceiling.ts';
@@ -54,5 +55,6 @@ export function buildApartment(): ApartmentModel {
       ['Балкон', 10.79, 5.12],
     ],
     measurements,
+    flooring: createFlooring(),
   };
 }

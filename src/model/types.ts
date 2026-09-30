@@ -1,4 +1,5 @@
 import type { ModelMeasurements } from './measurement-types.ts';
+import type { ModelFlooring } from './flooring-types.ts';
 
 export type Vector3Tuple = [number, number, number];
 export type ModelShape = 'box' | 'cylinder' | 'sphere';
@@ -16,6 +17,7 @@ export interface ModelPart {
   group: ModelGroup;
   rot: number;
   measurementId?: string;
+  floorSurfaceId?: string;
 }
 
 export interface ApartmentModel {
@@ -31,4 +33,5 @@ export interface ApartmentModel {
   parts: ModelPart[];
   labels: RoomLabel[];
   measurements?: ModelMeasurements;
+  flooring?: ModelFlooring;
 }
