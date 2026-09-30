@@ -4,12 +4,8 @@ import * as THREE from 'three';
 import type { ApartmentModel, ModelPart } from '../model/types.ts';
 import type { ApartmentMesh, ViewerOptions } from './types.ts';
 import { PERFORMANCE_PROFILES } from './performance.ts';
-import {
-  CUT_HEIGHT,
-  createSceneResources,
-  isClipped,
-  type SceneResources,
-} from './scene-resources.ts';
+import { createSceneResources, isClipped, type SceneResources } from './scene-resources.ts';
+import { effectiveCutHeight } from './cut-height.ts';
 
 declare module 'react' {
   namespace JSX {
@@ -47,9 +43,12 @@ function PartMesh({
   );
   const material = resources.materials[part.mat];
   if (!material) throw new Error(`Unknown model material: ${part.mat}`);
-  const clipped = isClipped(part, options.mode);
+  const cutHeight = effectiveCutHeight(options.mode, options.cutHeight);
+  // Avoid clipping coplanar top faces: GPU precision otherwise produces stripes at 2.70 m.
+  const clipped =
+    isClipped(part, options.mode) && part.pos[1] + part.size[1] / 2 > cutHeight + 1e-7;
   const hiddenWallFurniture =
-    clipped && part.group === 'furniture' && part.pos[1] - part.size[1] / 2 > CUT_HEIGHT - 0.01;
+    clipped && part.group === 'furniture' && part.pos[1] - part.size[1] / 2 >= cutHeight;
   return (
     <mesh
       ref={register}
@@ -81,6 +80,7 @@ function PartMesh({
 }
 
 export function ApartmentScene({ model, options, meshes, caps, children }: Props) {
+  const cutHeight = effectiveCutHeight(options.mode, options.cutHeight);
   const [allocated, setAllocated] = useState<{
     model: ApartmentModel;
     resources: SceneResources;
@@ -92,6 +92,9 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
   }, [model]);
   const environmentIntensity =
     PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity;
+  useLayoutEffect(() => {
+    if (allocated) allocated.resources.clippingPlane.constant = cutHeight;
+  }, [allocated, cutHeight]);
   useLayoutEffect(() => {
     if (!allocated) return;
     for (const material of [
@@ -162,8 +165,8 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
           if (
             part.shape !== 'box' ||
             !['walls', 'furniture'].includes(part.group) ||
-            bottom >= CUT_HEIGHT ||
-            top <= CUT_HEIGHT
+            bottom >= cutHeight - 1e-7 ||
+            top <= cutHeight + 1e-7
           )
             return null;
           const capMaterial =
@@ -179,7 +182,7 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
               }}
               geometry={resources.geometries.box}
               material={capMaterial}
-              position={[part.pos[0], CUT_HEIGHT - 0.002, part.pos[2]]}
+              position={[part.pos[0], cutHeight - 0.002, part.pos[2]]}
               rotation={[0, part.rot, 0]}
               scale={[part.size[0], 0.008, part.size[2]]}
               userData={{ group: part.group, sourceIndex: index }}

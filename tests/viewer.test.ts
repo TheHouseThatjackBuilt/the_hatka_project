@@ -9,6 +9,7 @@ import type { ApartmentModel } from '../src/model/types.ts';
 import { ApartmentScene } from '../src/viewer/ApartmentScene.tsx';
 import { createCameraController } from '../src/viewer/camera.ts';
 import { DEFAULT_VIEWER_OPTIONS } from '../src/viewer/options.ts';
+import { effectiveCutHeight } from '../src/viewer/cut-height.ts';
 import type { ApartmentMesh, FitRect, ViewerOptions } from '../src/viewer/types.ts';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
@@ -51,6 +52,62 @@ function assertFiniteCamera(controller: ReturnType<typeof createCameraController
   ];
   assert.ok(values.every(Number.isFinite), 'camera matrices must remain finite');
 }
+
+test('adjustable cut preserves meshes, updates caps and fit, and top retains its fixed height', async (t) => {
+  const { renderer, meshes, options, area } = await setup();
+  t.after(() => renderer.unmount());
+  const originals = [...meshes];
+  const caps: THREE.Mesh[] = [];
+  const controller = createCameraController(
+    area,
+    meshes,
+    () => {},
+    undefined,
+    undefined,
+    () => effectiveCutHeight(options.mode, options.cutHeight),
+  );
+  for (const mode of ['cut', 'top', 'full', 'cut'] as const) {
+    options.mode = mode;
+    for (const height of [0.3, 1.05, 2.4, 2.7]) {
+      options.cutHeight = height;
+      await renderer.update(React.createElement(ApartmentScene, { model, options, meshes, caps }));
+      const effective = effectiveCutHeight(mode, height);
+      meshes.forEach((mesh, index) => {
+        assert.equal(mesh, originals[index]);
+        if (mesh.material.clippingPlanes?.length)
+          assert.equal(mesh.material.clippingPlanes[0]!.constant, effective);
+        if (mesh.userData.pos[1] + mesh.userData.size[1] / 2 <= effective + 1e-7)
+          assert.equal(
+            mesh.material.clippingPlanes?.length,
+            0,
+            'coplanar top faces must not be clipped',
+          );
+        if (mesh.userData.group === 'furniture')
+          assert.equal(
+            mesh.visible,
+            mode === 'full' || mesh.userData.pos[1] - mesh.userData.size[1] / 2 < effective,
+          );
+      });
+      caps.forEach((cap, index) => {
+        assert.equal(cap.position.y, effective - 0.002);
+        const part = model.parts[index]!;
+        assert.ok(part.pos[1] - part.size[1] / 2 < effective);
+        assert.ok(part.pos[1] + part.size[1] / 2 > effective);
+      });
+      controller.setMode(mode);
+      controller.fit();
+      const bounds = projectedVisibleBounds(meshes, controller, mode);
+      assert.ok(
+        Math.max(
+          Math.abs(bounds.minX),
+          Math.abs(bounds.maxX),
+          Math.abs(bounds.minY),
+          Math.abs(bounds.maxY),
+        ) <= 0.881,
+      );
+    }
+  }
+});
 
 function projectedVisibleBounds(
   meshes: ApartmentMesh[],

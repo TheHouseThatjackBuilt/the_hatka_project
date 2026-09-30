@@ -7,6 +7,7 @@ export type ViewMode = 'cut' | 'full' | 'top';
 export type ViewerStatus = 'loading' | 'ready' | 'error';
 
 export interface ViewerOptions {
+  cutHeight: number;
   performanceProfile: PerformanceProfile;
   mode: ViewMode;
   furnitureVisible: boolean;

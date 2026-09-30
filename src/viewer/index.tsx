@@ -12,6 +12,7 @@ import { createResizeFit } from './resize-fit.ts';
 import { PERFORMANCE_PROFILES, renderDpr } from './performance.ts';
 import { StudioEnvironment } from './StudioEnvironment.tsx';
 import { ContactShadows } from './ContactShadows.tsx';
+import { effectiveCutHeight, normalizeCutHeight } from './cut-height.ts';
 import type { MeasurementSnapshot } from './measurement-types.ts';
 
 extend({
@@ -107,7 +108,7 @@ export function createViewer(
   const caps: THREE.Mesh[] = [];
   let state: RootState | undefined;
   let disposed = false;
-  let options = { ...initialOptions };
+  let options = { ...initialOptions, cutHeight: normalizeCutHeight(initialOptions.cutHeight) };
   let resolveReady!: () => void;
   let rejectReady!: (error: unknown) => void;
   const ready = new Promise<void>((resolve, reject) => {
@@ -117,7 +118,9 @@ export function createViewer(
   const invalidate = () => {
     if (!disposed) state?.invalidate();
   };
-  const camera = createCameraController(viewport, meshes, invalidate, getFitRect);
+  const camera = createCameraController(viewport, meshes, invalidate, getFitRect, undefined, () =>
+    effectiveCutHeight(options.mode, options.cutHeight),
+  );
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   const syncMotion = () => camera.setReducedMotion(motionPreference.matches);
   syncMotion();
@@ -215,7 +218,10 @@ export function createViewer(
           <ApartmentScene model={model} options={options} meshes={meshes} caps={caps}>
             {profile.environmentIntensity > 0 && <StudioEnvironment />}
             {profile.contactShadows && options.furnitureVisible && (
-              <ContactShadows meshes={meshes} revision={options.mode} />
+              <ContactShadows
+                meshes={meshes}
+                revision={`${options.mode}:${effectiveCutHeight(options.mode, options.cutHeight)}`}
+              />
             )}
             <ViewerFrame
               camera={camera}
@@ -274,7 +280,7 @@ export function createViewer(
     ready,
     setOptions(next) {
       if (next.mode !== options.mode) resizeFit.cancel();
-      options = { ...next };
+      options = { ...next, cutHeight: normalizeCutHeight(next.cutHeight) };
       if (!disposed) state?.setDpr(renderDpr(options.performanceProfile, window.devicePixelRatio));
       measurements.setOptions(options);
       renderScene();
