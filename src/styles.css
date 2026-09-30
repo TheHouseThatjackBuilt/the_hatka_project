@@ -95,6 +95,7 @@ noscript {
   pointer-events: auto;
 }
 .viewer-settings-panel {
+  position: relative;
   display: grid;
   gap: var(--s-2);
 }

@@ -1,11 +1,18 @@
 import { useLayoutEffect, useState, useCallback, useRef, type ReactNode } from 'react';
-import type { ThreeElements } from '@react-three/fiber';
+import { useThree, type ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { ApartmentModel, ModelPart } from '../model/types.ts';
 import type { ApartmentMesh, ViewerOptions } from './types.ts';
 import { PERFORMANCE_PROFILES } from './performance.ts';
 import { createSceneResources, isClipped, type SceneResources } from './scene-resources.ts';
 import { effectiveCutHeight } from './cut-height.ts';
+import {
+  coveredFloorSurfaces,
+  isCoveredFloor,
+  isLegacyFloorJoint,
+  createFloorPreviewResources,
+  type FloorPreviewResources,
+} from './flooring-material.ts';
 
 declare module 'react' {
   namespace JSX {
@@ -27,12 +34,16 @@ function PartMesh({
   options,
   meshes,
   resources,
+  floor,
+  hideFloorJoint,
 }: {
   part: ModelPart;
   originalIndex: number;
   options: ViewerOptions;
   meshes: ApartmentMesh[];
   resources: SceneResources;
+  floor?: FloorPreviewResources;
+  hideFloorJoint: boolean;
 }) {
   const register = useCallback(
     (meshRef: ApartmentMesh | null) => {
@@ -59,27 +70,53 @@ function PartMesh({
       scale={part.size}
       castShadow={part.group !== 'floor' && !['glass', 'showerglass'].includes(part.mat)}
       receiveShadow
-      visible={!hiddenWallFurniture}
+      visible={!hiddenWallFurniture && !hideFloorJoint}
       geometry={resources.geometries[part.shape]}
     >
-      <meshStandardMaterial
-        name={material.name}
-        color={material.color}
-        opacity={material.opacity}
-        roughness={material.roughness}
-        metalness={material.metalness}
-        envMapIntensity={PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity}
-        transparent={material.transparent}
-        depthWrite={material.depthWrite}
-        side={material.side}
-        clipShadows
-        clippingPlanes={clipped ? [resources.clippingPlane] : []}
-      />
+      {floor ? (
+        <primitive object={floor.material} attach="material" dispose={null} />
+      ) : (
+        <meshStandardMaterial
+          name={material.name}
+          color={material.color}
+          opacity={material.opacity}
+          roughness={material.roughness}
+          metalness={material.metalness}
+          envMapIntensity={PERFORMANCE_PROFILES[options.performanceProfile].environmentIntensity}
+          transparent={material.transparent}
+          depthWrite={material.depthWrite}
+          side={material.side}
+          clipShadows
+          clippingPlanes={clipped ? [resources.clippingPlane] : []}
+        />
+      )}
     </mesh>
   );
 }
 
 export function ApartmentScene({ model, options, meshes, caps, children }: Props) {
+  const invalidate = useThree((state) => state.invalidate);
+  const surfaces = coveredFloorSurfaces(model);
+  const floorEnabled = !!options.flooring && surfaces.size > 0;
+  const [floor, setFloor] = useState<{
+    model: ApartmentModel;
+    resources: FloorPreviewResources;
+  } | null>(null);
+  const [floorError, setFloorError] = useState<unknown>(null);
+  useLayoutEffect(() => {
+    setFloorError(null);
+    if (!floorEnabled) {
+      setFloor(null);
+      return;
+    }
+    const resources = createFloorPreviewResources(invalidate, (error) => setFloorError(error));
+    setFloor({ model, resources });
+    return () => resources.dispose();
+  }, [model, floorEnabled, invalidate]);
+  const floorResources = floor?.model === model && floorEnabled ? floor.resources : undefined;
+  useLayoutEffect(() => {
+    if (floorResources && options.flooring) floorResources.setSelection(options.flooring);
+  }, [floorResources, options.flooring]);
   const cutHeight = effectiveCutHeight(options.mode, options.cutHeight);
   const [allocated, setAllocated] = useState<{
     model: ApartmentModel;
@@ -102,12 +139,14 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
       allocated.resources.capMaterial,
     ])
       material.envMapIntensity = environmentIntensity;
-  }, [allocated, environmentIntensity]);
+    if (floorResources) floorResources.material.envMapIntensity = environmentIntensity;
+  }, [allocated, environmentIntensity, floorResources]);
   const sunlightRef = useRef<THREE.DirectionalLight>(null);
   const targetRef = useRef<THREE.Group>(null);
   useLayoutEffect(() => {
     if (sunlightRef.current && targetRef.current) sunlightRef.current.target = targetRef.current;
   }, [allocated?.resources, options.performanceProfile]);
+  if (floorError) throw new Error('Не удалось загрузить текстуру пола', { cause: floorError });
   if (!allocated || allocated.model !== model) return null;
   const { resources } = allocated;
   const { shadowMapSize } = PERFORMANCE_PROFILES[options.performanceProfile];
@@ -154,6 +193,18 @@ export function ApartmentScene({ model, options, meshes, caps, children }: Props
               options={options}
               meshes={meshes}
               resources={resources}
+              floor={
+                floorResources &&
+                isCoveredFloor(model.parts[index]!, surfaces) &&
+                !isLegacyFloorJoint(model.parts[index]!)
+                  ? floorResources
+                  : undefined
+              }
+              hideFloorJoint={
+                !!floorResources &&
+                isCoveredFloor(model.parts[index]!, surfaces) &&
+                isLegacyFloorJoint(model.parts[index]!)
+              }
             />
           ))}
         </group>

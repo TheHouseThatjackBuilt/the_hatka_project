@@ -19,10 +19,7 @@ const baseline = parseApartmentModel(
 );
 const currentBaseline = parseApartmentModel(
   JSON.parse(
-    readFileSync(
-      new URL('./fixtures/apartment-measurements-2026-09-10.json', import.meta.url),
-      'utf8',
-    ),
+    readFileSync(new URL('./fixtures/apartment-flooring-2026-09-30.json', import.meta.url), 'utf8'),
   ),
 );
 

@@ -1,5 +1,6 @@
 import type { ApartmentModel, ModelMaterial, ModelPart, RoomLabel, Vector3Tuple } from './types.ts';
 import { isMeasurements } from './parse-measurements.ts';
+import { isFlooring } from './parse-flooring.ts';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -35,6 +36,8 @@ function isPart(value: unknown): value is ModelPart {
     typeof value.mat === 'string' &&
     (value.measurementId === undefined ||
       (typeof value.measurementId === 'string' && value.measurementId.trim().length > 0)) &&
+    (value.floorSurfaceId === undefined ||
+      (typeof value.floorSurfaceId === 'string' && value.floorSurfaceId.trim().length > 0)) &&
     isNumber(value.rot)
   );
 }
@@ -68,7 +71,10 @@ function isModel(value: unknown): value is ApartmentModel {
     value.labels.every(isLabel) &&
     (value.measurements === undefined
       ? value.parts.every((part: ModelPart) => part.measurementId === undefined)
-      : isMeasurements(value.measurements, value.parts))
+      : isMeasurements(value.measurements, value.parts)) &&
+    (value.flooring === undefined
+      ? value.parts.every((part: ModelPart) => part.floorSurfaceId === undefined)
+      : isFlooring(value.flooring, value.parts))
   );
 }
 
