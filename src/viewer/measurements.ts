@@ -16,7 +16,8 @@ import type {
   MeasurementSnapshot,
 } from './measurement-types.ts';
 import type { CanvasMeasurementInteraction } from './controls.ts';
-import { CUT_HEIGHT, isClipped } from './scene-resources.ts';
+import { isClipped } from './scene-resources.ts';
+import { effectiveCutHeight } from './cut-height.ts';
 import './measurements.css';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -80,7 +81,10 @@ export function createMeasurements(
         mesh &&
         isWorldVisible(mesh) &&
         part.group !== 'ceiling' &&
-        !(isClipped(part, options.mode) && part.pos[1] - part.size[1] / 2 >= CUT_HEIGHT)
+        !(
+          isClipped(part, options.mode) &&
+          part.pos[1] - part.size[1] / 2 >= effectiveCutHeight(options.mode, options.cutHeight)
+        )
       );
     });
 
@@ -166,7 +170,14 @@ export function createMeasurements(
         ((position.x - rect.left) / rect.width) * 2 - 1,
         1 - ((position.y - rect.top) / rect.height) * 2,
       );
-      return pickMeasurementSurface(camera, ndc, surfaces, options.mode, raycaster);
+      return pickMeasurementSurface(
+        camera,
+        ndc,
+        surfaces,
+        options.mode,
+        raycaster,
+        effectiveCutHeight(options.mode, options.cutHeight),
+      );
     };
     const roomAt = (hit: ReturnType<typeof pick>) =>
       hit?.part.group === 'floor'
@@ -444,7 +455,12 @@ export function createMeasurements(
         clear();
         suppressed = false;
       }
-      if (next.mode !== options.mode || next.furnitureVisible !== options.furnitureVisible) {
+      if (
+        next.mode !== options.mode ||
+        next.furnitureVisible !== options.furnitureVisible ||
+        effectiveCutHeight(next.mode, next.cutHeight) !==
+          effectiveCutHeight(options.mode, options.cutHeight)
+      ) {
         pendingTap = null;
         pointer = null;
         if (points.length) clear();

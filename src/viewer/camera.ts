@@ -13,6 +13,7 @@ export function createCameraController(
   requestRender: () => void,
   getFitRect: () => FitRect | undefined = () => undefined,
   now: () => number = () => performance.now(),
+  getCutHeight: () => number = () => CUT_HEIGHT,
 ) {
   const camera = new OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
   const target = new Vector3();
@@ -181,7 +182,7 @@ export function createCameraController(
       const part = mesh.userData;
       const bottom = part.pos[1] - part.size[1] / 2;
       const top = isClipped(part, mode)
-        ? Math.min(CUT_HEIGHT, part.pos[1] + part.size[1] / 2)
+        ? Math.min(getCutHeight(), part.pos[1] + part.size[1] / 2)
         : part.pos[1] + part.size[1] / 2;
       if (top < bottom) continue;
       const cosine = Math.cos(part.rot),

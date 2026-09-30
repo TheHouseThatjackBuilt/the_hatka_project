@@ -4,7 +4,7 @@ import { BoxGeometry, Mesh, MeshBasicMaterial, Group, OrthographicCamera, Vector
 import { pickMeasurementSurface } from '../src/viewer/measurement-picking.ts';
 import type { ModelPart } from '../src/model/types.ts';
 
-test('picking follows parent visibility and maps a cut cap to the original wall', () => {
+test('picking maps custom-height cut caps and discards clipped wall hits above them', () => {
   const geometry = new BoxGeometry(1, 1, 1),
     material = new MeshBasicMaterial();
   const part: ModelPart = {
@@ -21,7 +21,7 @@ test('picking follows parent visibility and maps a cut cap to the original wall'
   mesh.position.set(...part.pos);
   mesh.scale.set(...part.size);
   const cap = new Mesh(geometry, material);
-  cap.position.y = 1.048;
+  cap.position.y = 0.298;
   cap.scale.set(2, 0.008, 1);
   const group = new Group();
   group.add(mesh, cap);
@@ -36,10 +36,19 @@ test('picking follows parent visibility and maps a cut cap to the original wall'
     { mesh: cap, part, cutCap: true },
   ];
   try {
-    const cut = pickMeasurementSurface(camera, new Vector2(), surfaces, 'cut');
+    const cut = pickMeasurementSurface(camera, new Vector2(), surfaces, 'cut', undefined, 0.3);
     assert.equal(cut?.part.measurementId, 'wall');
-    assert.equal(cut?.point.y, 1.05);
+    assert.equal(cut?.point.y, 0.3);
     assert.equal(pickMeasurementSurface(camera, new Vector2(), surfaces, 'full')?.point.y, 2.7);
+    cap.position.y = 2.398;
+    assert.equal(
+      pickMeasurementSurface(camera, new Vector2(), surfaces, 'cut', undefined, 2.4)?.point.y,
+      2.4,
+    );
+    assert.equal(
+      pickMeasurementSurface(camera, new Vector2(), [{ mesh, part }], 'cut', undefined, 2.4),
+      null,
+    );
     group.visible = false;
     assert.equal(pickMeasurementSurface(camera, new Vector2(), surfaces, 'cut'), null);
     group.visible = true;

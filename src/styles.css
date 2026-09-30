@@ -119,6 +119,29 @@ noscript {
 .viewer-settings-panel .hatka-status {
   padding-inline: var(--s-1);
 }
+.cut-height-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-1) var(--s-2);
+  align-items: center;
+  min-width: 0;
+}
+.cut-height-control label {
+  min-width: 0;
+  font-size: var(--font-sm);
+}
+.cut-height-control output {
+  white-space: nowrap;
+  color: var(--text-2);
+  font-size: var(--font-sm);
+  font-variant-numeric: tabular-nums;
+}
+.cut-height-control input {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--accent);
+}
 .viewer-fit-area {
   grid-row: 2;
   grid-column: 2;

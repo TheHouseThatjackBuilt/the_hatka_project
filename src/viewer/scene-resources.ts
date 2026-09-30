@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { ApartmentModel } from '../model/types.ts';
+import { DEFAULT_CUT_HEIGHT } from './cut-height.ts';
 
-export const CUT_HEIGHT = 1.05;
+export const CUT_HEIGHT = DEFAULT_CUT_HEIGHT;
 
 const CLIPPED_GROUPS = new Set(['walls', 'windows', 'doors', 'furniture']);
 

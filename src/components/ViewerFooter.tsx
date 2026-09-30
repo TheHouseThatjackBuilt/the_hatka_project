@@ -1,4 +1,4 @@
-import { MODE_TEXT } from '../viewer/options.ts';
+import { formatCutHeight, MODE_TEXT } from '../viewer/options.ts';
 import type { ViewMode } from '../viewer/types.ts';
 import { FloatingPanel } from './ui/FloatingPanel.tsx';
 import { IconButton } from './ui/IconButton.tsx';
@@ -9,6 +9,7 @@ import { ViewerHelp } from './ViewerHelp.tsx';
 
 interface ViewerFooterProps {
   mode: ViewMode;
+  cutHeight: number;
   disabled: boolean;
   onRotate(angle: number): void;
   onZoom(factor: number): void;
@@ -54,6 +55,7 @@ function Action({
 }
 export function ViewerFooter({
   mode,
+  cutHeight,
   disabled,
   onRotate,
   onZoom,
@@ -108,7 +110,9 @@ export function ViewerFooter({
       </aside>
       <footer id="ap-footer">
         <StatusBadge id="ap-state" aria-live="polite">
-          {MODE_TEXT[mode]}
+          {mode === 'cut'
+            ? `Потолки 2,70 м · разрез на ${formatCutHeight(cutHeight)} м`
+            : MODE_TEXT[mode]}
         </StatusBadge>
         <ViewerHelp ready={!disabled} />
       </footer>

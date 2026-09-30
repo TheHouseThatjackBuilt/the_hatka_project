@@ -84,6 +84,7 @@ export function App() {
       )}
       <ViewerFooter
         mode={options.mode}
+        cutHeight={options.cutHeight}
         disabled={disabled}
         panMode={options.panMode}
         onPanToggle={() => setOptions((current) => ({ ...current, panMode: !current.panMode }))}

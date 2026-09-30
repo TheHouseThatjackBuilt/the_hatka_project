@@ -23,6 +23,7 @@ export function pickMeasurementSurface(
   surfaces: PickSurface[],
   mode: ViewMode,
   raycaster = new Raycaster(),
+  cutHeight = CUT_HEIGHT,
 ) {
   const candidates = surfaces.filter(
     ({ mesh, part, cutCap }) =>
@@ -36,10 +37,10 @@ export function pickMeasurementSurface(
     false,
   )) {
     const surface = byMesh.get(hit.object as Mesh)!;
-    if (!surface.cutCap && isClipped(surface.part, mode) && hit.point.y > CUT_HEIGHT + 1e-7)
+    if (!surface.cutCap && isClipped(surface.part, mode) && hit.point.y > cutHeight + 1e-7)
       continue;
     const point = hit.point.clone();
-    if (surface.cutCap) point.y = CUT_HEIGHT;
+    if (surface.cutCap) point.y = cutHeight;
     return { ...surface, point };
   }
   return null;

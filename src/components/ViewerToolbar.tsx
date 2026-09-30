@@ -2,9 +2,15 @@ import { Button } from './ui/Button.tsx';
 import { FloatingPanel } from './ui/FloatingPanel.tsx';
 import { SegmentedControl } from './ui/SegmentedControl.tsx';
 import { Select } from './ui/Select.tsx';
-import { StatusBadge } from './ui/StatusBadge.tsx';
 import { Toggle } from './ui/Toggle.tsx';
-import { isViewMode, VIEW_MODES } from '../viewer/options.ts';
+import {
+  MAX_CUT_HEIGHT,
+  MIN_CUT_HEIGHT,
+  CUT_HEIGHT_STEP,
+  formatCutHeight,
+  isViewMode,
+  VIEW_MODES,
+} from '../viewer/options.ts';
 import { isPerformanceProfile, PERFORMANCE_OPTIONS } from '../viewer/performance.ts';
 import type { ViewerOptions } from '../viewer/types.ts';
 import type { Ref } from 'react';
@@ -81,7 +87,27 @@ export function ViewerToolbar({
         >
           Размеры
         </Button>
-        {options.mode === 'cut' && <StatusBadge>Срез · 1,05 м</StatusBadge>}
+        {options.mode === 'cut' && (
+          <div className="cut-height-control">
+            <label htmlFor="cut-height">Высота среза</label>
+            <output htmlFor="cut-height" aria-live="polite">
+              {formatCutHeight(options.cutHeight)} м
+            </output>
+            <input
+              id="cut-height"
+              type="range"
+              min={MIN_CUT_HEIGHT}
+              max={MAX_CUT_HEIGHT}
+              step={CUT_HEIGHT_STEP}
+              value={options.cutHeight}
+              disabled={disabled}
+              aria-label="Высота среза"
+              onChange={(event) =>
+                onChange({ ...options, cutHeight: event.currentTarget.valueAsNumber })
+              }
+            />
+          </div>
+        )}
       </FloatingPanel>
     </div>
   );
